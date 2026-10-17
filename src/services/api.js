@@ -3,7 +3,7 @@
    Connects the React frontend to the Node.js + MySQL 8.0 backend.
    ============================================================ */
 
-const API_BASE = '/api';
+const API_BASE = (import.meta.env.VITE_API_BASE || '/api').replace(/\/$/, '');
 
 async function handleResponse(res) {
   if (!res.ok) {
