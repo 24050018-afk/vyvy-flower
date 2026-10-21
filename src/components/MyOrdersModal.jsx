@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useCustomer } from '../context/CustomerContext';
-import { getCustomerOrders } from '../services/api';
-import { X, Package, RefreshCw } from 'lucide-react';
+import { getCustomerOrders, cancelCustomerOrder } from '../services/api';
+import { ToastContext } from '../App';
+import { X, Package, RefreshCw, XCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 
 const ORDER_STEPS = [
   { key: 'Chờ xác nhận', label: 'Chờ xác nhận', desc: 'Shop đang duyệt đơn' },
@@ -11,10 +12,26 @@ const ORDER_STEPS = [
   { key: 'Hoàn thành', label: 'Hoàn thành', desc: 'Đã nhận hoa tận tay' },
 ];
 
+const CANCEL_REASONS = [
+  'Đổi ý, không còn nhu cầu',
+  'Muốn đổi mẫu hoa hoặc đổi số lượng',
+  'Thay đổi thời gian / địa chỉ nhận hoa',
+  'Đặt nhầm thông tin người nhận',
+  'Lý do khác'
+];
+
 export default function MyOrdersModal() {
+  const addToast = useContext(ToastContext);
   const { customer, ordersModalOpen, setOrdersModalOpen } = useCustomer();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // Modal xác nhận hủy đơn
+  const [cancellingOrder, setCancellingOrder] = useState(null);
+  const [cancelReason, setCancelReason] = useState(CANCEL_REASONS[0]);
+  const [customReason, setCustomReason] = useState('');
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [cancelError, setCancelError] = useState('');
 
   const fetchOrders = async () => {
     if (!customer?.phone) return;
@@ -40,6 +57,34 @@ export default function MyOrdersModal() {
   const getStepIndex = (status) => {
     if (status === 'Đã hủy') return -1;
     return ORDER_STEPS.findIndex(s => s.key === status);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!cancellingOrder) return;
+    setIsCancelling(true);
+    setCancelError('');
+    const finalReason = cancelReason === 'Lý do khác' && customReason.trim()
+      ? customReason.trim()
+      : cancelReason;
+
+    try {
+      const res = await cancelCustomerOrder(cancellingOrder.id, customer?.phone, finalReason);
+      if (res.success) {
+        if (addToast) addToast(`Đã hủy đơn hàng ${cancellingOrder.orderCode} thành công!`);
+        setOrders(prev => prev.map(o => o.id === cancellingOrder.id ? {
+          ...o,
+          status: 'Đã hủy',
+          notes: (o.notes || '') + ` [Khách hủy: ${finalReason}]`
+        } : o));
+        setCancellingOrder(null);
+      } else {
+        setCancelError(res.error || 'Không thể hủy đơn hàng này!');
+      }
+    } catch (err) {
+      setCancelError(err.message || 'Lỗi kết nối máy chủ!');
+    } finally {
+      setIsCancelling(false);
+    }
   };
 
   return (
@@ -263,6 +308,75 @@ export default function MyOrdersModal() {
                           );
                         })}
                       </div>
+
+                      {/* Cho phép khách hàng hủy đơn hàng trước khi Shop duyệt */}
+                      {order.status === 'Chờ xác nhận' && (
+                        <div style={{
+                          marginTop: '16px',
+                          padding: '12px 14px',
+                          borderRadius: '14px',
+                          background: 'rgba(250, 204, 21, 0.05)',
+                          border: '1px solid rgba(250, 204, 21, 0.15)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          flexWrap: 'wrap',
+                          gap: '12px'
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Info size={16} style={{ color: '#facc15', flexShrink: 0 }} />
+                            <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                              Đơn đang chờ Shop duyệt. Bạn có thể <strong>hủy đơn miễn phí</strong> lúc này.
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCancellingOrder(order);
+                              setCancelReason(CANCEL_REASONS[0]);
+                              setCustomReason('');
+                              setCancelError('');
+                            }}
+                            style={{
+                              padding: '6px 14px',
+                              borderRadius: '9999px',
+                              background: 'rgba(244, 63, 94, 0.12)',
+                              border: '1px solid rgba(244, 63, 94, 0.35)',
+                              color: '#f43f5e',
+                              fontSize: '12px',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              transition: 'all 0.2s',
+                            }}
+                            onMouseEnter={e => {
+                              e.currentTarget.style.background = 'rgba(244, 63, 94, 0.25)';
+                            }}
+                            onMouseLeave={e => {
+                              e.currentTarget.style.background = 'rgba(244, 63, 94, 0.12)';
+                            }}
+                          >
+                            <XCircle size={14} />
+                            <span>Hủy Đơn Hàng</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {order.status !== 'Chờ xác nhận' && !isCancelled && (
+                        <div style={{
+                          marginTop: '14px',
+                          fontSize: '12px',
+                          color: 'rgba(255, 255, 255, 0.5)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px'
+                        }}>
+                          <CheckCircle size={14} style={{ color: '#a3e635' }} />
+                          <span>Shop đã duyệt đơn & chuẩn bị cắm hoa. Nếu cần đổi thông tin gấp, vui lòng liên hệ Hotline Vy Vy Flower.</span>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div style={{
@@ -279,6 +393,178 @@ export default function MyOrdersModal() {
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {/* Modal xác nhận hủy đơn hàng dành cho khách */}
+        {cancellingOrder && (
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0, 0, 0, 0.85)',
+              backdropFilter: 'blur(10px)',
+              zIndex: 2000,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px',
+            }}
+            onClick={() => !isCancelling && setCancellingOrder(null)}
+          >
+            <div
+              style={{
+                background: '#13151f',
+                border: '1px solid rgba(244, 63, 94, 0.3)',
+                borderRadius: '24px',
+                maxWidth: '480px',
+                width: '100%',
+                padding: '28px',
+                boxShadow: '0 25px 60px rgba(0,0,0,0.9), 0 0 40px rgba(244,63,94,0.15)',
+                position: 'relative',
+              }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                <div style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  background: 'rgba(244, 63, 94, 0.15)',
+                  color: '#f43f5e',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <AlertTriangle size={24} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#fff', margin: 0 }}>
+                    Xác Nhận Hủy Đơn Hàng
+                  </h3>
+                  <span style={{ fontSize: '13px', color: '#facc15', fontFamily: 'monospace', fontWeight: 700 }}>
+                    {cancellingOrder.orderCode}
+                  </span>
+                </div>
+              </div>
+
+              <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.5, marginBottom: '18px' }}>
+                Bạn có chắc chắn muốn hủy đơn hàng này không? Sau khi xác nhận hủy, đơn hàng sẽ dừng xử lý ngay lập tức.
+              </p>
+
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>
+                  Lý do bạn muốn hủy đơn:
+                </label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {CANCEL_REASONS.map(r => (
+                    <label
+                      key={r}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        padding: '8px 12px',
+                        borderRadius: '10px',
+                        background: cancelReason === r ? 'rgba(250, 204, 21, 0.1)' : 'rgba(255,255,255,0.03)',
+                        border: cancelReason === r ? '1px solid #facc15' : '1px solid rgba(255,255,255,0.08)',
+                        cursor: 'pointer',
+                        fontSize: '13px',
+                        color: cancelReason === r ? '#facc15' : 'rgba(255,255,255,0.8)',
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="cancelReason"
+                        checked={cancelReason === r}
+                        onChange={() => setCancelReason(r)}
+                        style={{ accentColor: '#facc15' }}
+                      />
+                      <span>{r}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {cancelReason === 'Lý do khác' && (
+                <div style={{ marginBottom: '16px' }}>
+                  <textarea
+                    value={customReason}
+                    onChange={e => setCustomReason(e.target.value)}
+                    placeholder="Vui lòng chia sẻ lý do chi tiết..."
+                    rows={2}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '10px',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      color: '#fff',
+                      fontSize: '13px',
+                      outline: 'none',
+                      resize: 'none',
+                    }}
+                  />
+                </div>
+              )}
+
+              {cancelError && (
+                <div style={{
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  background: 'rgba(244, 63, 94, 0.15)',
+                  border: '1px solid #f43f5e',
+                  color: '#f43f5e',
+                  fontSize: '13px',
+                  marginBottom: '16px'
+                }}>
+                  {cancelError}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  type="button"
+                  disabled={isCancelling}
+                  onClick={() => setCancellingOrder(null)}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '9999px',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    color: '#fff',
+                    fontWeight: 600,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Giữ Đơn Hàng
+                </button>
+
+                <button
+                  type="button"
+                  disabled={isCancelling}
+                  onClick={handleConfirmCancel}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '9999px',
+                    background: '#f43f5e',
+                    border: 'none',
+                    color: '#fff',
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    cursor: isCancelling ? 'not-allowed' : 'pointer',
+                    opacity: isCancelling ? 0.7 : 1,
+                    boxShadow: '0 4px 15px rgba(244, 63, 94, 0.4)',
+                  }}
+                >
+                  {isCancelling ? 'Đang Hủy...' : 'Xác Nhận Hủy'}
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

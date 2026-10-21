@@ -887,6 +887,59 @@ app.get('/api/customer/orders', async (req, res) => {
   }
 });
 
+app.post('/api/customer/orders/:id/cancel', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { phone, reason } = req.body;
+
+    const [rows] = await pool.query('SELECT * FROM orders WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Không tìm thấy đơn hàng cần hủy!' });
+    }
+
+    const order = rows[0];
+
+    // Khách hàng chỉ có thể hủy đơn hàng trước khi Shop xác nhận (tức là trạng thái 'Chờ xác nhận')
+    if (order.status !== 'Chờ xác nhận') {
+      return res.status(400).json({
+        error: `Không thể hủy đơn hàng này do Shop đã chuyển sang trạng thái "${order.status}". Vui lòng liên hệ Hotline/Zalo Vy Vy Flower để được hỗ trợ trực tiếp!`
+      });
+    }
+
+    const cancelNote = reason ? ` [Khách hủy: ${reason}]` : ' [Khách hàng chủ động hủy khi chờ xác nhận]';
+    await pool.query(
+      'UPDATE orders SET status = ?, notes = CONCAT(COALESCE(notes, ""), ?) WHERE id = ?',
+      ['Đã hủy', cancelNote, id]
+    );
+
+    // Gửi thông báo đến trang Quản trị Admin
+    try {
+      await pool.query(
+        'INSERT INTO notifications (type, title, message, order_id, order_code, is_read) VALUES (?, ?, ?, ?, ?, 0)',
+        [
+          'order_cancelled',
+          'Khách hàng vừa hủy đơn hoa',
+          `Khách ${order.customer_name} (${order.customer_phone}) vừa hủy đơn hàng ${order.order_code}.${reason ? ' Lý do: ' + reason : ''}`,
+          order.id,
+          order.order_code
+        ]
+      );
+    } catch (notifErr) {
+      console.warn('Không thể tạo thông báo hủy đơn:', notifErr.message);
+    }
+
+    res.json({
+      success: true,
+      message: 'Hủy đơn hàng thành công!',
+      orderId: order.id,
+      orderCode: order.order_code,
+      status: 'Đã hủy'
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 /* ============================================================
    8. NOTIFICATIONS API (MySQL Live Alerts to Admin)
    ============================================================ */

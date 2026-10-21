@@ -240,6 +240,15 @@ export async function getCustomerOrders(phone) {
   return handleResponse(res);
 }
 
+export async function cancelCustomerOrder(id, phone, reason = '') {
+  const res = await fetch(`${API_BASE}/customer/orders/${id}/cancel`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone, reason }),
+  });
+  return handleResponse(res);
+}
+
 /* ============ NOTIFICATIONS (Live Alerts to Admin) ============ */
 export async function getNotifications() {
   const res = await fetch(`${API_BASE}/notifications`);

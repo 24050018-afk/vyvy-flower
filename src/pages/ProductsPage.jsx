@@ -377,74 +377,205 @@ export default function ProductsPage() {
 
         {/* Modal for detail view */}
         {activeModalProduct && (
-          <div style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.8)',
-            backdropFilter: 'blur(16px)',
-            zIndex: 1000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '24px',
-          }}
-          onClick={() => setActiveModalProduct(null)}>
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0, 0, 0, 0.85)',
+              backdropFilter: 'blur(16px)',
+              zIndex: 1000,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px',
+            }}
+            onClick={() => setActiveModalProduct(null)}
+          >
             <div
+              className="product-modal-card"
               style={{
                 background: '#12141c',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 borderRadius: '28px',
-                maxWidth: '680px',
+                maxWidth: '860px',
                 width: '100%',
+                maxHeight: '90vh',
                 overflow: 'hidden',
                 position: 'relative',
-                boxShadow: '0 25px 60px rgba(0,0,0,0.8)',
+                boxShadow: '0 25px 70px rgba(0,0,0,0.9), 0 0 40px rgba(250,204,21,0.08)',
+                display: 'flex',
               }}
               onClick={e => e.stopPropagation()}
             >
+              {/* Close button */}
               <button
+                type="button"
                 onClick={() => setActiveModalProduct(null)}
                 style={{
                   position: 'absolute',
                   top: '16px',
                   right: '16px',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: 'none',
+                  background: 'rgba(0, 0, 0, 0.65)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
                   borderRadius: '50%',
-                  width: '36px',
-                  height: '36px',
+                  width: '38px',
+                  height: '38px',
                   color: '#fff',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  zIndex: 10,
+                  zIndex: 30,
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.65)';
+                  e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
                 <X size={18} />
               </button>
 
-              <div style={{ maxHeight: '280px', overflow: 'hidden' }}>
-                <img src={activeModalProduct.image} alt={activeModalProduct.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
+              {/* Left Column: Full Product Image Showcase (No Cropping!) */}
+              <div
+                className="product-modal-img-col"
+                style={{
+                  flex: '1 1 48%',
+                  minHeight: '440px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  background: '#090a0f',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {/* Ambient Blurred Backdrop matching flower colors */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: '-30px',
+                    backgroundImage: `url(${activeModalProduct.image})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    filter: 'blur(32px) brightness(0.28) saturate(1.4)',
+                    transform: 'scale(1.25)',
+                    pointerEvents: 'none',
+                  }}
+                />
 
-              <div style={{ padding: '28px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <span style={{ color: '#facc15', fontSize: '12px', fontWeight: 700, letterSpacing: '1px' }}>
-                    {activeModalProduct.category.toUpperCase()}
-                  </span>
-                  <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px' }}>
-                    ⭐ {activeModalProduct.rating} ({activeModalProduct.reviews} đánh giá)
-                  </span>
+                {/* Full Uncropped High-Detail Bouquet Image */}
+                <img
+                  src={activeModalProduct.image}
+                  alt={activeModalProduct.name}
+                  style={{
+                    position: 'relative',
+                    zIndex: 2,
+                    maxWidth: '100%',
+                    maxHeight: '480px',
+                    width: 'auto',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    display: 'block',
+                    padding: '16px',
+                    filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.7))',
+                    transition: 'transform 0.3s ease',
+                  }}
+                />
+
+                {/* Badge Overlay */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '16px',
+                    left: '16px',
+                    zIndex: 10,
+                    padding: '4px 12px',
+                    borderRadius: '9999px',
+                    background: 'rgba(12, 13, 18, 0.85)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    color: activeModalProduct.badgeColor || '#facc15',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    letterSpacing: '0.5px',
+                  }}
+                >
+                  {activeModalProduct.badge || 'BESPOKE'}
                 </div>
 
-                <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#fff', marginBottom: '12px' }}>
-                  {activeModalProduct.name}
-                </h2>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '16px',
+                    left: '16px',
+                    zIndex: 10,
+                    background: activeModalProduct.stock > 0 ? 'rgba(163, 230, 53, 0.2)' : 'rgba(244, 63, 94, 0.2)',
+                    backdropFilter: 'blur(8px)',
+                    border: `1px solid ${activeModalProduct.stock > 0 ? '#a3e635' : '#f43f5e'}66`,
+                    color: activeModalProduct.stock > 0 ? '#a3e635' : '#f43f5e',
+                    padding: '3px 12px',
+                    borderRadius: '9999px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                  }}
+                >
+                  {activeModalProduct.stock > 0 ? `Còn ${activeModalProduct.stock} bó hoa tươi` : 'Tạm hết hàng'}
+                </div>
+              </div>
 
-                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-                  {activeModalProduct.description}
-                </p>
+              {/* Right Column: Information & Actions */}
+              <div
+                className="product-modal-content-col"
+                style={{
+                  flex: '1 1 52%',
+                  padding: '32px 28px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  overflowY: 'auto',
+                  maxHeight: '90vh',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <span style={{ color: '#facc15', fontSize: '12px', fontWeight: 700, letterSpacing: '1px' }}>
+                      {activeModalProduct.category.toUpperCase()}
+                    </span>
+                    <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px' }}>
+                      ⭐ {activeModalProduct.rating} ({activeModalProduct.reviews} đánh giá)
+                    </span>
+                  </div>
+
+                  <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#fff', marginBottom: '12px', lineHeight: 1.3 }}>
+                    {activeModalProduct.name}
+                  </h2>
+
+                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', lineHeight: 1.6, marginBottom: '20px' }}>
+                    {activeModalProduct.description}
+                  </p>
+
+                  {/* Commitments & Value Props */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '22px' }}>
+                    <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>🌸</span> <span>Hoa tươi loại 1 trong ngày</span>
+                    </div>
+                    <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>🎀</span> <span>Tặng nơ lụa & thiệp ghi lời</span>
+                    </div>
+                    <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>⚡</span> <span>Giao hỏa tốc 2 giờ</span>
+                    </div>
+                    <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>📸</span> <span>Chụp ảnh thật trước khi giao</span>
+                    </div>
+                  </div>
+                </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
@@ -605,6 +736,25 @@ export default function ProductsPage() {
             .products-grid-container {
               grid-template-columns: 1fr !important;
               gap: 16px !important;
+            }
+          }
+
+          @media (max-width: 768px) {
+            .product-modal-card {
+              flex-direction: column !important;
+              max-height: 88vh !important;
+              overflow-y: auto !important;
+              border-radius: 22px !important;
+            }
+            .product-modal-img-col {
+              min-height: 320px !important;
+              height: 320px !important;
+              flex: none !important;
+            }
+            .product-modal-content-col {
+              padding: 22px 18px !important;
+              flex: none !important;
+              max-height: none !important;
             }
           }
         `}</style>

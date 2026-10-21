@@ -4,7 +4,7 @@ import { products as fallbackProducts } from '../data/mockData';
 import { getProducts } from '../services/api';
 import { ToastContext } from '../App';
 import Card3D from '../components/Card3D';
-import { Sparkles, ArrowRight, Heart, Star, ShieldCheck, Truck, Clock, Palette, ShoppingCart } from 'lucide-react';
+import { Sparkles, ArrowRight, Heart, Star, ShieldCheck, Truck, Clock, Palette, ShoppingCart, X, Check, Plus, Minus } from 'lucide-react';
 import { useCustomer } from '../context/CustomerContext';
 import { useCart } from '../context/CartContext';
 
@@ -12,6 +12,8 @@ export default function HomePage() {
   const addToast = useContext(ToastContext);
   const [activeCategory, setActiveCategory] = useState('Tất cả');
   const [dbProducts, setDbProducts] = useState(fallbackProducts);
+  const [activeModalProduct, setActiveModalProduct] = useState(null);
+  const [modalQuantity, setModalQuantity] = useState(1);
 
   useEffect(() => {
     getProducts()
@@ -394,14 +396,22 @@ export default function HomePage() {
         >
           {filteredProducts.map((p) => (
             <Card3D key={p.id} intensity={10} style={{ borderRadius: '24px' }}>
-              <div className="glass-panel" style={{
-                borderRadius: '24px',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                transition: 'all 0.3s ease',
-              }}>
+              <div
+                className="glass-panel"
+                style={{
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setActiveModalProduct(p);
+                  setModalQuantity(1);
+                }}
+              >
                 {/* Image */}
                 <div style={{ position: 'relative', height: '230px', overflow: 'hidden' }}>
                   <img
@@ -688,6 +698,331 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Modal for detail view */}
+      {activeModalProduct && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(16px)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+          }}
+          onClick={() => setActiveModalProduct(null)}
+        >
+          <div
+            className="product-modal-card"
+            style={{
+              background: '#12141c',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '28px',
+              maxWidth: '860px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflow: 'hidden',
+              position: 'relative',
+              boxShadow: '0 25px 70px rgba(0,0,0,0.9), 0 0 40px rgba(250,204,21,0.08)',
+              display: 'flex',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setActiveModalProduct(null)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: 'rgba(0, 0, 0, 0.65)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                borderRadius: '50%',
+                width: '38px',
+                height: '38px',
+                color: '#fff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 30,
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.65)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              <X size={18} />
+            </button>
+
+            {/* Left Column: Full Product Image Showcase (No Cropping!) */}
+            <div
+              className="product-modal-img-col"
+              style={{
+                flex: '1 1 48%',
+                minHeight: '440px',
+                position: 'relative',
+                overflow: 'hidden',
+                background: '#090a0f',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {/* Ambient Blurred Backdrop matching flower colors */}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: '-30px',
+                  backgroundImage: `url(${activeModalProduct.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  filter: 'blur(32px) brightness(0.28) saturate(1.4)',
+                  transform: 'scale(1.25)',
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Full Uncropped High-Detail Bouquet Image */}
+              <img
+                src={activeModalProduct.image}
+                alt={activeModalProduct.name}
+                style={{
+                  position: 'relative',
+                  zIndex: 2,
+                  maxWidth: '100%',
+                  maxHeight: '480px',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                  padding: '16px',
+                  filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.7))',
+                  transition: 'transform 0.3s ease',
+                }}
+              />
+
+              {/* Badge Overlay */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '16px',
+                  left: '16px',
+                  zIndex: 10,
+                  padding: '4px 12px',
+                  borderRadius: '9999px',
+                  background: 'rgba(12, 13, 18, 0.85)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: activeModalProduct.badgeColor || '#facc15',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  letterSpacing: '0.5px',
+                }}
+              >
+                {activeModalProduct.badge || 'BESPOKE'}
+              </div>
+
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '16px',
+                  left: '16px',
+                  zIndex: 10,
+                  background: activeModalProduct.stock > 0 ? 'rgba(163, 230, 53, 0.2)' : 'rgba(244, 63, 94, 0.2)',
+                  backdropFilter: 'blur(8px)',
+                  border: `1px solid ${activeModalProduct.stock > 0 ? '#a3e635' : '#f43f5e'}66`,
+                  color: activeModalProduct.stock > 0 ? '#a3e635' : '#f43f5e',
+                  padding: '3px 12px',
+                  borderRadius: '9999px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                }}
+              >
+                {activeModalProduct.stock > 0 ? `Còn ${activeModalProduct.stock} bó hoa tươi` : 'Tạm hết hàng'}
+              </div>
+            </div>
+
+            {/* Right Column: Information & Actions */}
+            <div
+              className="product-modal-content-col"
+              style={{
+                flex: '1 1 52%',
+                padding: '32px 28px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                overflowY: 'auto',
+                maxHeight: '90vh',
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <span style={{ color: '#facc15', fontSize: '12px', fontWeight: 700, letterSpacing: '1px' }}>
+                    {activeModalProduct.category?.toUpperCase()}
+                  </span>
+                  <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px' }}>
+                    ⭐ {activeModalProduct.rating || 4.9} ({activeModalProduct.reviews || 88} đánh giá)
+                  </span>
+                </div>
+
+                <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#fff', marginBottom: '12px', lineHeight: 1.3 }}>
+                  {activeModalProduct.name}
+                </h2>
+
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', lineHeight: 1.6, marginBottom: '20px' }}>
+                  {activeModalProduct.description}
+                </p>
+
+                {/* Commitments & Value Props */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '22px' }}>
+                  <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>🌸</span> <span>Hoa tươi loại 1 trong ngày</span>
+                  </div>
+                  <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>🎀</span> <span>Tặng nơ lụa & thiệp ghi lời</span>
+                  </div>
+                  <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>⚡</span> <span>Giao hỏa tốc 2 giờ</span>
+                  </div>
+                  <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>📸</span> <span>Chụp ảnh thật trước khi giao</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
+                  <div>
+                    <div style={{ fontSize: '24px', fontWeight: 800, color: '#facc15' }}>
+                      {activeModalProduct.price?.toLocaleString('vi-VN')}₫
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
+                      Đơn giá niêm yết (Đã bao gồm VAT & nơ lụa)
+                    </div>
+                  </div>
+
+                  {/* Quantity Stepper */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.65)' }}>Số lượng:</span>
+                    <div
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        borderRadius: '9999px',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        padding: '3px 8px',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setModalQuantity(prev => Math.max(1, prev - 1))}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#ffffff',
+                          width: '26px',
+                          height: '26px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <span
+                        style={{
+                          color: '#ffffff',
+                          fontWeight: 800,
+                          fontSize: '14px',
+                          minWidth: '28px',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {modalQuantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setModalQuantity(prev => prev + 1)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#ffffff',
+                          width: '26px',
+                          height: '26px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addToCart(activeModalProduct, modalQuantity);
+                      setActiveModalProduct(null);
+                      setModalQuantity(1);
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '12px 20px',
+                      borderRadius: '9999px',
+                      background: 'rgba(250, 204, 21, 0.12)',
+                      border: '1.5px solid #facc15',
+                      color: '#facc15',
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <ShoppingCart size={16} />
+                    <span>Thêm Vào Giỏ Hàng</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="hero-cta-btn"
+                    style={{ flex: 1, justifyContent: 'center', padding: '12px 24px', fontSize: '14px' }}
+                    onClick={() => {
+                      handleQuickOrder(activeModalProduct, modalQuantity);
+                      setActiveModalProduct(null);
+                      setModalQuantity(1);
+                    }}
+                  >
+                    <span>Đặt Hoa Ngay</span>
+                    <div className="cta-icon-badge"><Check size={18} /></div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         @media (max-width: 640px) {
           .home-signature-grid {
@@ -711,6 +1046,25 @@ export default function HomePage() {
           .home-catalog-grid {
             grid-template-columns: 1fr !important;
             gap: 16px !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .product-modal-card {
+            flex-direction: column !important;
+            max-height: 88vh !important;
+            overflow-y: auto !important;
+            border-radius: 22px !important;
+          }
+          .product-modal-img-col {
+            min-height: 320px !important;
+            height: 320px !important;
+            flex: none !important;
+          }
+          .product-modal-content-col {
+            padding: 22px 18px !important;
+            flex: none !important;
+            max-height: none !important;
           }
         }
       `}</style>
