@@ -12,9 +12,12 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PetalCanvas from './components/PetalCanvas';
 import FloatingContactWidget from './components/FloatingContactWidget';
+import MobileBottomBar from './components/MobileBottomBar';
 
 // Customer Flow
 import { CustomerProvider } from './context/CustomerContext';
+import { CartProvider } from './context/CartContext';
+import CartDrawer from './components/CartDrawer';
 import CustomerAuthModal from './components/CustomerAuthModal';
 import OrderPlacementModal from './components/OrderPlacementModal';
 import MyOrdersModal from './components/MyOrdersModal';
@@ -40,6 +43,7 @@ function PublicLayout({ children }) {
       </main>
       <FloatingContactWidget />
       <Footer />
+      <MobileBottomBar />
     </>
   );
 }
@@ -79,51 +83,56 @@ export default function App() {
     <ToastContext.Provider value={addToast}>
       <BrowserRouter>
         <CustomerProvider addToast={addToast}>
-          {/* Global 3D Ambient Layer - No cursor followers */}
-          <FloatingSpheresBackground />
+          <CartProvider addToast={addToast}>
+            {/* Global 3D Ambient Layer - No cursor followers */}
+            <FloatingSpheresBackground />
 
-          <Routes>
-            <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
-            <Route path="/products" element={<PublicLayout><ProductsPage /></PublicLayout>} />
-            <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
+            <Routes>
+              <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
+              <Route path="/products" element={<PublicLayout><ProductsPage /></PublicLayout>} />
+              <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
 
-            <Route
-              path="/admin/login"
-              element={
-                isAdminLoggedIn ? (
-                  <Navigate to="/admin/dashboard" replace />
-                ) : (
-                  <AdminLogin onLogin={handleLogin} />
-                )
-              }
-            />
-            <Route path="/admin" element={
-              <ProtectedRoute isLoggedIn={isAdminLoggedIn}>
-                <AdminLayout onLogout={handleLogout} />
-              </ProtectedRoute>
-            }>
-              <Route index element={<Navigate to="/admin/dashboard" replace />} />
-              <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="products" element={<AdminProducts />} />
-              <Route path="inventory" element={<AdminInventory />} />
-              <Route path="customers" element={<AdminCustomers />} />
-              <Route path="orders" element={<AdminOrders />} />
-            </Route>
-          </Routes>
+              <Route
+                path="/admin/login"
+                element={
+                  isAdminLoggedIn ? (
+                    <Navigate to="/admin/dashboard" replace />
+                  ) : (
+                    <AdminLogin onLogin={handleLogin} />
+                  )
+                }
+              />
+              <Route path="/admin" element={
+                <ProtectedRoute isLoggedIn={isAdminLoggedIn}>
+                  <AdminLayout onLogout={handleLogout} />
+                </ProtectedRoute>
+              }>
+                <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="inventory" element={<AdminInventory />} />
+                <Route path="customers" element={<AdminCustomers />} />
+                <Route path="orders" element={<AdminOrders />} />
+              </Route>
+            </Routes>
 
-          {/* Customer Interactive Modals */}
-          <CustomerAuthModal />
-          <OrderPlacementModal />
-          <MyOrdersModal />
+            {/* Cart Drawer */}
+            <CartDrawer />
 
-          {/* Floating Toasts */}
-          <div className="toast-wrap">
-            {toasts.map(t => (
-              <div key={t.id} className={`toast toast-${t.type}`}>
-                {t.type === 'success' ? '✨ ' : '❌ '}{t.message}
-              </div>
-            ))}
-          </div>
+            {/* Customer Interactive Modals */}
+            <CustomerAuthModal />
+            <OrderPlacementModal />
+            <MyOrdersModal />
+
+            {/* Floating Toasts */}
+            <div className="toast-wrap">
+              {toasts.map(t => (
+                <div key={t.id} className={`toast toast-${t.type}`}>
+                  {t.type === 'success' ? '✨ ' : '❌ '}{t.message}
+                </div>
+              ))}
+            </div>
+          </CartProvider>
         </CustomerProvider>
       </BrowserRouter>
     </ToastContext.Provider>

@@ -772,4 +772,49 @@ h1, h2, h3, h4 {
   object-fit: cover;
 }
 
+/* ============================================================
+   MOBILE POLISH & THUMB-FRIENDLY BOTTOM NAVIGATION
+   ============================================================ */
+.floating-contact-widget {
+  bottom: 24px;
+  right: 24px;
+}
+
+@media (min-width: 769px) {
+  .mobile-bottom-nav-bar {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 74px; /* Safe space for sticky bottom navigation bar */
+  }
+
+  .floating-contact-widget {
+    bottom: 76px !important;
+    right: 14px !important;
+  }
+
+  /* Tap target enhancements & smooth tactile feel */
+  button, a, input, select, textarea {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-bottom-nav-btn:active {
+    transform: scale(0.92);
+  }
+
+  .btn-card-action:active,
+  .hero-cta-btn:active {
+    transform: scale(0.96) !important;
+  }
+
+  /* Prevent iOS auto-zoom on form inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
 

@@ -22,7 +22,11 @@ app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use('/uploads', express.static(UPLOAD_DIR));
 
 // Initialize MySQL pool and database
-await initMySQL();
+try {
+  await initMySQL();
+} catch (dbErr) {
+  console.warn('[Server DB Notice]', dbErr.message);
+}
 const pool = getPool();
 
 // Request logger
@@ -62,7 +66,7 @@ app.post('/api/products', async (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
       name, category, Number(price), originalPrice ? Number(originalPrice) : null,
-      image || '/images/product_rose.jpg', description || '',
+      image || '/images/vyvy_lily_hong.jpg', description || '',
       rating ? Number(rating) : 5.0, reviews ? Number(reviews) : 0,
       badge || '', badgeColor || '#facc15', Number(stock || 10),
       JSON.stringify(Array.isArray(occasion) ? occasion : []),
@@ -85,7 +89,7 @@ app.put('/api/products/:id', async (req, res) => {
       WHERE id = ?
     `, [
       name, category, Number(price), originalPrice ? Number(originalPrice) : null,
-      image || '/images/product_rose.jpg', description,
+      image || '/images/vyvy_lily_hong.jpg', description,
       Number(rating), Number(reviews), badge, badgeColor, Number(stock),
       JSON.stringify(Array.isArray(occasion) ? occasion : []),
       featured ? 1 : 0,
@@ -196,6 +200,7 @@ app.post('/api/orders', async (req, res) => {
       items,
       totalAmount,
       notes,
+      paymentStatus,
     } = req.body;
 
     const [countRows] = await pool.query('SELECT COUNT(*) as count FROM orders');
@@ -203,7 +208,7 @@ app.post('/api/orders', async (req, res) => {
 
     const [result] = await pool.query(`
       INSERT INTO orders (order_code, customer_name, customer_phone, customer_email, delivery_date, delivery_address, occasion, items_json, total_amount, status, payment_status, notes)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Chờ xác nhận', 'Chưa thanh toán', ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Chờ xác nhận', ?, ?)
     `, [
       orderCode,
       customerName,
@@ -214,6 +219,7 @@ app.post('/api/orders', async (req, res) => {
       occasion || 'Sinh nhật',
       JSON.stringify(items || []),
       Number(totalAmount || 0),
+      paymentStatus || 'Chưa thanh toán',
       notes || ''
     ]);
 

@@ -23,7 +23,7 @@ export default function AdminLogin({ onLogin }) {
         setError(res.message || 'Sai thông tin đăng nhập!');
       }
     } catch (err) {
-      setError(err.message || 'Lỗi kết nối tới cơ sở dữ liệu MySQL!');
+      setError(err.message || 'Lỗi kết nối máy chủ!');
     } finally {
       setLoading(false);
     }
@@ -49,43 +49,27 @@ export default function AdminLogin({ onLogin }) {
         {/* Brand Logo matching Vy Vy Flower */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '10px',
-            marginBottom: '14px',
+            display: 'inline-block',
+            marginBottom: '18px',
           }}>
             <img
-              src="/images/vyvy_avatar.jpg"
-              alt="Vy Vy Flower"
+              src="/images/logo-white.png"
+              alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
               style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '50%',
-                border: '2px solid #facc15',
-                boxShadow: '0 0 16px rgba(250, 204, 21, 0.4)',
+                height: '68px',
+                width: 'auto',
+                maxWidth: '280px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 2px 14px rgba(0,0,0,0.6))',
               }}
             />
-            <span style={{ fontSize: '26px', fontWeight: 800, color: '#fff', letterSpacing: '-0.5px' }}>
-              Vy Vy
-            </span>
-            <span style={{
-              background: 'linear-gradient(135deg, #f59e0b 0%, #ec4899 100%)',
-              color: '#ffffff',
-              padding: '3px 12px',
-              borderRadius: '9999px',
-              fontSize: '12px',
-              fontWeight: 800,
-              letterSpacing: '0.8px',
-            }}>
-              FLOWER
-            </span>
           </div>
 
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>
             Cổng Quản Trị Hệ Thống
           </h2>
           <p style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '13px' }}>
-            Xác thực tài khoản trực tiếp qua cơ sở dữ liệu MySQL (Workbench)
+            Hệ thống quản lý tiệm hoa nghệ thuật Vy Vy Flower
           </p>
         </div>
 
@@ -146,7 +130,7 @@ export default function AdminLogin({ onLogin }) {
             className="hero-cta-btn"
             style={{ width: '100%', justifyContent: 'center', marginTop: '8px' }}
           >
-            <span>{loading ? 'Đang xác thực qua MySQL...' : 'Đăng Nhập Quản Trị'}</span>
+            <span>{loading ? 'Đang xác thực...' : 'Đăng Nhập Quản Trị'}</span>
             <div className="cta-icon-badge">
               <ArrowRight size={18} />
             </div>
@@ -166,8 +150,8 @@ export default function AdminLogin({ onLogin }) {
           flexDirection: 'column',
           gap: '4px',
         }}>
-          <div><strong>Tài khoản trong MySQL:</strong> <code style={{ color: '#facc15' }}>admin</code></div>
-          <div><strong>Mật khẩu trong MySQL:</strong> <code style={{ color: '#facc15' }}>bloom2026</code></div>
+          <div><strong>Tài khoản mặc định:</strong> <code style={{ color: '#facc15' }}>admin</code></div>
+          <div><strong>Mật khẩu mặc định:</strong> <code style={{ color: '#facc15' }}>bloom2026</code></div>
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '20px' }}>

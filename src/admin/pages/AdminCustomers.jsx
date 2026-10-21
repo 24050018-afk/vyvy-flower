@@ -37,7 +37,7 @@ export default function AdminCustomers() {
       const data = await getCustomers();
       setCustomers(data);
     } catch (err) {
-      addToast('Không thể tải khách hàng từ database!', 'error');
+      addToast('Không thể tải danh sách khách hàng!', 'error');
     } finally {
       setLoading(false);
     }
@@ -75,10 +75,10 @@ export default function AdminCustomers() {
     try {
       if (editItem) {
         await updateCustomer(editItem.id, form);
-        addToast(`Đã cập nhật thông tin "${form.name}" trong MySQL Database!`);
+        addToast(`Đã cập nhật thông tin "${form.name}" thành công!`);
       } else {
         await createCustomer(form);
-        addToast(`Đã thêm khách hàng "${form.name}" vào MySQL Database!`);
+        addToast(`Đã thêm khách hàng "${form.name}" thành công!`);
       }
       setShowModal(false);
       loadData();
@@ -88,7 +88,7 @@ export default function AdminCustomers() {
   };
 
   const handleDelete = async (id, name) => {
-    if (window.confirm(`Xác nhận xóa khách hàng "${name}" khỏi cơ sở dữ liệu MySQL?`)) {
+    if (window.confirm(`Xác nhận xóa khách hàng "${name}"?`)) {
       try {
         await deleteCustomer(id);
         addToast(`Đã xóa khách hàng "${name}"!`);
@@ -140,7 +140,7 @@ export default function AdminCustomers() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ fontSize: '11px', color: '#a3e635', fontWeight: 700, letterSpacing: '1px' }}>
-              ● MYSQL TABLE: vyvy_flower_db.customers
+              ● QUẢN LÝ KHÁCH HÀNG
             </div>
             <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#fff', marginTop: '4px' }}>
               Quản Lý Khách Hàng
@@ -659,7 +659,7 @@ export default function AdminCustomers() {
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#fff' }}>
-                {editItem ? 'Chỉnh Sửa Khách Hàng (MySQL Workbench)' : 'Thêm Khách Hàng Mới (MySQL)'}
+                {editItem ? 'Chỉnh Sửa Khách Hàng' : 'Thêm Khách Hàng Mới'}
               </h3>
               <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}>
                 <X size={20} />
@@ -760,7 +760,7 @@ export default function AdminCustomers() {
                   className="hero-cta-btn"
                   style={{ flex: 2, justifyContent: 'center' }}
                 >
-                  <span>{editItem ? 'Cập Nhật Khách Hàng' : 'Thêm Vào MySQL'}</span>
+                  <span>{editItem ? 'Cập Nhật Khách Hàng' : 'Thêm Khách Hàng'}</span>
                   <div className="cta-icon-badge" style={{ width: '28px', height: '28px' }}>
                     <Check size={16} />
                   </div>

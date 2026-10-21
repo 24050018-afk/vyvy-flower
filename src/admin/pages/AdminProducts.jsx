@@ -29,7 +29,7 @@ export default function AdminProducts() {
     occasion: 'Sinh nhật, Kỷ niệm',
     rating: '5.0',
     reviews: '0',
-    image: '/images/product_rose.jpg',
+    image: '/images/vyvy_lily_hong.jpg',
   });
 
   const loadData = async () => {
@@ -38,7 +38,7 @@ export default function AdminProducts() {
       const data = await getProducts();
       setProductList(data);
     } catch (err) {
-      addToast('Không thể tải sản phẩm từ MySQL!', 'error');
+      addToast('Không thể tải danh sách sản phẩm!', 'error');
     } finally {
       setLoading(false);
     }
@@ -61,7 +61,7 @@ export default function AdminProducts() {
       occasion: 'Sinh nhật, Kỷ niệm',
       rating: '5.0',
       reviews: '0',
-      image: '/images/product_rose.jpg',
+      image: '/images/vyvy_lily_hong.jpg',
     });
     setShowModal(true);
   };
@@ -79,7 +79,7 @@ export default function AdminProducts() {
       occasion: Array.isArray(product.occasion) ? product.occasion.join(', ') : '',
       rating: String(product.rating || '5.0'),
       reviews: String(product.reviews || '0'),
-      image: product.image || '/images/product_rose.jpg',
+      image: product.image || '/images/vyvy_lily_hong.jpg',
     });
     setShowModal(true);
   };
@@ -105,10 +105,10 @@ export default function AdminProducts() {
     try {
       if (editItem) {
         await updateProduct(editItem.id, payload);
-        addToast(`Đã cập nhật "${form.name}" vào MySQL Database!`);
+        addToast(`Đã cập nhật "${form.name}" thành công!`);
       } else {
         await createProduct(payload);
-        addToast(`Đã thêm mới "${form.name}" vào MySQL Database!`);
+        addToast(`Đã thêm mới "${form.name}" thành công!`);
       }
       setShowModal(false);
       loadData();
@@ -118,7 +118,7 @@ export default function AdminProducts() {
   };
 
   const handleDelete = async (id, name) => {
-    if (window.confirm(`Xác nhận xóa sản phẩm "${name}" khỏi cơ sở dữ liệu MySQL?`)) {
+    if (window.confirm(`Xác nhận xóa sản phẩm "${name}" khỏi hệ thống?`)) {
       try {
         await deleteProduct(id);
         addToast(`Đã xóa "${name}" vĩnh viễn!`);
@@ -131,7 +131,7 @@ export default function AdminProducts() {
 
   const openQuickImageEdit = (product) => {
     setQuickImageProduct(product);
-    setQuickImageUrl(product.image || '/images/product_rose.jpg');
+    setQuickImageUrl(product.image || '/images/vyvy_lily_hong.jpg');
   };
 
   const handleSaveQuickImage = async () => {
@@ -140,7 +140,7 @@ export default function AdminProducts() {
     try {
       await updateProductImage(quickImageProduct.id, quickImageUrl);
       setProductList(prev => prev.map(p => p.id === quickImageProduct.id ? { ...p, image: quickImageUrl } : p));
-      addToast(`Đã cập nhật hình ảnh cho "${quickImageProduct.name}" vào MySQL Database!`);
+      addToast(`Đã cập nhật hình ảnh cho "${quickImageProduct.name}" thành công!`);
       setQuickImageProduct(null);
     } catch (err) {
       addToast(err.message || 'Lỗi khi cập nhật ảnh sản phẩm!', 'error');
@@ -186,13 +186,13 @@ export default function AdminProducts() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ fontSize: '12px', color: '#a3e635', fontWeight: 700, letterSpacing: '1px' }}>
-              ● MYSQL TABLE: vyvy_flower_db.products
+              ● QUẢN LÝ SẢN PHẨM
             </div>
             <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', marginTop: '4px' }}>
               Quản Lý Sản Phẩm
             </h1>
             <p style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px', marginTop: '4px' }}>
-              Đồng bộ hai chiều với MySQL Workbench (xem và chỉnh sửa trực tiếp qua SQL)
+              Danh mục hoa tươi nghệ thuật, cập nhật thời gian thực
             </p>
           </div>
 
@@ -294,7 +294,7 @@ export default function AdminProducts() {
                         <img
                           src={p.image}
                           alt={p.name}
-                          onError={(e) => { e.target.src = '/images/product_rose.jpg'; }}
+                          onError={(e) => { e.target.src = '/images/vyvy_lily_hong.jpg'; }}
                         />
                         <div className="admin-product-thumb-overlay">
                           <Camera size={18} />
@@ -434,7 +434,7 @@ export default function AdminProducts() {
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#fff' }}>
-                {editItem ? 'Chỉnh Sửa Sản Phẩm (MySQL Workbench)' : 'Thêm Sản Phẩm Mới (MySQL)'}
+                {editItem ? 'Chỉnh Sửa Sản Phẩm' : 'Thêm Sản Phẩm Mới'}
               </h3>
               <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}>
                 <X size={20} />
@@ -585,7 +585,7 @@ export default function AdminProducts() {
                   className="hero-cta-btn"
                   style={{ flex: 2, justifyContent: 'center' }}
                 >
-                  <span>{editItem ? 'Lưu Vào Database' : 'Tạo Mới Trong Database'}</span>
+                  <span>{editItem ? 'Lưu Thay Đổi' : 'Tạo Sản Phẩm Mới'}</span>
                   <div className="cta-icon-badge" style={{ width: '28px', height: '28px' }}>
                     <Check size={16} />
                   </div>
@@ -603,7 +603,7 @@ export default function AdminProducts() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <div>
                 <div style={{ fontSize: '11px', color: '#a3e635', fontWeight: 700, letterSpacing: '0.5px' }}>
-                  ● MYSQL UPDATE: vyvy_flower_db.products.image
+                  ● HÌNH ẢNH SẢN PHẨM
                 </div>
                 <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#fff', marginTop: '4px' }}>
                   Đổi Hình Ảnh Sản Phẩm
@@ -653,7 +653,7 @@ export default function AdminProducts() {
                 className="hero-cta-btn"
                 style={{ flex: 2, justifyContent: 'center' }}
               >
-                <span>{savingImage ? 'Đang Lưu...' : 'Cập Nhật Ảnh Vào MySQL'}</span>
+                <span>{savingImage ? 'Đang Lưu...' : 'Cập Nhật Ảnh'}</span>
                 <div className="cta-icon-badge" style={{ width: '28px', height: '28px' }}>
                   <Check size={16} />
                 </div>

@@ -3,14 +3,19 @@ import { Upload, Link as LinkIcon, Image as ImageIcon, Check, Loader2 } from 'lu
 import { uploadImage } from '../../services/api';
 
 const PRESET_IMAGES = [
-  { url: '/images/product_rose.jpg', name: 'Hoa Hồng Đỏ Classic' },
-  { url: '/images/product_orchid.jpg', name: 'Lan Hồ Điệp Hoàng Gia' },
-  { url: '/images/product_mixed.jpg', name: 'Bó Hoa Mùa Xuân' },
-  { url: '/images/hero_banner.jpg', name: 'Giỏ Hoa Sen Đỏ Hoàng Triều' },
-  { url: '/images/spheres_green.jpg', name: '3D Electro Bloom' },
-  { url: '/images/spheres_yellow.jpg', name: '3D Sunshine Euphoria' },
-  { url: '/images/spheres_purple.jpg', name: '3D Velvet Dream' },
-  { url: '/images/vyvy_avatar.jpg', name: 'Vy Vy Signature Art' },
+  { url: '/images/vyvy_lily_hong.jpg', name: 'Bó Hoa Lily Trắng & Hồng Đỏ Quý Phái' },
+  { url: '/images/vyvy_baby_tulip_xanh.jpg', name: 'Bó Baby Xanh Biển & Tulip Trắng' },
+  { url: '/images/vyvy_traicay_saurieng.jpg', name: 'Bó Hoa Trái Cây Sầu Riêng & Măng Cụt' },
+  { url: '/images/vyvy_hong_juliet_tana.jpg', name: 'Bó Hoa Hồng Juliet & Cúc Tana Nắng Hạ' },
+  { url: '/images/vyvy_ly_kep_hong.jpg', name: 'Bó Hoa Ly Kép Hồng Công Chúa' },
+  { url: '/images/vyvy_chucmung_2010.jpg', name: 'Bó Hoa Chúc Mừng 20/10 Vy Vy Edition' },
+  { url: '/images/vyvy_hong_camchuong.jpg', name: 'Bó Hoa Hồng & Cẩm Chướng Pastel' },
+  { url: '/images/vyvy_sac_mau_nang_ha.jpg', name: 'Bó Hoa Sắc Màu Nắng Hạ' },
+  { url: '/images/vyvy_lily_trang.jpg', name: 'Bó Hoa Lily Trắng Tinh Khôi' },
+  { url: '/images/vyvy_pastel_hong.jpg', name: 'Bó Đồng Tiền & Cẩm Chướng Pastel' },
+  { url: '/images/vyvy_baby_xanh_gocnghieng.jpg', name: 'Bó Baby Xanh Biển Nghệ Thuật' },
+  { url: '/images/vyvy_dongtien_pastel.jpg', name: 'Bó Đồng Tiền Pastel (Góc cận)' },
+  { url: '/images/vyvy_sac_mau_nang_ha_2.jpg', name: 'Bó Sắc Màu Nắng Hạ (Góc cận)' },
 ];
 
 export default function ProductImageSelector({ value, onChange, productName = 'flower', onError }) {
@@ -109,9 +114,9 @@ export default function ProductImageSelector({ value, onChange, productName = 'f
             </div>
           ) : (
             <img
-              src={value || '/images/product_rose.jpg'}
+              src={value || '/images/vyvy_lily_hong.jpg'}
               alt="Preview"
-              onError={(e) => { e.target.src = '/images/product_rose.jpg'; }}
+              onError={(e) => { e.target.src = '/images/vyvy_lily_hong.jpg'; }}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           )}

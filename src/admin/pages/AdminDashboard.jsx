@@ -151,13 +151,13 @@ export default function AdminDashboard() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '12px', color: '#a3e635', fontWeight: 700, letterSpacing: '1px' }}>● LIVE MYSQL 8.0 (SCHEMA: vyvy_flower_db)</span>
+              <span style={{ fontSize: '12px', color: '#a3e635', fontWeight: 700, letterSpacing: '1px' }}>● HỆ THỐNG QUẢN TRỊ VY VY FLOWER</span>
             </div>
             <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', marginTop: '4px' }}>
               Bảng Điều Khiển Quản Trị
             </h1>
             <p style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px', marginTop: '4px' }}>
-              Dữ liệu đơn hàng, doanh thu và tồn kho thời gian thực từ cơ sở dữ liệu MySQL (quản lý qua MySQL Workbench)
+              Tổng quan đơn hàng, doanh thu và tồn kho cập nhật theo thời gian thực
             </p>
           </div>
 
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
         {/* Category breakdown */}
         <div className="glass-card" style={{ padding: '28px', borderRadius: '24px' }}>
           <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '20px' }}>
-            Phân Bổ Danh Mục Sản Phẩm (MySQL)
+            Phân Bổ Danh Mục Sản Phẩm
           </h3>
 
           <div style={{ display: 'flex', alignItems: 'center', height: '260px' }}>
@@ -315,7 +315,7 @@ export default function AdminDashboard() {
       <div className="glass-card" style={{ padding: '28px', borderRadius: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#fff', margin: 0 }}>
-            Đơn Hàng Gần Đây Trong Database
+            Đơn Hàng Gần Đây
           </h3>
           <button
             onClick={handleExportRecentOrders}

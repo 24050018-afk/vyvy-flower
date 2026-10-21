@@ -119,7 +119,7 @@ export default function MyOrdersModal() {
         {/* Orders list */}
         {loading && orders.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px', color: 'rgba(255,255,255,0.5)' }}>
-            Đang tải dữ liệu đơn hàng từ MySQL...
+            Đang tải danh sách đơn hàng...
           </div>
         ) : orders.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '50px 20px', background: 'rgba(255,255,255,0.02)', borderRadius: '24px' }}>

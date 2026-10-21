@@ -77,30 +77,18 @@ export default function AdminLayout({ onLogout }) {
         {/* Brand Logo & Mobile close button */}
         <div style={{ padding: '20px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
               <img
-                src="/images/vyvy_avatar.jpg"
-                alt="Vy Vy Flower"
+                src="/images/logo-white.png"
+                alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  border: '1.5px solid #facc15',
+                  height: '48px',
+                  width: 'auto',
+                  maxWidth: '200px',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))',
                 }}
               />
-              <span style={{ fontSize: '18px', fontWeight: 800, color: '#fff', letterSpacing: '-0.5px' }}>
-                Vy Vy
-              </span>
-              <span style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #ec4899 100%)',
-                color: '#ffffff',
-                padding: '2px 8px',
-                borderRadius: '9999px',
-                fontSize: '10px',
-                fontWeight: 800,
-              }}>
-                FLOWER
-              </span>
             </Link>
             <div style={{ color: 'rgba(255, 255, 255, 0.4)', fontSize: '11px', marginTop: '6px', letterSpacing: '1px', textTransform: 'uppercase' }}>
               Quản Trị Hệ Thống
@@ -277,7 +265,7 @@ export default function AdminLayout({ onLogout }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#a3e635', boxShadow: '0 0 10px #a3e635', flexShrink: 0 }} />
               <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
-                MySQL 8.0: <span style={{ color: '#facc15' }}>vyvy_flower_db</span>
+                Hệ Thống: <span style={{ color: '#a3e635' }}>Trực Tuyến</span>
               </span>
             </div>
           </div>

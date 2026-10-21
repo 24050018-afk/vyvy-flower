@@ -5,13 +5,14 @@ export default function FloatingContactWidget() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: '24px',
-      right: '24px',
-      zIndex: 90,
-      fontFamily: 'inherit',
-    }}>
+    <div
+      className="floating-contact-widget"
+      style={{
+        position: 'fixed',
+        zIndex: 90,
+        fontFamily: 'inherit',
+      }}
+    >
       {/* Expanded popover */}
       {open && (
         <div style={{

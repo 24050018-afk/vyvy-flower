@@ -81,9 +81,9 @@ export default function ContactPage() {
 
       const res = await createOrder(orderData);
       setSubmittedOrder({ ...orderData, orderCode: res.orderCode });
-      addToast(`Đã lưu đơn hàng ${res.orderCode} vào MySQL Database thành công!`);
+      addToast(`Đã gửi đơn hàng ${res.orderCode} thành công! Vy Vy Flower sẽ liên hệ bạn sớm nhất.`);
     } catch (err) {
-      addToast(err.message || 'Lỗi khi tạo đơn hàng trong database!', 'error');
+      addToast(err.message || 'Lỗi khi gửi đơn hàng, vui lòng thử lại!', 'error');
     } finally {
       setLoading(false);
     }
@@ -201,7 +201,7 @@ export default function ContactPage() {
             Liên Hệ & <span className="text-highlight-yellow">Đặt Hoa Riêng</span>
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: '580px', margin: '0 auto', fontSize: '15px' }}>
-            Thông tin đặt hoa sẽ được lưu trữ trực tiếp vào MySQL Database và cập nhật lên MySQL Workbench
+            Chúng tôi luôn sẵn sàng lắng nghe và thiết kế những tác phẩm hoa nghệ thuật độc bản theo đúng mong muốn của bạn.
           </p>
         </div>
 
@@ -352,7 +352,7 @@ export default function ContactPage() {
                 className="hero-cta-btn"
                 style={{ width: '100%', justifyContent: 'center', marginTop: '10px' }}
               >
-                <span>{loading ? 'Đang lưu vào MySQL...' : 'Gửi Đơn Hàng Vào Database'}</span>
+                <span>{loading ? 'Đang gửi yêu cầu...' : 'Gửi Yêu Cầu Đặt Hoa'}</span>
                 <div className="cta-icon-badge">
                   <Send size={18} />
                 </div>
@@ -420,8 +420,8 @@ export default function ContactPage() {
 
             <div className="showcase-card" style={{ height: '260px' }}>
               <img
-                src="/images/spheres_yellow.jpg"
-                alt="Studio 3D art"
+                src="/images/vyvy_hong_juliet_tana.jpg"
+                alt="Vy Vy Flower Atelier"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
               <div style={{
@@ -434,7 +434,7 @@ export default function ContactPage() {
                   VIP FLORAL CONCIERGE
                 </span>
                 <h4 style={{ color: '#fff', fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>
-                  Đơn hàng được lưu tự động vào database
+                  Dịch vụ tư vấn & cắm hoa theo yêu cầu
                 </h4>
               </div>
             </div>

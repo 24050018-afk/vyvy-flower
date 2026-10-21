@@ -92,7 +92,7 @@ export default function AdminOrders() {
       const data = await getOrders();
       setOrders(data);
     } catch (err) {
-      addToast('Không thể tải đơn hàng từ MySQL!', 'error');
+      addToast('Không thể tải danh sách đơn hàng!', 'error');
     } finally {
       setLoading(false);
     }
@@ -154,7 +154,7 @@ export default function AdminOrders() {
   };
 
   const handleDelete = async (id, code) => {
-    if (window.confirm(`Xác nhận xóa vĩnh viễn đơn hàng "${code}" khỏi cơ sở dữ liệu MySQL?`)) {
+    if (window.confirm(`Xác nhận xóa vĩnh viễn đơn hàng "${code}"?`)) {
       try {
         await deleteOrder(id);
         addToast(`Đã xóa đơn hàng "${code}" thành công!`);
@@ -270,7 +270,7 @@ export default function AdminOrders() {
               }}
             >
               <RefreshCw size={14} className={loading ? 'spin' : ''} />
-              <span>Làm mới MySQL</span>
+              <span>Làm mới</span>
             </button>
           </div>
         </div>
@@ -641,6 +641,46 @@ export default function AdminOrders() {
                   <strong>Địa chỉ giao:</strong> {detailOrder.deliveryAddress || 'Nhận tại cửa hàng'}
                 </div>
               </div>
+
+              {/* Itemized Products Ordered */}
+              {Array.isArray(detailOrder.items) && detailOrder.items.length > 0 && (
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '18px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <div style={{ fontSize: '12px', color: '#facc15', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
+                    Danh Sách Hoa Đã Đặt ({detailOrder.items.length} tác phẩm):
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {detailOrder.items.map((it, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '6px 0',
+                          borderBottom: idx < detailOrder.items.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <img
+                            src={it.image || '/images/vyvy_lily_hong.jpg'}
+                            alt={it.name}
+                            style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'cover' }}
+                          />
+                          <div>
+                            <div style={{ color: '#fff', fontWeight: 600, fontSize: '13px' }}>{it.name}</div>
+                            <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '11px' }}>
+                              {Number(it.price || 0).toLocaleString('vi-VN')}₫ x {it.quantity || 1}
+                            </div>
+                          </div>
+                        </div>
+                        <div style={{ color: '#a3e635', fontWeight: 700, fontSize: '13px' }}>
+                          {((Number(it.price) || 0) * (Number(it.quantity) || 1)).toLocaleString('vi-VN')}₫
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {detailOrder.notes && (
                 <div style={{ background: 'rgba(250, 204, 21, 0.05)', padding: '14px', borderRadius: '16px', border: '1px solid rgba(250, 204, 21, 0.2)' }}>

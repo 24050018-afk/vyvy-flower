@@ -4,8 +4,9 @@ import { products as fallbackProducts } from '../data/mockData';
 import { getProducts } from '../services/api';
 import { ToastContext } from '../App';
 import Card3D from '../components/Card3D';
-import { Sparkles, ArrowRight, Heart, Star, ShieldCheck, Truck, Clock, Palette } from 'lucide-react';
+import { Sparkles, ArrowRight, Heart, Star, ShieldCheck, Truck, Clock, Palette, ShoppingCart } from 'lucide-react';
 import { useCustomer } from '../context/CustomerContext';
+import { useCart } from '../context/CartContext';
 
 export default function HomePage() {
   const addToast = useContext(ToastContext);
@@ -21,48 +22,55 @@ export default function HomePage() {
   }, []);
 
   const { startOrderFlow } = useCustomer();
+  const { addToCart, startDirectOrder } = useCart();
 
-  const handleQuickOrder = (title, priceNum) => {
-    startOrderFlow({
-      id: Date.now(),
-      name: title,
+  const handleQuickOrder = (productObj) => {
+    startDirectOrder(productObj);
+  };
+
+  const handleAddSignatureToCart = (card, priceNum) => {
+    addToCart({
+      id: card.id,
+      name: card.title,
       price: priceNum,
-      image: '/images/spheres_green.jpg',
-      category: 'Signature 3D Edition'
+      image: card.image,
+      category: 'Signature 3D Edition',
+      badge: card.badge,
+      badgeColor: card.themeColor,
     });
   };
 
-  // The 3 signature 3D showcase cards from the reference image
+  // The 3 signature showcase cards with real Vy Vy Flower designs
   const signature3DCards = [
     {
       id: 'sig-1',
-      title: 'ELECTRO BLOOM',
-      subtitle: 'TROPICAL BOTANICALS • 2026',
+      title: 'BLUE CELESTIAL',
+      subtitle: 'BABY BIỂN & TULIP TRẮNG • 2026',
       badge: 'POPULAR',
-      price: '950.000₫',
-      image: '/images/spheres_green.jpg',
-      themeColor: '#a3e635',
-      icon: '🌿',
+      price: '680.000₫',
+      image: '/images/vyvy_baby_tulip_xanh.jpg',
+      themeColor: '#38bdf8',
+      icon: '❄️',
     },
     {
       id: 'sig-2',
-      title: 'FOAM SUNSHINE',
-      subtitle: 'GOLDEN ROSE & AMBER • ATELIER',
+      title: 'JULIET SUNSHINE',
+      subtitle: 'GOLDEN JULIET & CÚC TANA • ATELIER',
       badge: 'SIGNATURE',
-      price: '1.450.000₫',
-      image: '/images/spheres_yellow.jpg',
+      price: '520.000₫',
+      image: '/images/vyvy_hong_juliet_tana.jpg',
       themeColor: '#facc15',
       icon: '✨',
     },
     {
       id: 'sig-3',
-      title: 'VELVET DREAM',
-      subtitle: 'LAVENDER & HYDRANGEA • LUXE',
+      title: 'ROYAL PINK LILY',
+      subtitle: 'LY KÉP HỒNG CÔNG CHÚA • LUXE',
       badge: 'PRESTIGE',
-      price: '1.850.000₫',
-      image: '/images/spheres_purple.jpg',
-      themeColor: '#c084fc',
-      icon: '🔮',
+      price: '750.000₫',
+      image: '/images/vyvy_ly_kep_hong.jpg',
+      themeColor: '#f472b6',
+      icon: '🌸',
     },
   ];
 
@@ -113,8 +121,8 @@ export default function HomePage() {
             color: 'rgba(255, 255, 255, 0.75)',
             marginBottom: '28px',
           }}>
-            <span style={{ color: '#facc15' }}>✦</span>
-            <span>NEXT-GEN FLORAL ATELIER & BESPOKE ART</span>
+            <span>✦</span>
+            <span>VY VY FLOWER • TIỆM HOA NGHỆ THUẬT SÓC TRĂNG</span>
           </div>
 
           {/* Headline - exact layout with neon yellow accent */}
@@ -140,7 +148,7 @@ export default function HomePage() {
             lineHeight: 1.65,
             fontWeight: 400,
           }}>
-            Không gian nghệ thuật cắm hoa đương đại độc bản. Nơi từng đóa hoa được tuyển chọn thủ công, kết tinh cùng ngôn ngữ thiết kế 3D vị lai.
+            Vy Vy Flower — Tiệm hoa tươi nghệ thuật độc bản Sóc Trăng. Nơi từng đóa hoa được tuyển chọn thủ công, kết tinh cùng ngôn ngữ thiết kế 3D vị lai.
           </p>
 
           {/* Hero CTA Button (Exact rounded pill with inner circle) */}
@@ -156,14 +164,17 @@ export default function HomePage() {
           {/* ========================================================
               THE 3 SIGNATURE 3D CARDS (Exact match to bottom of image)
               ======================================================== */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-            gap: '24px',
-            maxWidth: '1060px',
-            margin: '0 auto',
-            textAlign: 'left',
-          }}>
+          <div
+            className="home-signature-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+              gap: '24px',
+              maxWidth: '1060px',
+              margin: '0 auto',
+              textAlign: 'left',
+            }}
+          >
             {signature3DCards.map((card) => (
               <Card3D key={card.id} intensity={14} style={{ borderRadius: '28px' }}>
                 <div className="showcase-card" style={{ height: '360px' }}>
@@ -254,16 +265,57 @@ export default function HomePage() {
                       </span>
                     </div>
 
-                    <button
-                      className="btn-card-action"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const priceNum = card.id === 'sig-1' ? 950000 : card.id === 'sig-2' ? 1450000 : 1850000;
-                        handleQuickOrder(card.title, priceNum);
-                      }}
-                    >
-                      Place a Bid
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        type="button"
+                        title="Thêm vào giỏ hàng"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const priceNum = card.id === 'sig-1' ? 950000 : card.id === 'sig-2' ? 1450000 : 1850000;
+                          handleAddSignatureToCart(card, priceNum);
+                        }}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '50%',
+                          background: 'rgba(255, 255, 255, 0.1)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          color: '#ffffff',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = '#facc15';
+                          e.currentTarget.style.color = '#facc15';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                          e.currentTarget.style.color = '#ffffff';
+                        }}
+                      >
+                        <ShoppingCart size={14} />
+                      </button>
+
+                      <button
+                        className="btn-card-action"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const priceNum = card.id === 'sig-1' ? 950000 : card.id === 'sig-2' ? 1450000 : 1850000;
+                          handleQuickOrder({
+                            id: card.id,
+                            name: card.title,
+                            price: priceNum,
+                            image: card.image,
+                            category: 'Signature 3D Edition',
+                          });
+                        }}
+                      >
+                        Đặt Ngay
+                      </button>
+                    </div>
                   </div>
                 </div>
               </Card3D>
@@ -305,7 +357,7 @@ export default function HomePage() {
           </div>
 
           {/* Category Filter Pills */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <div className="home-categories-scroll" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {categories.map(cat => (
               <button
                 key={cat}
@@ -329,11 +381,14 @@ export default function HomePage() {
         </div>
 
         {/* Product Cards Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '24px',
-        }}>
+        <div
+          className="home-catalog-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: '24px',
+          }}
+        >
           {filteredProducts.map((p) => (
             <Card3D key={p.id} intensity={10} style={{ borderRadius: '24px' }}>
               <div className="glass-panel" style={{
@@ -432,13 +487,49 @@ export default function HomePage() {
                       )}
                     </div>
 
-                    <button
-                      className="btn-card-action"
-                      style={{ padding: '8px 16px', fontSize: '12px' }}
-                      onClick={() => handleQuickOrder(p.name, p.price)}
-                    >
-                      Đặt Ngay
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        type="button"
+                        title="Thêm vào giỏ hàng"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(p);
+                        }}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '50%',
+                          background: 'rgba(255, 255, 255, 0.08)',
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          color: '#ffffff',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = '#facc15';
+                          e.currentTarget.style.color = '#facc15';
+                          e.currentTarget.style.background = 'rgba(250, 204, 21, 0.12)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                          e.currentTarget.style.color = '#ffffff';
+                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                        }}
+                      >
+                        <ShoppingCart size={14} />
+                      </button>
+
+                      <button
+                        className="btn-card-action"
+                        style={{ padding: '8px 16px', fontSize: '12px' }}
+                        onClick={() => handleQuickOrder(p)}
+                      >
+                        Đặt Ngay
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -568,8 +659,8 @@ export default function HomePage() {
             <Card3D intensity={12} style={{ borderRadius: '28px' }}>
               <div className="showcase-card" style={{ height: '380px' }}>
                 <img
-                  src="/images/spheres_purple.jpg"
-                  alt="Workshop 3D"
+                  src="/images/vyvy_lily_hong.jpg"
+                  alt="Workshop Nghệ Thuật Vy Vy Flower"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <div style={{
@@ -594,6 +685,32 @@ export default function HomePage() {
         </div>
       </section>
 
+      <style>{`
+        @media (max-width: 640px) {
+          .home-signature-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .home-categories-scroll {
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            width: 100% !important;
+            padding-bottom: 6px !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none !important;
+          }
+          .home-categories-scroll::-webkit-scrollbar {
+            display: none !important;
+          }
+          .home-categories-scroll button {
+            flex-shrink: 0 !important;
+          }
+          .home-catalog-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

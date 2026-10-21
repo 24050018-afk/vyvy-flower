@@ -22,36 +22,21 @@ export default function Footer() {
           <div>
             <Link to="/" style={{
               textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              color: '#ffffff',
+              display: 'inline-block',
               marginBottom: '18px',
             }}>
               <img
-                src="/images/vyvy_avatar.jpg"
-                alt="Vy Vy Flower"
+                src="/images/logo-white.png"
+                alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
                 style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  border: '1.5px solid #facc15',
+                  height: '68px',
+                  width: 'auto',
+                  maxWidth: '280px',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 14px rgba(0,0,0,0.6))',
+                  display: 'block',
                 }}
               />
-              <span style={{ fontSize: '24px', fontWeight: 800, letterSpacing: '-0.5px' }}>
-                Vy Vy
-              </span>
-              <span style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #ec4899 100%)',
-                color: '#ffffff',
-                padding: '2px 9px',
-                borderRadius: '9999px',
-                fontSize: '11px',
-                fontWeight: 800,
-                letterSpacing: '0.8px',
-              }}>
-                FLOWER
-              </span>
             </Link>
 
             <p style={{

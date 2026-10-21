@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { User, MessageSquare, ShoppingBag, Sparkles, Menu, X, Shield } from 'lucide-react';
+import { User, ShoppingBag, ShoppingCart, Menu, X, Shield } from 'lucide-react';
 import { useCustomer } from '../context/CustomerContext';
+import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
   const { customer, logout, setAuthModalOpen, setOrdersModalOpen } = useCustomer();
+  const { openCart, cartCount } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
@@ -25,60 +27,45 @@ export default function Navbar() {
       left: 0,
       right: 0,
       zIndex: 100,
-      padding: scrolled ? '12px 0' : '20px 0',
-      background: scrolled ? 'rgba(10, 11, 16, 0.88)' : 'transparent',
+      padding: scrolled ? '10px 0' : '16px 0',
+      background: scrolled ? 'rgba(10, 11, 16, 0.92)' : 'transparent',
       backdropFilter: scrolled ? 'blur(20px)' : 'none',
       borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid transparent',
       transition: 'all 0.3s ease',
     }}>
-      <div style={{
-        maxWidth: 1320,
-        margin: '0 auto',
-        padding: '0 32px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '24px',
-      }}>
+      <div
+        className="nav-inner-container"
+        style={{
+          maxWidth: 1320,
+          margin: '0 auto',
+          padding: '0 32px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '24px',
+        }}
+      >
         {/* ================= BRAND LOGO (Vy Vy FLOWER) ================= */}
         <Link to="/" style={{
           textDecoration: 'none',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px',
           color: '#ffffff',
+          transition: 'transform 0.2s ease',
         }}>
           <img
-            src="/images/vyvy_avatar.jpg"
-            alt="Vy Vy Flower"
+            src="/images/logo-white.png"
+            alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
+            className="nav-brand-logo"
             style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              border: '1.5px solid #facc15',
-              boxShadow: '0 0 12px rgba(250, 204, 21, 0.4)',
+              height: scrolled ? '52px' : '66px',
+              width: 'auto',
+              maxWidth: '260px',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 14px rgba(0,0,0,0.7))',
+              transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           />
-          <span style={{
-            fontSize: '22px',
-            fontWeight: 800,
-            letterSpacing: '-0.5px',
-            color: '#ffffff',
-          }}>
-            Vy Vy
-          </span>
-          <span style={{
-            background: 'linear-gradient(135deg, #f59e0b 0%, #ec4899 100%)',
-            color: '#ffffff',
-            padding: '2px 9px',
-            borderRadius: '9999px',
-            fontSize: '11px',
-            fontWeight: 800,
-            letterSpacing: '0.8px',
-            boxShadow: '0 0 16px rgba(245, 158, 11, 0.4)',
-          }}>
-            FLOWER
-          </span>
         </Link>
 
         {/* ================= DESKTOP NAV LINKS ================= */}
@@ -276,7 +263,7 @@ export default function Navbar() {
               }}
             >
               <User size={15} />
-              <span>Đăng Nhập</span>
+              <span className="auth-btn-text">Đăng Nhập</span>
             </button>
           )}
 
@@ -286,6 +273,7 @@ export default function Navbar() {
               type="button"
               onClick={() => setOrdersModalOpen(true)}
               title="Xem đơn hàng của bạn"
+              className="nav-hide-mobile"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -305,10 +293,52 @@ export default function Navbar() {
             </button>
           )}
 
+          {/* Shopping Cart Button */}
+          <button
+            type="button"
+            onClick={openCart}
+            title="Xem giỏ hoa tươi"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '7px',
+              padding: '6px 14px',
+              borderRadius: '9999px',
+              background: cartCount > 0 ? 'rgba(250, 204, 21, 0.15)' : 'rgba(255, 255, 255, 0.06)',
+              border: cartCount > 0 ? '1.5px solid #facc15' : '1px solid rgba(255, 255, 255, 0.15)',
+              color: cartCount > 0 ? '#facc15' : '#ffffff',
+              fontSize: '13px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              boxShadow: cartCount > 0 ? '0 0 16px rgba(250, 204, 21, 0.25)' : 'none',
+            }}
+          >
+            <ShoppingCart size={16} />
+            <span style={{ display: 'none' }} className="cart-text-desktop">Giỏ Hàng</span>
+            {cartCount > 0 && (
+              <span
+                style={{
+                  background: 'linear-gradient(135deg, #f59e0b 0%, #ec4899 100%)',
+                  color: '#ffffff',
+                  borderRadius: '9999px',
+                  padding: '2px 7px',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  lineHeight: '1.2',
+                  boxShadow: '0 0 10px rgba(236, 72, 153, 0.5)',
+                }}
+              >
+                {cartCount}
+              </span>
+            )}
+          </button>
+
           {/* Admin link icon */}
           <Link
             to="/admin"
             title="Khu vực Quản trị Florist Studio"
+            className="nav-hide-mobile"
             style={{
               color: 'rgba(255, 255, 255, 0.75)',
               display: 'flex',
@@ -329,7 +359,7 @@ export default function Navbar() {
           {/* Contact Pill */}
           <Link
             to="/contact"
-            className="btn-pill-outline"
+            className="btn-pill-outline nav-hide-mobile"
             style={{ padding: '8px 20px', fontSize: '13px' }}
           >
             Liên Hệ
@@ -357,30 +387,207 @@ export default function Navbar() {
       {menuOpen && (
         <div style={{
           position: 'fixed',
-          top: '70px',
+          top: scrolled ? '65px' : '76px',
           left: 0,
           right: 0,
-          background: 'rgba(12, 13, 18, 0.96)',
-          backdropFilter: 'blur(25px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          padding: '24px 32px',
+          maxHeight: 'calc(100vh - 76px)',
+          overflowY: 'auto',
+          background: 'rgba(10, 11, 16, 0.98)',
+          backdropFilter: 'blur(30px)',
+          borderBottom: '1px solid rgba(250, 204, 21, 0.25)',
+          padding: '24px 20px 36px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '18px',
+          gap: '14px',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.9)',
+          animation: 'fadeIn 0.2s ease',
         }}>
-          <Link to="/" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600 }}>Trang Chủ</Link>
-          <Link to="/products" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600 }}>Bộ Sưu Tập</Link>
-          <a href="/#workshop" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600 }}>Workshop</a>
-          <a href="/#services" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600 }}>Dịch Vụ VIP</a>
-          <Link to="/contact" onClick={() => setMenuOpen(false)} style={{ color: '#facc15', textDecoration: 'none', fontSize: '16px', fontWeight: 600 }}>Đặt Hoa / Contact</Link>
-          <Link to="/admin" onClick={() => setMenuOpen(false)} style={{ color: '#ec4899', textDecoration: 'none', fontSize: '16px', fontWeight: 600 }}>Khu Vực Quản Trị (Admin)</Link>
+          {/* Customer Banner in Drawer */}
+          {customer ? (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px 16px',
+              borderRadius: '16px',
+              background: 'rgba(250, 204, 21, 0.1)',
+              border: '1px solid rgba(250, 204, 21, 0.3)',
+              marginBottom: '6px',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <img
+                  src={customer.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(customer.name)}`}
+                  alt={customer.name}
+                  style={{ width: '32px', height: '32px', borderRadius: '50%' }}
+                />
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff' }}>{customer.name}</div>
+                  <div style={{ fontSize: '11px', color: '#facc15' }}>Hạng: {customer.status || 'Thành viên'}</div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  setOrdersModalOpen(true);
+                }}
+                style={{
+                  background: '#facc15',
+                  border: 'none',
+                  borderRadius: '9999px',
+                  color: '#000',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  padding: '5px 12px',
+                  cursor: 'pointer',
+                }}
+              >
+                Đơn hoa
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                setAuthModalOpen(true);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '12px',
+                borderRadius: '14px',
+                background: 'rgba(250, 204, 21, 0.15)',
+                border: '1px solid #facc15',
+                color: '#facc15',
+                fontSize: '14px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                marginBottom: '6px',
+              }}
+            >
+              <User size={16} />
+              <span>Đăng Nhập / Tra Cứu Đơn Hàng</span>
+            </button>
+          )}
+
+          {/* Quick Cart Trigger */}
+          <button
+            type="button"
+            onClick={() => {
+              setMenuOpen(false);
+              openCart();
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: 'linear-gradient(135deg, rgba(250, 204, 21, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%)',
+              border: '1.5px solid #facc15',
+              borderRadius: '16px',
+              padding: '12px 18px',
+              color: '#facc15',
+              fontSize: '15px',
+              fontWeight: 800,
+              cursor: 'pointer',
+              textAlign: 'left',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <ShoppingCart size={20} />
+              <span>Giỏ Hoa Của Bạn</span>
+            </div>
+            <span
+              style={{
+                background: '#facc15',
+                color: '#000',
+                padding: '3px 10px',
+                borderRadius: '9999px',
+                fontSize: '12px',
+                fontWeight: 900,
+              }}
+            >
+              {cartCount} món
+            </span>
+          </button>
+
+          <Link to="/" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600, padding: '8px 12px', borderRadius: '10px' }}>Trang Chủ</Link>
+          <Link to="/products" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600, padding: '8px 12px', borderRadius: '10px' }}>Bộ Sưu Tập Hoa Tươi</Link>
+          <a href="/#workshop" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600, padding: '8px 12px', borderRadius: '10px' }}>Workshop Cắm Hoa VIP</a>
+          <a href="/#services" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600, padding: '8px 12px', borderRadius: '10px' }}>Dịch Vụ Hoa Sự Kiện</a>
+          <Link to="/contact" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 600, padding: '8px 12px', borderRadius: '10px' }}>Liên Hệ & Bản Đồ Tiệm</Link>
+          <Link to="/admin" onClick={() => setMenuOpen(false)} style={{ color: '#ec4899', textDecoration: 'none', fontSize: '14px', fontWeight: 700, padding: '8px 12px', borderRadius: '10px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>Khu Vực Quản Trị Hệ Thống (Admin)</Link>
+
+          {/* Hotline Quick Call in Drawer */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '10px' }}>
+            <a
+              href="tel:0901234567"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '11px',
+                borderRadius: '12px',
+                background: 'rgba(163, 230, 53, 0.15)',
+                border: '1px solid #a3e635',
+                color: '#a3e635',
+                textDecoration: 'none',
+                fontSize: '13px',
+                fontWeight: 700,
+              }}
+            >
+              <PhoneCall size={16} />
+              <span>0901.234.567</span>
+            </a>
+            <a
+              href="https://zalo.me"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '11px',
+                borderRadius: '12px',
+                background: 'rgba(6, 182, 212, 0.15)',
+                border: '1px solid #06b6d4',
+                color: '#06b6d4',
+                textDecoration: 'none',
+                fontSize: '13px',
+                fontWeight: 700,
+              }}
+            >
+              <span>💬 Nhắn Zalo</span>
+            </a>
+          </div>
         </div>
       )}
 
       <style>{`
+        @media (min-width: 992px) {
+          .cart-text-desktop { display: inline !important; }
+        }
         @media (max-width: 820px) {
           .desktop-nav { display: none !important; }
           .mobile-toggle { display: block !important; }
+          .nav-hide-mobile { display: none !important; }
+          .nav-inner-container {
+            padding: 0 16px !important;
+            gap: 12px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .auth-btn-text { display: none !important; }
+        }
+        @media (max-width: 600px) {
+          .nav-brand-logo {
+            height: 46px !important;
+            max-width: 170px !important;
+          }
         }
       `}</style>
     </header>

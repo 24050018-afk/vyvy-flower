@@ -34,7 +34,7 @@ export default function AdminInventory() {
       const data = await getInventory();
       setInventory(data);
     } catch (err) {
-      addToast('Không thể tải kho từ MySQL!', 'error');
+      addToast('Không thể tải kho nguyên vật liệu!', 'error');
     } finally {
       setLoading(false);
     }
@@ -90,7 +90,7 @@ export default function AdminInventory() {
           pricePerUnit: Number(form.pricePerUnit),
           supplier: form.supplier,
         });
-        addToast(`Đã cập nhật "${form.name}" trong MySQL Database!`);
+        addToast(`Đã cập nhật "${form.name}" thành công!`);
       } else {
         await createInventoryItem({
           name: form.name,
@@ -101,7 +101,7 @@ export default function AdminInventory() {
           pricePerUnit: Number(form.pricePerUnit),
           supplier: form.supplier,
         });
-        addToast(`Đã thêm mới "${form.name}" vào MySQL Database!`);
+        addToast(`Đã thêm mới "${form.name}" thành công!`);
       }
       setShowModal(false);
       loadData();
@@ -134,7 +134,7 @@ export default function AdminInventory() {
   };
 
   const handleDelete = async (id, name) => {
-    if (window.confirm(`Xác nhận xóa vật tư "${name}" khỏi cơ sở dữ liệu MySQL?`)) {
+    if (window.confirm(`Xác nhận xóa vật tư "${name}"?`)) {
       try {
         await deleteInventoryItem(id);
         addToast(`Đã xóa "${name}"!`);
@@ -185,13 +185,13 @@ export default function AdminInventory() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ fontSize: '12px', color: '#a3e635', fontWeight: 700, letterSpacing: '1px' }}>
-              ● MYSQL TABLE: vyvy_flower_db.inventory
+              ● QUẢN LÝ KHO NGUYÊN LIỆU
             </div>
             <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', marginTop: '4px' }}>
               Quản Lý Tồn Kho & Nguyên Liệu
             </h1>
             <p style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px', marginTop: '4px' }}>
-              Kiểm soát số lượng hoa tươi, giấy gói, bình gốm qua MySQL Workbench
+              Kiểm soát số lượng hoa tươi, giấy gói, bình gốm và phụ liệu theo thời gian thực
             </p>
           </div>
 
@@ -496,7 +496,7 @@ export default function AdminInventory() {
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#fff' }}>
-                {editItem ? 'Chỉnh Sửa Vật Tư (MySQL Workbench)' : 'Thêm Vật Tư Mới (MySQL)'}
+                {editItem ? 'Chỉnh Sửa Vật Tư' : 'Thêm Vật Tư Mới'}
               </h3>
               <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}>
                 <X size={20} />
@@ -622,7 +622,7 @@ export default function AdminInventory() {
                   className="hero-cta-btn"
                   style={{ flex: 2, justifyContent: 'center' }}
                 >
-                  <span>{editItem ? 'Cập Nhật Kho' : 'Thêm Vào MySQL'}</span>
+                  <span>{editItem ? 'Cập Nhật Kho' : 'Thêm Vào Kho'}</span>
                   <div className="cta-icon-badge" style={{ width: '28px', height: '28px' }}>
                     <Check size={16} />
                   </div>

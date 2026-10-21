@@ -404,19 +404,24 @@ export default function CustomerAuthModal() {
 
         {/* Modal Brand Title */}
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-block', marginBottom: '12px' }}>
             <img
-              src="/images/vyvy_avatar.jpg"
-              alt="Vy Vy Studio"
-              style={{ width: '36px', height: '36px', borderRadius: '50%', border: '1.5px solid #facc15' }}
+              src="/images/logo-white.png"
+              alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
+              style={{
+                height: '56px',
+                width: 'auto',
+                maxWidth: '240px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.5))',
+              }}
             />
-            <span style={{ fontSize: '20px', fontWeight: 800, color: '#fff' }}>Vy Vy Flower</span>
           </div>
           <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>
             Xác Thực Tài Khoản Thật
           </h2>
           <p style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: '13px' }}>
-            Liên kết tài khoản để lưu đơn hàng và điểm tích lũy vào MySQL
+            Đăng nhập để theo dõi đơn hàng và nhận ưu đãi độc quyền từ Vy Vy Flower
           </p>
         </div>
 
@@ -814,7 +819,7 @@ export default function CustomerAuthModal() {
                 🌐 Google Identity Services (OAuth 2.0)
               </div>
               <div>
-                Đăng nhập bằng Gmail chính thức của bạn để tự động đồng bộ họ tên, avatar và email vào cơ sở dữ liệu MySQL.
+                Đăng nhập nhanh bằng Gmail chính thức của bạn để tự động đồng bộ họ tên, email và nhận ưu đãi thành viên.
               </div>
             </div>
 
@@ -876,10 +881,10 @@ export default function CustomerAuthModal() {
                 }}
               >
                 <Sparkles size={15} />
-                <span>Thử nghiệm nhanh liên kết Google vào MySQL</span>
+                <span>Đăng nhập thử nghiệm tài khoản Google</span>
               </button>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '6px' }}>
-                (Tạo ngay bản ghi khách hàng Google thật trong bảng MySQL `vyvy_flower_db.customers`)
+                (Kích hoạt nhanh tài khoản thành viên để trải nghiệm đặt hoa)
               </div>
             </div>
           </div>
@@ -954,10 +959,10 @@ export default function CustomerAuthModal() {
                 }}
               >
                 <Sparkles size={15} />
-                <span>Thử nghiệm nhanh liên kết Facebook vào MySQL</span>
+                <span>Đăng nhập thử nghiệm tài khoản Facebook</span>
               </button>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '6px' }}>
-                (Tạo ngay bản ghi khách hàng Facebook thật trong bảng MySQL `vyvy_flower_db.customers`)
+                (Kích hoạt nhanh tài khoản thành viên để trải nghiệm đặt hoa)
               </div>
             </div>
           </div>
@@ -1108,7 +1113,7 @@ export default function CustomerAuthModal() {
                 className="hero-cta-btn"
                 style={{ width: '100%', justifyContent: 'center', marginTop: '6px' }}
               >
-                <span>{loading ? 'Đang kết nối...' : pwdMode === 'login' ? 'Đăng Nhập MySQL' : 'Đăng Ký & Đặt Hoa'}</span>
+                <span>{loading ? 'Đang xử lý...' : pwdMode === 'login' ? 'Đăng Nhập' : 'Đăng Ký & Đặt Hoa'}</span>
                 <div className="cta-icon-badge">
                   <ArrowRight size={16} />
                 </div>
@@ -1119,7 +1124,7 @@ export default function CustomerAuthModal() {
 
         {/* Footer Guarantee */}
         <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>
-          🔒 Kết nối và lưu trữ an toàn trong MySQL Workbench (`vyvy_flower_db`)
+          🔒 Thông tin cá nhân của quý khách được bảo mật tuyệt đối
         </div>
       </div>
     </div>
