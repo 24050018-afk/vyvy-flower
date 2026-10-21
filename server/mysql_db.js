@@ -153,7 +153,34 @@ export async function initMySQL() {
     console.log('[MySQL] Default admin account seeded: admin / bloom2026');
   }
 
-  // Seed products if empty
+  // Auto-cleanup outdated placeholder sphere products and dummy items like 'aaaa'
+  try {
+    const [outdatedRows] = await pool.query(`
+      SELECT COUNT(*) as count FROM products
+      WHERE name = 'aaaa' 
+         OR image LIKE '%/spheres_%' 
+         OR image LIKE '%/product_rose.jpg%' 
+         OR image LIKE '%/product_orchid.jpg%' 
+         OR image LIKE '%/product_mixed.jpg%'
+         OR image LIKE '%/hero_banner.jpg%'
+    `);
+    if (outdatedRows[0].count > 0) {
+      console.log(`[MySQL] Found ${outdatedRows[0].count} outdated or test products in database. Upgrading to authentic Vy Vy Flower catalog...`);
+      await pool.query(`
+        DELETE FROM products 
+        WHERE name = 'aaaa' 
+           OR image LIKE '%/spheres_%' 
+           OR image LIKE '%/product_rose.jpg%' 
+           OR image LIKE '%/product_orchid.jpg%' 
+           OR image LIKE '%/product_mixed.jpg%'
+           OR image LIKE '%/hero_banner.jpg%'
+      `);
+    }
+  } catch (cleanErr) {
+    console.warn('[MySQL] Auto-cleanup notice:', cleanErr.message);
+  }
+
+  // Seed products if empty (or after cleanup)
   const [prodRows] = await pool.query('SELECT COUNT(*) as count FROM products');
   if (prodRows[0].count === 0) {
     await seedMySQLData();
@@ -162,6 +189,13 @@ export async function initMySQL() {
   }
 
   return pool;
+}
+
+export async function resetCatalog() {
+  if (!pool) throw new Error('MySQL pool not initialized!');
+  await pool.query('DELETE FROM products');
+  await seedMySQLData();
+  return true;
 }
 
 export function getPool() {

@@ -3,7 +3,7 @@ import cors from 'cors';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { initMySQL, getPool, DB_NAME } from './mysql_db.js';
+import { initMySQL, getPool, DB_NAME, resetCatalog } from './mysql_db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,6 +53,16 @@ app.get('/api/products', async (req, res) => {
       occasion: typeof p.occasions === 'string' ? JSON.parse(p.occasions || '[]') : (p.occasions || []),
     }));
     res.json(formatted);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/products/reset-default-catalog', async (req, res) => {
+  try {
+    await resetCatalog();
+    const [rows] = await pool.query('SELECT * FROM products ORDER BY id DESC');
+    res.json({ success: true, count: rows.length, message: 'Đã đồng bộ danh mục hoa thật thành công!' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

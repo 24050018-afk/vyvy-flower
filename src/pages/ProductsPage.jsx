@@ -31,10 +31,13 @@ export default function ProductsPage() {
     setLoading(true);
     getProducts()
       .then(data => {
-        if (data && data.length > 0) setProductList(data);
+        if (data && data.length > 0) {
+          const clean = data.filter(p => !p.image?.includes('spheres_') && p.name !== 'aaaa');
+          if (clean.length > 0) setProductList(clean);
+        }
       })
       .catch(err => {
-        console.error('Failed to fetch products from MySQL:', err);
+        console.error('Failed to fetch products from backend:', err);
       })
       .finally(() => setLoading(false));
   };

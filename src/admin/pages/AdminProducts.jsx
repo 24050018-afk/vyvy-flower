@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getProducts, createProduct, updateProduct, deleteProduct, updateProductImage } from '../../services/api';
+import { getProducts, createProduct, updateProduct, deleteProduct, updateProductImage, resetDefaultCatalog } from '../../services/api';
 import { ToastContext } from '../../App';
-import { Plus, Search, Edit3, Trash2, X, Check, RefreshCw, Camera, Download } from 'lucide-react';
+import { Plus, Search, Edit3, Trash2, X, Check, RefreshCw, Camera, Download, Sparkles } from 'lucide-react';
 import ProductImageSelector from '../components/ProductImageSelector';
 import { exportToCsv, cleanText, cleanMoney, cleanNumber, cleanList } from '../../utils/csvExport';
 
@@ -129,6 +129,21 @@ export default function AdminProducts() {
     }
   };
 
+  const handleResetCatalog = async () => {
+    if (window.confirm('Xác nhận đồng bộ lại toàn bộ danh mục 8 bó hoa thật chuẩn Vy Vy Flower? Các sản phẩm thử nghiệm hoặc ảnh cũ sẽ được dọn dẹp sạch sẽ.')) {
+      setLoading(true);
+      try {
+        await resetDefaultCatalog();
+        addToast('Đã đồng bộ thành công danh mục hoa thật mới nhất!');
+        loadData();
+      } catch (err) {
+        addToast(err.message || 'Lỗi khi đồng bộ danh mục!', 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const openQuickImageEdit = (product) => {
     setQuickImageProduct(product);
     setQuickImageUrl(product.image || '/images/vyvy_lily_hong.jpg');
@@ -237,6 +252,28 @@ export default function AdminProducts() {
             >
               <RefreshCw size={15} className={loading ? 'spin' : ''} />
               <span>Tải Lại</span>
+            </button>
+
+            <button
+              onClick={handleResetCatalog}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 18px',
+                borderRadius: '9999px',
+                background: 'rgba(250, 204, 21, 0.15)',
+                border: '1px solid rgba(250, 204, 21, 0.4)',
+                color: '#facc15',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+              title="Đồng bộ danh mục 8 bó hoa thật chuẩn Vy Vy Flower vào cơ sở dữ liệu"
+            >
+              <Sparkles size={15} />
+              <span>Đồng Bộ Danh Mục Hoa Thật</span>
             </button>
 
             <button

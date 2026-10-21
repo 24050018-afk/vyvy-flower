@@ -16,7 +16,10 @@ export default function HomePage() {
   useEffect(() => {
     getProducts()
       .then(data => {
-        if (data && data.length > 0) setDbProducts(data);
+        if (data && data.length > 0) {
+          const clean = data.filter(p => !p.image?.includes('spheres_') && p.name !== 'aaaa');
+          if (clean.length > 0) setDbProducts(clean);
+        }
       })
       .catch(() => {});
   }, []);

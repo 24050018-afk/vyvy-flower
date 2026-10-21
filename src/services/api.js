@@ -44,6 +44,14 @@ export async function deleteProduct(id) {
   return handleResponse(res);
 }
 
+export async function resetDefaultCatalog() {
+  const res = await fetch(`${API_BASE}/products/reset-default-catalog`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  return handleResponse(res);
+}
+
 export async function updateProductImage(id, imageUrl) {
   const res = await fetch(`${API_BASE}/products/${id}/image`, {
     method: 'PATCH',
