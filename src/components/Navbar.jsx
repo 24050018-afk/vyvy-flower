@@ -56,13 +56,26 @@ export default function Navbar() {
           <img
             src="/images/logo-white.png"
             alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
-            className="nav-brand-logo"
+            className="nav-brand-logo nav-logo-dark"
             style={{
               height: scrolled ? '52px' : '66px',
               width: 'auto',
               maxWidth: '260px',
               objectFit: 'contain',
               filter: 'drop-shadow(0 2px 14px rgba(0,0,0,0.7))',
+              transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          />
+          <img
+            src="/images/logo.png"
+            alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
+            className="nav-brand-logo nav-logo-light"
+            style={{
+              height: scrolled ? '52px' : '66px',
+              width: 'auto',
+              maxWidth: '260px',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 10px rgba(100, 70, 50, 0.12))',
               transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           />

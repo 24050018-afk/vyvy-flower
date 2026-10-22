@@ -28,12 +28,26 @@ export default function Footer() {
               <img
                 src="/images/logo-white.png"
                 alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
+                className="nav-logo-dark"
                 style={{
                   height: '68px',
                   width: 'auto',
                   maxWidth: '280px',
                   objectFit: 'contain',
                   filter: 'drop-shadow(0 2px 14px rgba(0,0,0,0.6))',
+                  display: 'block',
+                }}
+              />
+              <img
+                src="/images/logo.png"
+                alt="Vy Vy Flower - Tiệm Hoa Sóc Trăng"
+                className="nav-logo-light"
+                style={{
+                  height: '68px',
+                  width: 'auto',
+                  maxWidth: '280px',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 10px rgba(100,70,50,0.12))',
                   display: 'block',
                 }}
               />
