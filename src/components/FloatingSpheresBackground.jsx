@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { Sun, Moon, Sparkles } from 'lucide-react';
 
 /* ============================================================
-   FloatingSpheresBackground
-   Matches the exact 3D floating glossy spheres, golden halo ring,
-   and dot grid matrix from the reference design.
-   Includes the customized 3D Vy Vy Flower shop avatar inside
-   the spinning golden ring.
+   FloatingSpheresBackground & Responsive Hero Artwork
+   Matches exact standards:
+   - Full HD 1920 × 1080 px (16:9) for laptops & standard monitors
+   - 2K / Retina 2560 × 1440 px (16:9) for ultra sharp displays
+   - Mobile Hero 1080 × 1920 px (9:16 vertical) for smartphones
+   - Preserves 3D floating glossy spheres, ambient glows & parallax
    ============================================================ */
 export default function FloatingSpheresBackground() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [themeMode, setThemeMode] = useState(() => {
+    return localStorage.getItem('vyvy_hero_theme') || 'dark';
+  });
+
+  const toggleTheme = () => {
+    const nextMode = themeMode === 'dark' ? 'light' : 'dark';
+    setThemeMode(nextMode);
+    localStorage.setItem('vyvy_hero_theme', nextMode);
+  };
 
   useEffect(() => {
     let animationFrameId;
@@ -33,12 +44,54 @@ export default function FloatingSpheresBackground() {
       zIndex: 0,
       overflow: 'hidden',
     }}>
-      {/* Deep subtle background gradient */}
+      {/* 1. Base Dark Floor */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'radial-gradient(ellipse at 50% 20%, #161824 0%, #0c0d12 60%, #07080a 100%)',
+        background: '#07080a',
+        zIndex: 0,
       }} />
+
+      {/* 2. Responsive Hero & Page Background Picture */}
+      <div
+        className="global-hero-bg-container"
+        style={{
+          transform: `translate(${mousePos.x * 8}px, ${mousePos.y * 8}px) scale(1.04)`,
+          transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+      >
+        <picture className="global-hero-bg-picture">
+          {/* Mobile Hero: 9:16 vertical (1080x1920) */}
+          <source
+            media="(max-width: 768px)"
+            srcSet={themeMode === 'light' ? '/images/hero-bg-light-mobile-1080.jpg' : '/images/hero-bg-dark-mobile-1080.jpg'}
+          />
+          {/* High-res 2K / Retina (2560x1440) */}
+          <source
+            media="(min-width: 1920px) or (-webkit-min-device-pixel-ratio: 2)"
+            srcSet={themeMode === 'light' ? '/images/hero-bg-light-2560.jpg' : '/images/hero-bg-dark-2560.jpg'}
+          />
+          {/* Standard Full HD Desktop / Laptop (1920x1080) */}
+          <img
+            src={themeMode === 'light' ? '/images/hero-bg-light-1920.jpg' : '/images/hero-bg-dark-1920.jpg'}
+            alt="Vy Vy Flower Luxury Hero Background"
+            className="global-hero-bg-img"
+          />
+        </picture>
+      </div>
+
+      {/* 3. Luxury Vignette & Contrast Overlay */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: themeMode === 'light'
+            ? 'radial-gradient(ellipse at 50% 35%, rgba(10, 12, 18, 0.50) 0%, rgba(10, 12, 18, 0.35) 60%, rgba(10, 12, 18, 0.20) 100%)'
+            : 'radial-gradient(ellipse at 50% 35%, rgba(12, 14, 20, 0.42) 0%, rgba(10, 11, 16, 0.68) 55%, rgba(7, 8, 10, 0.92) 100%)',
+          zIndex: 2,
+          transition: 'background 0.5s ease',
+        }}
+      />
 
       {/* Ambient color light glows */}
       <div style={{
@@ -273,6 +326,62 @@ export default function FloatingSpheresBackground() {
         fontFamily: 'monospace',
       }}>
         <span>x</span><span>x</span><span>x</span><span>x</span>
+      </div>
+
+      {/* Theme Switcher Pill (Interactive) */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          left: '24px',
+          zIndex: 99,
+          pointerEvents: 'auto',
+        }}
+        className="hero-theme-toggle-container"
+      >
+        <button
+          onClick={toggleTheme}
+          title="Chuyển đổi giao diện hình nền Dạ Nguyệt / Nắng Sớm"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '7px 14px',
+            borderRadius: '9999px',
+            background: 'rgba(15, 17, 24, 0.82)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.14)',
+            color: '#ffffff',
+            fontSize: '12px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)',
+            transition: 'all 0.25s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(250, 204, 21, 0.6)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.background = 'rgba(22, 25, 36, 0.95)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.14)';
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.background = 'rgba(15, 17, 24, 0.82)';
+          }}
+        >
+          {themeMode === 'light' ? (
+            <>
+              <Sun size={14} color="#facc15" />
+              <span>Nền: Nắng Sớm (Gốc)</span>
+            </>
+          ) : (
+            <>
+              <Moon size={14} color="#38bdf8" />
+              <span>Nền: Dạ Nguyệt Luxe</span>
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

@@ -815,6 +815,49 @@ h1, h2, h3, h4 {
   input, select, textarea {
     font-size: 16px !important;
   }
+
+  .hero-theme-toggle-container {
+    bottom: 84px !important;
+    left: 14px !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE HERO BANNER & FULL BACKGROUND SYSTEM
+   Standard Full HD: 1920 × 1080 px (16:9)
+   High-Res 2K / Retina: 2560 × 1440 px (16:9)
+   Mobile Hero: 1080 × 1920 px (9:16 vertical)
+   ============================================================ */
+.global-hero-bg-container {
+  position: absolute;
+  inset: -20px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.global-hero-bg-picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.global-hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  filter: contrast(1.05) saturate(1.08);
+  will-change: transform;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .global-hero-bg-img {
+    object-position: center top;
+  }
 }
 
 
