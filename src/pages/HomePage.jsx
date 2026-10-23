@@ -4,6 +4,7 @@ import { products as fallbackProducts } from '../data/mockData';
 import { getProducts } from '../services/api';
 import { ToastContext } from '../App';
 import Card3D from '../components/Card3D';
+import ProductDetailModal from '../components/ProductDetailModal';
 import { Sparkles, ArrowRight, Heart, Star, ShieldCheck, Truck, Clock, Palette, ShoppingCart, X, Check, Plus, Minus } from 'lucide-react';
 import { useCustomer } from '../context/CustomerContext';
 import { useCart } from '../context/CartContext';
@@ -127,33 +128,33 @@ export default function HomePage() {
             marginBottom: '28px',
           }}>
             <span>✦</span>
-            <span>VY VY FLOWER • TIỆM HOA NGHỆ THUẬT SÓC TRĂNG</span>
+            <span>TIỆM HOA TƯƠI NGHỆ THUẬT • SÓC TRĂNG</span>
           </div>
 
-          {/* Headline - exact layout with neon yellow accent */}
+          {/* Headline - Vy Vy Flower with red highlight */}
           <h1 style={{
             fontSize: 'clamp(2.8rem, 6.2vw, 4.8rem)',
             fontWeight: 800,
             lineHeight: 1.15,
-            letterSpacing: '-0.03em',
+            letterSpacing: '-0.02em',
             color: '#ffffff',
             maxWidth: '920px',
             margin: '0 auto 24px',
           }}>
-            Collect and gift super<br />
-            rare <span className="text-highlight-yellow">Floral Arts</span>
+            Vy Vy Flower<br />
+            <span className="text-highlight-red">Tiệm hoa Sóc Trăng</span>
           </h1>
 
           {/* Subtitle text */}
           <p style={{
-            fontSize: 'clamp(14px, 1.8vw, 16px)',
-            color: 'rgba(255, 255, 255, 0.65)',
-            maxWidth: '620px',
+            fontSize: 'clamp(15px, 2vw, 17.5px)',
+            color: 'rgba(255, 255, 255, 0.75)',
+            maxWidth: '680px',
             margin: '0 auto 36px',
-            lineHeight: 1.65,
-            fontWeight: 400,
+            lineHeight: 1.7,
+            fontWeight: 500,
           }}>
-            Vy Vy Flower — Tiệm hoa tươi nghệ thuật độc bản Sóc Trăng. Nơi từng đóa hoa được tuyển chọn thủ công, kết tinh cùng ngôn ngữ thiết kế 3D vị lai.
+            Nơi cảm xúc nở thành hoa, mang đến cho bạn độc bản cho những dịp đặc biệt của mình
           </p>
 
           {/* Hero CTA Button (Exact rounded pill with inner circle) */}
@@ -181,145 +182,90 @@ export default function HomePage() {
             }}
           >
             {signature3DCards.map((card) => (
-              <Card3D key={card.id} intensity={14} style={{ borderRadius: '28px' }}>
-                <div className="showcase-card" style={{ height: '360px' }}>
-                  
-                  {/* Card 3D sphere background image */}
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      position: 'absolute',
-                      inset: 0,
-                    }}
-                  />
-
-                  {/* Dark subtle gradient overlay to keep text legible */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(180deg, rgba(12,13,18,0.3) 0%, rgba(12,13,18,0.1) 40%, rgba(12,13,18,0.85) 100%)',
-                    zIndex: 2,
-                  }} />
-
-                  {/* Top content on card */}
-                  <div style={{ position: 'relative', zIndex: 3, padding: '24px 22px' }}>
-                    <div style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      padding: '4px 12px',
-                      borderRadius: '9999px',
-                      background: 'rgba(12, 13, 18, 0.7)',
-                      border: `1px solid ${card.themeColor}55`,
-                      backdropFilter: 'blur(10px)',
-                      color: card.themeColor,
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      letterSpacing: '1px',
-                    }}>
+              <Card3D key={card.id} intensity={10} style={{ borderRadius: '26px', height: '100%' }}>
+                <div
+                  className="signature-showcase-card"
+                  onClick={() => {
+                    const priceNum = card.id === 'sig-1' ? 680000 : card.id === 'sig-2' ? 520000 : 750000;
+                    const fullProduct = dbProducts.find(p => p.id === card.id) || {
+                      id: card.id,
+                      name: card.title,
+                      category: 'Bó hoa',
+                      price: priceNum,
+                      image: card.image,
+                      badge: card.badge,
+                      description: card.subtitle,
+                      rating: 5.0,
+                      reviews: 36,
+                    };
+                    setActiveModalProduct(fullProduct);
+                    setModalQuantity(1);
+                  }}
+                >
+                  {/* Clean, vibrant bouquet photography — 100% unobstructed */}
+                  <div className="signature-img-wrap">
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      loading="lazy"
+                    />
+                    <div className="signature-badge-pill">
                       <span>{card.icon}</span>
                       <span>{card.badge}</span>
                     </div>
-
-                    <h3 style={{
-                      color: '#ffffff',
-                      fontSize: '22px',
-                      fontWeight: 800,
-                      marginTop: '12px',
-                      letterSpacing: '-0.5px',
-                      textShadow: '0 2px 10px rgba(0,0,0,0.8)',
-                    }}>
-                      {card.title}
-                    </h3>
-                    <div style={{
-                      color: 'rgba(255, 255, 255, 0.75)',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      letterSpacing: '0.5px',
-                    }}>
-                      {card.subtitle}
+                    <div className="signature-curator-tag">
+                      <span>✦ VY VY ATELIER</span>
                     </div>
                   </div>
 
-                  {/* Capsule bottom bar (Exact replica from the reference image) */}
-                  <div className="card-capsule-bar">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div style={{
-                        width: '26px',
-                        height: '26px',
-                        borderRadius: '50%',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '12px',
-                      }}>
-                        {card.icon}
-                      </div>
-                      <span style={{
-                        color: '#ffffff',
-                        fontSize: '14px',
-                        fontWeight: 700,
-                        letterSpacing: '-0.3px',
-                      }}>
-                        {card.price}
-                      </span>
+                  {/* Clean, high-contrast dedicated info base (Zero blur, 100% crisp) */}
+                  <div className="signature-info-base">
+                    <div className="signature-meta-row">
+                      <span className="signature-flower-types">{card.subtitle}</span>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <button
-                        type="button"
-                        title="Thêm vào giỏ hàng"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const priceNum = card.id === 'sig-1' ? 950000 : card.id === 'sig-2' ? 1450000 : 1850000;
-                          handleAddSignatureToCart(card, priceNum);
-                        }}
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '50%',
-                          background: 'rgba(255, 255, 255, 0.1)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
-                          color: '#ffffff',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#facc15';
-                          e.currentTarget.style.color = '#facc15';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                          e.currentTarget.style.color = '#ffffff';
-                        }}
-                      >
-                        <ShoppingCart size={14} />
-                      </button>
+                    <h3 className="signature-card-title">
+                      {card.title}
+                    </h3>
 
-                      <button
-                        className="btn-card-action"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const priceNum = card.id === 'sig-1' ? 950000 : card.id === 'sig-2' ? 1450000 : 1850000;
-                          handleQuickOrder({
-                            id: card.id,
-                            name: card.title,
-                            price: priceNum,
-                            image: card.image,
-                            category: 'Signature 3D Edition',
-                          });
-                        }}
-                      >
-                        Đặt Ngay
-                      </button>
+                    <div className="signature-card-bottom-row">
+                      <div>
+                        <div className="signature-price-label">Giá tác phẩm</div>
+                        <div className="signature-card-price">{card.price}</div>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <button
+                          type="button"
+                          className="signature-cart-btn"
+                          title="Thêm vào giỏ hàng"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const priceNum = card.id === 'sig-1' ? 680000 : card.id === 'sig-2' ? 520000 : 750000;
+                            handleAddSignatureToCart(card, priceNum);
+                          }}
+                        >
+                          <ShoppingCart size={15} />
+                        </button>
+
+                        <button
+                          type="button"
+                          className="signature-order-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const priceNum = card.id === 'sig-1' ? 680000 : card.id === 'sig-2' ? 520000 : 750000;
+                            handleQuickOrder({
+                              id: card.id,
+                              name: card.title,
+                              price: priceNum,
+                              image: card.image,
+                              category: 'Signature Atelier Edition',
+                            });
+                          }}
+                        >
+                          <span>Đặt Ngay</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -350,34 +296,26 @@ export default function HomePage() {
           marginBottom: '40px',
         }}>
           <div>
-            <div className="cross-marks" style={{ marginBottom: '12px' }}>
-              <span>+</span><span>+</span><span>+</span>
+            <div className="catalog-header-badge">
+              <span className="badge-sparkle">✦</span>
+              <span>TUYỂN TẬP HOA TƯƠI ĐỘC BẢN</span>
             </div>
-            <h2 style={{ fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: 800, color: '#fff' }}>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: 800 }}>
               Bộ Sưu Tập <span className="text-highlight-yellow">Nổi Bật</span>
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '8px', fontSize: '15px' }}>
-              Những tác phẩm hoa tươi được thiết kế công phu bởi nghệ nhân bậc thầy
+            <p className="catalog-header-sub" style={{ marginTop: '8px', fontSize: '15px' }}>
+              Những tác phẩm hoa tươi được thiết kế công phu bởi nghệ nhân bậc thầy Vy Vy Flower
             </p>
           </div>
 
           {/* Category Filter Pills */}
-          <div className="home-categories-scroll" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <div className="home-categories-scroll" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             {categories.map(cat => (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setActiveCategory(cat)}
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: '9999px',
-                  background: activeCategory === cat ? 'var(--c-yellow)' : 'rgba(255, 255, 255, 0.05)',
-                  color: activeCategory === cat ? '#0b0c10' : 'rgba(255, 255, 255, 0.75)',
-                  border: activeCategory === cat ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
+                className={`catalog-filter-btn ${activeCategory === cat ? 'active' : ''}`}
               >
                 {cat}
               </button>
@@ -395,152 +333,111 @@ export default function HomePage() {
           }}
         >
           {filteredProducts.map((p) => (
-            <Card3D key={p.id} intensity={10} style={{ borderRadius: '24px' }}>
+            <Card3D key={p.id} intensity={8} style={{ borderRadius: '26px' }}>
               <div
-                className="glass-panel"
-                style={{
-                  borderRadius: '24px',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer',
-                }}
+                className="product-card-luxury"
                 onClick={() => {
                   setActiveModalProduct(p);
                   setModalQuantity(1);
                 }}
               >
-                {/* Image */}
-                <div style={{ position: 'relative', height: '230px', overflow: 'hidden' }}>
+                {/* Image Showcase */}
+                <div className="product-card-img-wrap">
                   <img
                     src={p.image}
                     alt={p.name}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      transition: 'transform 0.4s ease',
-                    }}
+                    loading="lazy"
                   />
-                  <div style={{
-                    position: 'absolute',
-                    top: '12px',
-                    left: '12px',
-                    padding: '4px 12px',
-                    borderRadius: '9999px',
-                    background: 'rgba(12, 13, 18, 0.85)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    color: p.badgeColor || '#facc15',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                  }}>
-                    {p.badge || 'ATELIER'}
+                  <div className="product-card-img-gradient" />
+
+                  {/* Badge */}
+                  <div className="product-card-badge">
+                    <span>✦</span>
+                    <span>{p.badge || 'ATELIER'}</span>
                   </div>
 
-                  <div style={{
-                    position: 'absolute',
-                    top: '12px',
-                    right: '12px',
-                    background: 'rgba(12, 13, 18, 0.7)',
-                    borderRadius: '50%',
-                    width: '32px',
-                    height: '32px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    color: '#fff',
-                  }}
-                  onClick={() => addToast(`Đã thích "${p.name}"!`)}>
+                  {/* Stock Tag if low */}
+                  {p.stock !== undefined && p.stock <= 5 && (
+                    <div className="product-card-stock-tag">
+                      {p.stock > 0 ? `Còn ${p.stock} bó` : 'Tạm hết hàng'}
+                    </div>
+                  )}
+
+                  {/* Favorite / Heart Button */}
+                  <button
+                    type="button"
+                    className="product-card-heart-btn"
+                    title="Thêm vào danh sách yêu thích"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToast(`Đã lưu "${p.name}" vào danh sách yêu thích!`);
+                    }}
+                  >
                     <Heart size={16} />
-                  </div>
+                  </button>
                 </div>
 
-                {/* Info */}
-                <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                {/* Card Body */}
+                <div className="product-card-body">
                   <div>
-                    <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.45)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
-                      {p.category}
+                    <div className="product-card-cat-row">
+                      <span className="product-card-category">{p.category}</span>
+                      <div className="product-card-rating">
+                        <Star size={12} fill="currentColor" />
+                        <span>{p.rating || 4.9}</span>
+                        <span className="product-card-reviews">({p.reviews || 48})</span>
+                      </div>
                     </div>
-                    <h4 style={{ fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>
+
+                    <h4 className="product-card-title" title={p.name}>
                       {p.name}
                     </h4>
-                    <p style={{
-                      fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.6)',
-                      lineHeight: 1.5,
-                      marginBottom: '16px',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}>
+
+                    <p className="product-card-desc">
                       {p.description}
                     </p>
+
+                    <div className="product-card-trust-tag">
+                      <Sparkles size={12} />
+                      <span>Hoa tươi nhập mới trong ngày • Nở chuẩn phom</span>
+                    </div>
                   </div>
 
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingTop: '12px',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                  }}>
+                  {/* Footer with Price & Actions */}
+                  <div className="product-card-footer">
                     <div>
-                      <div style={{ fontSize: '18px', fontWeight: 800, color: '#facc15' }}>
+                      <div className="product-card-price">
                         {p.price.toLocaleString('vi-VN')}₫
                       </div>
                       {p.originalPrice && (
-                        <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.35)', textDecoration: 'line-through' }}>
+                        <div className="product-card-original-price">
                           {p.originalPrice.toLocaleString('vi-VN')}₫
                         </div>
                       )}
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div className="product-card-actions">
                       <button
                         type="button"
+                        className="product-card-cart-btn"
                         title="Thêm vào giỏ hàng"
                         onClick={(e) => {
                           e.stopPropagation();
                           addToCart(p);
                         }}
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '50%',
-                          background: 'rgba(255, 255, 255, 0.08)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
-                          color: '#ffffff',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#facc15';
-                          e.currentTarget.style.color = '#facc15';
-                          e.currentTarget.style.background = 'rgba(250, 204, 21, 0.12)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-                          e.currentTarget.style.color = '#ffffff';
-                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                        }}
                       >
-                        <ShoppingCart size={14} />
+                        <ShoppingCart size={15} />
                       </button>
 
                       <button
-                        className="btn-card-action"
-                        style={{ padding: '8px 16px', fontSize: '12px' }}
-                        onClick={() => handleQuickOrder(p)}
+                        type="button"
+                        className="product-card-order-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleQuickOrder(p);
+                        }}
                       >
-                        Đặt Ngay
+                        <span>Đặt Ngay</span>
                       </button>
                     </div>
                   </div>
@@ -698,329 +595,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Modal for detail view */}
+      {/* Modal for detail view with Reviews & Replies */}
       {activeModalProduct && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.85)',
-            backdropFilter: 'blur(16px)',
-            zIndex: 1000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px',
-          }}
-          onClick={() => setActiveModalProduct(null)}
-        >
-          <div
-            className="product-modal-card"
-            style={{
-              background: '#12141c',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              borderRadius: '28px',
-              maxWidth: '860px',
-              width: '100%',
-              maxHeight: '90vh',
-              overflow: 'hidden',
-              position: 'relative',
-              boxShadow: '0 25px 70px rgba(0,0,0,0.9), 0 0 40px rgba(250,204,21,0.08)',
-              display: 'flex',
-            }}
-            onClick={e => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button
-              type="button"
-              onClick={() => setActiveModalProduct(null)}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                background: 'rgba(0, 0, 0, 0.65)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                borderRadius: '50%',
-                width: '38px',
-                height: '38px',
-                color: '#fff',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 30,
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.65)';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              <X size={18} />
-            </button>
-
-            {/* Left Column: Full Product Image Showcase (No Cropping!) */}
-            <div
-              className="product-modal-img-col"
-              style={{
-                flex: '1 1 48%',
-                minHeight: '440px',
-                position: 'relative',
-                overflow: 'hidden',
-                background: '#090a0f',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {/* Ambient Blurred Backdrop matching flower colors */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: '-30px',
-                  backgroundImage: `url(${activeModalProduct.image})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  filter: 'blur(32px) brightness(0.28) saturate(1.4)',
-                  transform: 'scale(1.25)',
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* Full Uncropped High-Detail Bouquet Image */}
-              <img
-                src={activeModalProduct.image}
-                alt={activeModalProduct.name}
-                style={{
-                  position: 'relative',
-                  zIndex: 2,
-                  maxWidth: '100%',
-                  maxHeight: '480px',
-                  width: 'auto',
-                  height: 'auto',
-                  objectFit: 'contain',
-                  display: 'block',
-                  padding: '16px',
-                  filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.7))',
-                  transition: 'transform 0.3s ease',
-                }}
-              />
-
-              {/* Badge Overlay */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '16px',
-                  left: '16px',
-                  zIndex: 10,
-                  padding: '4px 12px',
-                  borderRadius: '9999px',
-                  background: 'rgba(12, 13, 18, 0.85)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  color: activeModalProduct.badgeColor || '#facc15',
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  letterSpacing: '0.5px',
-                }}
-              >
-                {activeModalProduct.badge || 'BESPOKE'}
-              </div>
-
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '16px',
-                  left: '16px',
-                  zIndex: 10,
-                  background: activeModalProduct.stock > 0 ? 'rgba(163, 230, 53, 0.2)' : 'rgba(244, 63, 94, 0.2)',
-                  backdropFilter: 'blur(8px)',
-                  border: `1px solid ${activeModalProduct.stock > 0 ? '#a3e635' : '#f43f5e'}66`,
-                  color: activeModalProduct.stock > 0 ? '#a3e635' : '#f43f5e',
-                  padding: '3px 12px',
-                  borderRadius: '9999px',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                }}
-              >
-                {activeModalProduct.stock > 0 ? `Còn ${activeModalProduct.stock} bó hoa tươi` : 'Tạm hết hàng'}
-              </div>
-            </div>
-
-            {/* Right Column: Information & Actions */}
-            <div
-              className="product-modal-content-col"
-              style={{
-                flex: '1 1 52%',
-                padding: '32px 28px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                overflowY: 'auto',
-                maxHeight: '90vh',
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <span style={{ color: '#facc15', fontSize: '12px', fontWeight: 700, letterSpacing: '1px' }}>
-                    {activeModalProduct.category?.toUpperCase()}
-                  </span>
-                  <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px' }}>
-                    ⭐ {activeModalProduct.rating || 4.9} ({activeModalProduct.reviews || 88} đánh giá)
-                  </span>
-                </div>
-
-                <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#fff', marginBottom: '12px', lineHeight: 1.3 }}>
-                  {activeModalProduct.name}
-                </h2>
-
-                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', lineHeight: 1.6, marginBottom: '20px' }}>
-                  {activeModalProduct.description}
-                </p>
-
-                {/* Commitments & Value Props */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '22px' }}>
-                  <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span>🌸</span> <span>Hoa tươi loại 1 trong ngày</span>
-                  </div>
-                  <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span>🎀</span> <span>Tặng nơ lụa & thiệp ghi lời</span>
-                  </div>
-                  <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span>⚡</span> <span>Giao hỏa tốc 2 giờ</span>
-                  </div>
-                  <div style={{ padding: '8px 10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', fontSize: '11px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span>📸</span> <span>Chụp ảnh thật trước khi giao</span>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
-                  <div>
-                    <div style={{ fontSize: '24px', fontWeight: 800, color: '#facc15' }}>
-                      {activeModalProduct.price?.toLocaleString('vi-VN')}₫
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
-                      Đơn giá niêm yết (Đã bao gồm VAT & nơ lụa)
-                    </div>
-                  </div>
-
-                  {/* Quantity Stepper */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.65)' }}>Số lượng:</span>
-                    <div
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        borderRadius: '9999px',
-                        border: '1px solid rgba(255, 255, 255, 0.15)',
-                        padding: '3px 8px',
-                      }}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setModalQuantity(prev => Math.max(1, prev - 1))}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#ffffff',
-                          width: '26px',
-                          height: '26px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <Minus size={14} />
-                      </button>
-                      <span
-                        style={{
-                          color: '#ffffff',
-                          fontWeight: 800,
-                          fontSize: '14px',
-                          minWidth: '28px',
-                          textAlign: 'center',
-                        }}
-                      >
-                        {modalQuantity}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setModalQuantity(prev => prev + 1)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#ffffff',
-                          width: '26px',
-                          height: '26px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <Plus size={14} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action buttons */}
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      addToCart(activeModalProduct, modalQuantity);
-                      setActiveModalProduct(null);
-                      setModalQuantity(1);
-                    }}
-                    style={{
-                      flex: 1,
-                      padding: '12px 20px',
-                      borderRadius: '9999px',
-                      background: 'rgba(250, 204, 21, 0.12)',
-                      border: '1.5px solid #facc15',
-                      color: '#facc15',
-                      fontWeight: 700,
-                      fontSize: '14px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    <ShoppingCart size={16} />
-                    <span>Thêm Vào Giỏ Hàng</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="hero-cta-btn"
-                    style={{ flex: 1, justifyContent: 'center', padding: '12px 24px', fontSize: '14px' }}
-                    onClick={() => {
-                      handleQuickOrder(activeModalProduct, modalQuantity);
-                      setActiveModalProduct(null);
-                      setModalQuantity(1);
-                    }}
-                  >
-                    <span>Đặt Hoa Ngay</span>
-                    <div className="cta-icon-badge"><Check size={18} /></div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductDetailModal
+          product={activeModalProduct}
+          onClose={() => setActiveModalProduct(null)}
+          quantity={modalQuantity}
+          onQuantityChange={setModalQuantity}
+          onAddToCart={(prod, qty) => addToCart(prod, qty)}
+          onQuickOrder={(prod, qty) => handleQuickOrder(prod, qty)}
+          addToast={addToast}
+        />
       )}
 
       <style>{`

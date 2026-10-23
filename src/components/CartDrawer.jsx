@@ -26,243 +26,105 @@ export default function CartDrawer() {
   };
 
   return (
-    <div
-      className="cart-drawer-backdrop"
-      onClick={closeCart}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(10px)',
-        zIndex: 1000,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        animation: 'fadeIn 0.25s ease',
-      }}
-    >
+    <div className="cart-drawer-backdrop" onClick={closeCart}>
       <div
-        className="cart-drawer-panel glass-panel"
+        className="cart-drawer-panel"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '100%',
-          maxWidth: '460px',
-          height: '100vh',
-          background: 'linear-gradient(180deg, rgba(18, 20, 29, 0.98) 0%, rgba(10, 11, 16, 0.98) 100%)',
-          backdropFilter: 'blur(25px)',
-          borderLeft: '1px solid rgba(250, 204, 21, 0.25)',
-          boxShadow: '-20px 0 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(250, 204, 21, 0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-          animation: 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
       >
         {/* ================= HEADER ================= */}
-        <div
-          className="cart-drawer-header"
-          style={{
-            padding: '24px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
+        <div className="cart-drawer-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div
-              style={{
-                width: '42px',
-                height: '42px',
-                borderRadius: '50%',
-                background: 'rgba(250, 204, 21, 0.15)',
-                border: '1.5px solid #facc15',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#facc15',
-                boxShadow: '0 0 15px rgba(250, 204, 21, 0.3)',
-              }}
-            >
-              <ShoppingBag size={20} />
+            <div className="cart-header-icon-wrap">
+              <ShoppingBag size={20} color="#ffffff" />
             </div>
             <div>
-              <div style={{ marginBottom: '4px' }}>
+              <div style={{ marginBottom: '3px' }}>
+                <img
+                  src="/images/logo.png"
+                  alt="Vy Vy Flower"
+                  className="cart-logo-dark-mode"
+                />
                 <img
                   src="/images/logo-white.png"
                   alt="Vy Vy Flower"
-                  style={{ height: '26px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
+                  className="cart-logo-light-mode"
                 />
               </div>
-              <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#fff', margin: 0 }}>
+              <h3 className="cart-drawer-title">
                 Giỏ Hoa Của Bạn
               </h3>
-              <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.55)' }}>
-                {cartCount > 0 ? `${cartCount} đóa hoa nghệ thuật đã chọn` : 'Chưa có sản phẩm'}
+              <span className="cart-drawer-subtitle">
+                {cartCount > 0 ? `${cartCount} đóa hoa nghệ thuật đã chọn` : 'Chưa có sản phẩm trong giỏ'}
               </span>
             </div>
           </div>
 
           <button
+            type="button"
             onClick={closeCart}
             aria-label="Đóng giỏ hàng"
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              background: 'rgba(255, 255, 255, 0.08)',
-              border: 'none',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
+            className="cart-close-btn"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* ================= BODY ================= */}
-        <div
-          style={{
-            flex: 1,
-            overflowY: 'auto',
-            padding: '20px 24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
+        <div className="cart-drawer-body">
           {cart.length === 0 ? (
             /* Empty State */
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '60px 20px',
-                margin: 'auto 0',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                style={{
-                  width: '90px',
-                  height: '90px',
-                  borderRadius: '50%',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px dashed rgba(250, 204, 21, 0.4)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '20px',
-                  color: '#facc15',
-                }}
-              >
-                <ShoppingBag size={40} style={{ opacity: 0.6 }} />
+            <div className="cart-empty-state">
+              <div className="cart-empty-icon-wrap">
+                <ShoppingBag size={38} />
               </div>
-              <h4 style={{ fontSize: '19px', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>
-                Giỏ hàng của bạn đang trống
+              <h4 className="cart-empty-title">
+                Giỏ hoa của bạn đang trống
               </h4>
-              <p
-                style={{
-                  color: 'rgba(255, 255, 255, 0.55)',
-                  fontSize: '13px',
-                  lineHeight: 1.6,
-                  maxWidth: '300px',
-                  marginBottom: '24px',
-                }}
-              >
-                Hãy chọn những tác phẩm hoa tươi nghệ thuật độc bản để dành tặng người thương hoặc trang hoàng không gian sống.
+              <p className="cart-empty-desc">
+                Hãy chọn những đóa hoa tươi rạng rỡ và tinh tế nhất của Vy Vy Flower để trao gửi yêu thương đến người thương nhé!
               </p>
               <button
                 type="button"
                 onClick={handleExplore}
-                className="hero-cta-btn"
-                style={{ padding: '12px 28px', fontSize: '14px' }}
+                className="cart-empty-cta-btn"
               >
-                <span>Khám Phá Bộ Sưu Tập</span>
-                <div className="cta-icon-badge">
-                  <Sparkles size={16} />
-                </div>
+                <span>Khám Phá Bộ Sưu Tập Hoa</span>
+                <Sparkles size={16} />
               </button>
             </div>
           ) : (
             /* Items List */
             <>
               {/* Perks Banner */}
-              <div
-                style={{
-                  background: 'rgba(250, 204, 21, 0.08)',
-                  border: '1px solid rgba(250, 204, 21, 0.25)',
-                  borderRadius: '16px',
-                  padding: '12px 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                }}
-              >
-                <span style={{ fontSize: '18px' }}>🚚</span>
-                <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.4 }}>
-                  <strong style={{ color: '#facc15' }}>Ưu đãi Florist Studio:</strong> Miễn phí vận chuyển nội thành & tặng kèm thiệp thiết kế cao cấp cho mọi đơn hoa!
+              <div className="cart-perks-banner">
+                <span style={{ fontSize: '20px', flexShrink: 0 }}>🌸</span>
+                <div className="cart-perks-text">
+                  <strong>Ưu đãi Florist Studio:</strong> Miễn phí giao hoa hỏa tốc nội thành & tặng kèm thiệp thiết kế tay cao cấp!
                 </div>
               </div>
 
               {/* Items Card List */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div className="cart-items-list">
                 {cart.map((item) => {
                   const itemTotal = (item.price || 0) * (item.quantity || 1);
                   return (
-                    <div
-                      key={item.id}
-                      style={{
-                        display: 'flex',
-                        gap: '14px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                        borderRadius: '20px',
-                        padding: '14px',
-                        position: 'relative',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
+                    <div key={item.id} className="cart-item-card">
                       {/* Thumbnail */}
-                      <div
-                        style={{
-                          width: '74px',
-                          height: '74px',
-                          borderRadius: '14px',
-                          overflow: 'hidden',
-                          flexShrink: 0,
-                          position: 'relative',
-                        }}
-                      >
+                      <div className="cart-item-thumb">
                         <img
                           src={item.image || '/images/vyvy_lily_hong.jpg'}
                           alt={item.name}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       </div>
 
                       {/* Content */}
-                      <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="cart-item-info">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                           <div>
-                            <div style={{ fontSize: '10px', color: '#facc15', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                              {item.category}
-                            </div>
-                            <h5
-                              style={{
-                                fontSize: '14px',
-                                fontWeight: 700,
-                                color: '#ffffff',
-                                margin: '2px 0 4px',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}
-                            >
+                            <span className="cart-item-category">
+                              {item.category || 'BÓ HOA TƯƠI'}
+                            </span>
+                            <h5 className="cart-item-name" title={item.name}>
                               {item.name}
                             </h5>
                           </div>
@@ -272,92 +134,45 @@ export default function CartDrawer() {
                             type="button"
                             onClick={() => removeFromCart(item.id)}
                             title="Xóa khỏi giỏ"
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              color: 'rgba(255, 255, 255, 0.4)',
-                              cursor: 'pointer',
-                              padding: '4px',
-                              borderRadius: '6px',
-                              transition: 'color 0.2s',
-                            }}
-                            onMouseEnter={(e) => (e.currentTarget.style.color = '#f43f5e')}
-                            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)')}
+                            className="cart-item-delete-btn"
                           >
-                            <Trash2 size={15} />
+                            <Trash2 size={16} />
                           </button>
                         </div>
 
                         {/* Price & Stepper Row */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px' }}>
+                        <div className="cart-item-price-row">
                           <div>
-                            <div style={{ fontSize: '14px', fontWeight: 800, color: '#facc15' }}>
+                            <div className="cart-item-total-price">
                               {itemTotal.toLocaleString('vi-VN')}₫
                             </div>
                             {item.quantity > 1 && (
-                              <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>
-                                {item.price.toLocaleString('vi-VN')}₫ x {item.quantity}
+                              <div className="cart-item-unit-price">
+                                {item.price?.toLocaleString('vi-VN')}₫ × {item.quantity}
                               </div>
                             )}
                           </div>
 
                           {/* Stepper */}
-                          <div
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              background: 'rgba(255, 255, 255, 0.06)',
-                              borderRadius: '9999px',
-                              border: '1px solid rgba(255, 255, 255, 0.12)',
-                              padding: '2px 6px',
-                            }}
-                          >
+                          <div className="cart-item-stepper">
                             <button
                               type="button"
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                color: '#ffffff',
-                                width: '22px',
-                                height: '22px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontSize: '12px',
-                              }}
+                              aria-label="Giảm số lượng"
+                              className="cart-stepper-btn"
                             >
-                              <Minus size={12} />
+                              <Minus size={13} />
                             </button>
-                            <span
-                              style={{
-                                color: '#ffffff',
-                                fontWeight: 700,
-                                fontSize: '13px',
-                                minWidth: '22px',
-                                textAlign: 'center',
-                              }}
-                            >
+                            <span className="cart-stepper-num">
                               {item.quantity}
                             </span>
                             <button
                               type="button"
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                color: '#ffffff',
-                                width: '22px',
-                                height: '22px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                fontSize: '12px',
-                              }}
+                              aria-label="Tăng số lượng"
+                              className="cart-stepper-btn"
                             >
-                              <Plus size={12} />
+                              <Plus size={13} />
                             </button>
                           </div>
                         </div>
@@ -368,20 +183,14 @@ export default function CartDrawer() {
               </div>
 
               {/* Clear Cart link */}
-              <div style={{ textAlign: 'right', marginTop: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px' }}>
                 <button
                   type="button"
                   onClick={clearCart}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'rgba(255, 255, 255, 0.45)',
-                    fontSize: '11px',
-                    cursor: 'pointer',
-                    textDecoration: 'underline',
-                  }}
+                  className="cart-clear-all-btn"
                 >
-                  Xóa tất cả món trong giỏ
+                  <Trash2 size={12} />
+                  <span>Xóa tất cả món trong giỏ</span>
                 </button>
               </div>
             </>
@@ -390,38 +199,20 @@ export default function CartDrawer() {
 
         {/* ================= FOOTER / CHECKOUT ACTIONS ================= */}
         {cart.length > 0 && (
-          <div
-            className="cart-drawer-footer"
-            style={{
-              padding: '20px 24px 28px',
-              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-              background: 'rgba(12, 13, 18, 0.8)',
-              backdropFilter: 'blur(15px)',
-            }}
-          >
+          <div className="cart-drawer-footer">
             {/* Calculation summary */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'rgba(255, 255, 255, 0.65)' }}>
+            <div className="cart-calc-box">
+              <div className="cart-calc-row">
                 <span>Tạm tính ({cartCount} món):</span>
-                <span style={{ color: '#fff', fontWeight: 600 }}>{cartTotal.toLocaleString('vi-VN')}₫</span>
+                <span className="cart-calc-val">{cartTotal.toLocaleString('vi-VN')}₫</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'rgba(255, 255, 255, 0.65)' }}>
+              <div className="cart-calc-row">
                 <span>Phí vận chuyển:</span>
-                <span style={{ color: '#a3e635', fontWeight: 700 }}>Miễn phí (0₫)</span>
+                <span className="cart-calc-free">Miễn phí (0₫)</span>
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  fontSize: '16px',
-                  fontWeight: 800,
-                  color: '#ffffff',
-                  paddingTop: '10px',
-                  borderTop: '1px dashed rgba(255, 255, 255, 0.1)',
-                }}
-              >
+              <div className="cart-calc-total-row">
                 <span>Tổng Thanh Toán:</span>
-                <span style={{ color: '#facc15', fontSize: '20px' }}>{cartTotal.toLocaleString('vi-VN')}₫</span>
+                <span className="cart-total-amount">{cartTotal.toLocaleString('vi-VN')}₫</span>
               </div>
             </div>
 
@@ -429,65 +220,693 @@ export default function CartDrawer() {
             <button
               type="button"
               onClick={startCartCheckout}
-              className="hero-cta-btn"
-              style={{
-                width: '100%',
-                justifyContent: 'center',
-                padding: '14px 24px',
-                fontSize: '15px',
-                fontWeight: 800,
-              }}
+              className="cart-checkout-btn"
             >
               <span>Tiến Hành Đặt Hàng & Xác Nhận</span>
-              <div className="cta-icon-badge">
-                <ArrowRight size={18} />
+              <div className="cart-checkout-icon-wrap">
+                <ArrowRight size={17} />
               </div>
             </button>
 
             <button
               type="button"
               onClick={closeCart}
-              style={{
-                width: '100%',
-                background: 'none',
-                border: 'none',
-                color: 'rgba(255, 255, 255, 0.55)',
-                fontSize: '12px',
-                fontWeight: 600,
-                marginTop: '12px',
-                cursor: 'pointer',
-                textAlign: 'center',
-              }}
+              className="cart-continue-shopping-btn"
             >
-              ← Tiếp tục chọn thêm hoa
+              ← Tiếp tục chọn thêm hoa tươi
             </button>
           </div>
         )}
       </div>
 
       <style>{`
-        @keyframes slideInRight {
-          from {
-            transform: translateX(100%);
-          }
-          to {
-            transform: translateX(0);
-          }
+        /* ================= BASE DRAWER ================= */
+        .cart-drawer-backdrop {
+          position: fixed;
+          inset: 0;
+          background-color: rgba(0, 0, 0, 0.75);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          z-index: 1050;
+          display: flex;
+          justify-content: flex-end;
+          animation: cartFadeIn 0.25s ease;
         }
-        @keyframes fadeIn {
+
+        .cart-drawer-panel {
+          width: 100%;
+          max-width: 480px;
+          height: 100vh;
+          background: #ffffff;
+          box-shadow: -20px 0 60px rgba(0, 0, 0, 0.25);
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          animation: cartSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Dark Mode Theme */
+        body:not(.theme-light-floral) .cart-drawer-panel {
+          background: #10121a !important;
+          border-left: 1px solid rgba(250, 204, 21, 0.25) !important;
+          box-shadow: -20px 0 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(250, 204, 21, 0.1) !important;
+        }
+
+        /* Light Mode Theme */
+        body.theme-light-floral .cart-drawer-panel {
+          background: #fdfbf9 !important;
+          border-left: 1px solid rgba(225, 215, 200, 0.85) !important;
+          box-shadow: -20px 0 60px rgba(80, 50, 30, 0.15) !important;
+        }
+
+        /* Header */
+        .cart-drawer-header {
+          padding: 22px 24px;
+          border-bottom: 1px solid #f1f5f9;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #ffffff;
+        }
+
+        body.theme-light-floral .cart-drawer-header {
+          background: #ffffff !important;
+          border-bottom: 1px solid #f0e8df !important;
+        }
+
+        body:not(.theme-light-floral) .cart-drawer-header {
+          background: #141724 !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .cart-header-icon-wrap {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+          flex-shrink: 0;
+        }
+
+        /* Logos Switch */
+        .cart-logo-dark-mode {
+          height: 28px;
+          width: auto;
+          max-width: 130px;
+          object-fit: contain;
+          display: none;
+        }
+
+        .cart-logo-light-mode {
+          height: 28px;
+          width: auto;
+          max-width: 130px;
+          object-fit: contain;
+          display: block;
+        }
+
+        body.theme-light-floral .cart-logo-dark-mode {
+          display: block !important;
+        }
+
+        body.theme-light-floral .cart-logo-light-mode {
+          display: none !important;
+        }
+
+        .cart-drawer-title {
+          font-size: 18px;
+          font-weight: 800;
+          color: #0f172a;
+          margin: 0;
+          letter-spacing: -0.2px;
+        }
+
+        body:not(.theme-light-floral) .cart-drawer-title {
+          color: #ffffff !important;
+        }
+
+        .cart-drawer-subtitle {
+          font-size: 12px;
+          color: #64748b;
+          font-weight: 500;
+        }
+
+        body:not(.theme-light-floral) .cart-drawer-subtitle {
+          color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        /* Close Button */
+        .cart-close-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: #f1f5f9;
+          border: 1px solid #e2e8f0;
+          color: #334155;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .cart-close-btn:hover {
+          background: #ffe4e6;
+          border-color: #fecdd3;
+          color: #e11d48;
+          transform: scale(1.05);
+        }
+
+        body:not(.theme-light-floral) .cart-close-btn {
+          background: rgba(255, 255, 255, 0.08) !important;
+          border-color: rgba(255, 255, 255, 0.15) !important;
+          color: #ffffff !important;
+        }
+
+        body:not(.theme-light-floral) .cart-close-btn:hover {
+          background: #e11d48 !important;
+          color: #ffffff !important;
+        }
+
+        /* Body */
+        .cart-drawer-body {
+          flex: 1;
+          overflow-y: auto;
+          padding: 20px 22px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        /* Perks Banner */
+        .cart-perks-banner {
+          background: linear-gradient(135deg, #fff1f2 0%, #fff7ed 100%);
+          border: 1.5px solid #fecdd3;
+          border-radius: 16px;
+          padding: 12px 16px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          box-shadow: 0 4px 12px rgba(225, 29, 72, 0.06);
+        }
+
+        body:not(.theme-light-floral) .cart-perks-banner {
+          background: rgba(250, 204, 21, 0.08) !important;
+          border: 1px solid rgba(250, 204, 21, 0.3) !important;
+        }
+
+        .cart-perks-text {
+          font-size: 12.5px;
+          line-height: 1.45;
+          color: #475569;
+        }
+
+        body.theme-light-floral .cart-perks-text strong {
+          color: #be123c !important;
+        }
+
+        body:not(.theme-light-floral) .cart-perks-text {
+          color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        body:not(.theme-light-floral) .cart-perks-text strong {
+          color: #facc15 !important;
+        }
+
+        /* Items List */
+        .cart-items-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        /* Item Card */
+        .cart-item-card {
+          display: flex;
+          gap: 14px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 18px;
+          padding: 14px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+          transition: all 0.2s ease;
+        }
+
+        body.theme-light-floral .cart-item-card {
+          background: #ffffff !important;
+          border: 1px solid #ede4db !important;
+          box-shadow: 0 4px 14px rgba(120, 80, 60, 0.05) !important;
+        }
+
+        body:not(.theme-light-floral) .cart-item-card {
+          background: rgba(255, 255, 255, 0.04) !important;
+          border: 1px solid rgba(255, 255, 255, 0.08) !important;
+          box-shadow: none !important;
+        }
+
+        .cart-item-thumb {
+          width: 76px;
+          height: 76px;
+          border-radius: 14px;
+          overflow: hidden;
+          flex-shrink: 0;
+          background: #f1f5f9;
+          border: 1px solid #e2e8f0;
+        }
+
+        .cart-item-thumb img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .cart-item-info {
+          flex: 1;
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+
+        .cart-item-category {
+          font-size: 10px;
+          color: #be123c;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          display: block;
+        }
+
+        body:not(.theme-light-floral) .cart-item-category {
+          color: #facc15 !important;
+        }
+
+        .cart-item-name {
+          font-size: 14.5px;
+          font-weight: 800;
+          color: #0f172a;
+          margin: 2px 0 6px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          line-height: 1.3;
+        }
+
+        body.theme-light-floral .cart-item-name {
+          color: #1c1917 !important;
+        }
+
+        body:not(.theme-light-floral) .cart-item-name {
+          color: #ffffff !important;
+        }
+
+        .cart-item-delete-btn {
+          background: none;
+          border: none;
+          color: #94a3b8;
+          cursor: pointer;
+          padding: 4px;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+        }
+
+        .cart-item-delete-btn:hover {
+          color: #ef4444;
+          background: #fee2e2;
+        }
+
+        body:not(.theme-light-floral) .cart-item-delete-btn {
+          color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        body:not(.theme-light-floral) .cart-item-delete-btn:hover {
+          color: #f43f5e !important;
+          background: rgba(244, 63, 94, 0.15) !important;
+        }
+
+        .cart-item-price-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+        }
+
+        .cart-item-total-price {
+          font-size: 15px;
+          font-weight: 800;
+          color: #e11d48;
+        }
+
+        body:not(.theme-light-floral) .cart-item-total-price {
+          color: #facc15 !important;
+        }
+
+        .cart-item-unit-price {
+          font-size: 11px;
+          color: #64748b;
+          font-weight: 500;
+        }
+
+        body:not(.theme-light-floral) .cart-item-unit-price {
+          color: rgba(255, 255, 255, 0.45) !important;
+        }
+
+        /* Stepper */
+        .cart-item-stepper {
+          display: inline-flex;
+          align-items: center;
+          background: #f1f5f9;
+          border-radius: 9999px;
+          border: 1px solid #cbd5e1;
+          padding: 2px 6px;
+        }
+
+        body.theme-light-floral .cart-item-stepper {
+          background: #f8f4ef !important;
+          border: 1px solid #e0d4c8 !important;
+        }
+
+        body:not(.theme-light-floral) .cart-item-stepper {
+          background: rgba(255, 255, 255, 0.08) !important;
+          border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .cart-stepper-btn {
+          background: none;
+          border: none;
+          color: #0f172a;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          border-radius: 50%;
+          transition: background 0.15s;
+        }
+
+        .cart-stepper-btn:hover {
+          background: rgba(0, 0, 0, 0.06);
+        }
+
+        body:not(.theme-light-floral) .cart-stepper-btn {
+          color: #ffffff !important;
+        }
+
+        body:not(.theme-light-floral) .cart-stepper-btn:hover {
+          background: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .cart-stepper-num {
+          color: #0f172a;
+          font-weight: 800;
+          font-size: 13.5px;
+          min-width: 24px;
+          text-align: center;
+        }
+
+        body:not(.theme-light-floral) .cart-stepper-num {
+          color: #ffffff !important;
+        }
+
+        /* Clear All Button */
+        .cart-clear-all-btn {
+          background: none;
+          border: none;
+          color: #64748b;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 6px 10px;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+        }
+
+        .cart-clear-all-btn:hover {
+          color: #ef4444;
+          background: #fee2e2;
+        }
+
+        body:not(.theme-light-floral) .cart-clear-all-btn {
+          color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        body:not(.theme-light-floral) .cart-clear-all-btn:hover {
+          color: #f43f5e !important;
+          background: rgba(244, 63, 94, 0.15) !important;
+        }
+
+        /* Footer */
+        .cart-drawer-footer {
+          padding: 20px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+          border-top: 1px solid #e2e8f0;
+          background: #ffffff;
+          box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        body.theme-light-floral .cart-drawer-footer {
+          background: #ffffff !important;
+          border-top: 1px solid #ede4db !important;
+          box-shadow: 0 -10px 30px rgba(120, 80, 60, 0.06) !important;
+        }
+
+        body:not(.theme-light-floral) .cart-drawer-footer {
+          background: #141724 !important;
+          border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+          box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .cart-calc-box {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 16px;
+        }
+
+        .cart-calc-row {
+          display: flex;
+          justify-content: space-between;
+          font-size: 13.5px;
+          color: #64748b;
+          font-weight: 500;
+        }
+
+        body:not(.theme-light-floral) .cart-calc-row {
+          color: rgba(255, 255, 255, 0.65) !important;
+        }
+
+        .cart-calc-val {
+          color: #0f172a;
+          font-weight: 700;
+        }
+
+        body:not(.theme-light-floral) .cart-calc-val {
+          color: #ffffff !important;
+        }
+
+        .cart-calc-free {
+          color: #16a34a;
+          font-weight: 800;
+        }
+
+        body:not(.theme-light-floral) .cart-calc-free {
+          color: #a3e635 !important;
+        }
+
+        .cart-calc-total-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 16px;
+          font-weight: 800;
+          color: #0f172a;
+          padding-top: 10px;
+          border-top: 1.5px dashed #cbd5e1;
+        }
+
+        body.theme-light-floral .cart-calc-total-row {
+          border-top: 1.5px dashed #e0d4c8 !important;
+        }
+
+        body:not(.theme-light-floral) .cart-calc-total-row {
+          color: #ffffff !important;
+          border-top: 1.5px dashed rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .cart-total-amount {
+          color: #e11d48;
+          font-size: 22px;
+          font-weight: 900;
+        }
+
+        body:not(.theme-light-floral) .cart-total-amount {
+          color: #facc15 !important;
+        }
+
+        /* Checkout Button */
+        .cart-checkout-btn {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 14px 24px;
+          border-radius: 9999px;
+          background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+          color: #ffffff;
+          font-size: 15px;
+          font-weight: 800;
+          border: none;
+          cursor: pointer;
+          box-shadow: 0 10px 25px rgba(225, 29, 72, 0.35);
+          transition: all 0.25s ease;
+        }
+
+        .cart-checkout-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 14px 30px rgba(225, 29, 72, 0.5);
+        }
+
+        .cart-checkout-icon-wrap {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: #ffffff;
+          color: #e11d48;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .cart-continue-shopping-btn {
+          width: 100%;
+          background: none;
+          border: none;
+          color: #64748b;
+          font-size: 13px;
+          font-weight: 600;
+          margin-top: 12px;
+          cursor: pointer;
+          text-align: center;
+          transition: color 0.2s ease;
+        }
+
+        .cart-continue-shopping-btn:hover {
+          color: #e11d48;
+        }
+
+        body:not(.theme-light-floral) .cart-continue-shopping-btn {
+          color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        body:not(.theme-light-floral) .cart-continue-shopping-btn:hover {
+          color: #facc15 !important;
+        }
+
+        /* Empty State */
+        .cart-empty-state {
+          text-align: center;
+          padding: 60px 20px;
+          margin: auto 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .cart-empty-icon-wrap {
+          width: 90px;
+          height: 90px;
+          border-radius: 50%;
+          background: #fff1f2;
+          border: 1.5px dashed #fecdd3;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 20px;
+          color: #e11d48;
+        }
+
+        body:not(.theme-light-floral) .cart-empty-icon-wrap {
+          background: rgba(250, 204, 21, 0.08) !important;
+          border: 1.5px dashed rgba(250, 204, 21, 0.4) !important;
+          color: #facc15 !important;
+        }
+
+        .cart-empty-title {
+          font-size: 20px;
+          font-weight: 800;
+          color: #0f172a;
+          margin: 0 0 8px;
+        }
+
+        body:not(.theme-light-floral) .cart-empty-title {
+          color: #ffffff !important;
+        }
+
+        .cart-empty-desc {
+          color: #64748b;
+          font-size: 13.5px;
+          line-height: 1.6;
+          max-width: 300px;
+          margin: 0 0 24px;
+        }
+
+        body:not(.theme-light-floral) .cart-empty-desc {
+          color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .cart-empty-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 13px 28px;
+          border-radius: 9999px;
+          background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+          color: #ffffff;
+          font-weight: 800;
+          font-size: 14px;
+          border: none;
+          cursor: pointer;
+          box-shadow: 0 8px 24px rgba(225, 29, 72, 0.35);
+          transition: all 0.2s ease;
+        }
+
+        .cart-empty-cta-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 30px rgba(225, 29, 72, 0.5);
+        }
+
+        /* Animations */
+        @keyframes cartSlideIn {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+        @keyframes cartFadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
         }
+
         @media (max-width: 600px) {
           .cart-drawer-panel {
             max-width: 100% !important;
             width: 100% !important;
           }
           .cart-drawer-header {
+            padding: 18px 20px !important;
+          }
+          .cart-drawer-body {
             padding: 16px !important;
           }
           .cart-drawer-footer {
-            padding: 16px 16px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
+            padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px)) !important;
           }
         }
       `}</style>

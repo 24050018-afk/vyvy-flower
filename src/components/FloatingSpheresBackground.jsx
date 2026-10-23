@@ -75,10 +75,10 @@ export default function FloatingSpheresBackground() {
         }}
       >
         <picture className="global-hero-bg-picture">
-          {/* Mobile Hero: 9:16 vertical (1080x1920) */}
+          {/* Mobile Hero: 9:16 vertical (853x1844 / 1080x1920) */}
           <source
             media="(max-width: 768px)"
-            srcSet={isLight ? '/images/hero-bg-light-mobile-1080.jpg' : '/images/hero-bg-dark-mobile-1080.jpg'}
+            srcSet={isLight ? '/images/background.jpg' : '/images/hero-bg-dark-mobile-1080.jpg'}
           />
           {/* High-res 2K / Retina (2560x1440) */}
           <source
@@ -96,6 +96,7 @@ export default function FloatingSpheresBackground() {
 
       {/* 3. Luxury Vignette & Contrast Overlay */}
       <div
+        className="hero-vignette-overlay"
         style={{
           position: 'absolute',
           inset: 0,
@@ -108,7 +109,7 @@ export default function FloatingSpheresBackground() {
       />
 
       {/* 4. Ambient color light glows */}
-      <div style={{
+      <div className="hero-ambient-glow" style={{
         position: 'absolute',
         top: '-15%',
         left: '20%',
@@ -121,7 +122,7 @@ export default function FloatingSpheresBackground() {
         filter: 'blur(80px)',
       }} />
 
-      <div style={{
+      <div className="hero-ambient-glow" style={{
         position: 'absolute',
         top: '15%',
         right: '10%',
@@ -134,7 +135,7 @@ export default function FloatingSpheresBackground() {
         filter: 'blur(70px)',
       }} />
 
-      <div style={{
+      <div className="hero-ambient-glow" style={{
         position: 'absolute',
         top: '30%',
         left: '-5%',
@@ -150,9 +151,9 @@ export default function FloatingSpheresBackground() {
       {/* =======================================================
           3D GLOSSY SPHERES (Customized for Luxury Floral Theme)
           ======================================================= */}
-
-      {/* 1. TOP CENTER SPHERE: Rose Quartz in Light, Lime in Dark */}
-      <div style={{
+      <div className="hero-spheres-container">
+        {/* 1. TOP CENTER SPHERE: Rose Quartz in Light, Lime in Dark */}
+        <div style={{
         position: 'absolute',
         top: '6%',
         left: '52%',
@@ -398,6 +399,7 @@ export default function FloatingSpheresBackground() {
         zIndex: 2,
       }}>
         <span>x</span><span>x</span><span>x</span><span>x</span>
+      </div>
       </div>
 
       {/* Theme Switcher Pill (Interactive) */}

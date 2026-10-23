@@ -347,7 +347,7 @@ export default function CustomerAuthModal() {
   };
 
   return (
-    <div className="modal-overlay" onClick={handleClose}>
+    <div className="modal-overlay" style={{ zIndex: 1200 }} onClick={handleClose}>
       <div
         className="modal-content glass-panel"
         style={{

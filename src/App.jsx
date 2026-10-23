@@ -29,6 +29,7 @@ import AdminProducts from './admin/pages/AdminProducts';
 import AdminInventory from './admin/pages/AdminInventory';
 import AdminCustomers from './admin/pages/AdminCustomers';
 import AdminOrders from './admin/pages/AdminOrders';
+import AdminReviews from './admin/pages/AdminReviews';
 import AdminLogin from './admin/pages/AdminLogin';
 
 export const ToastContext = React.createContext(null);
@@ -113,6 +114,7 @@ export default function App() {
                 <Route path="inventory" element={<AdminInventory />} />
                 <Route path="customers" element={<AdminCustomers />} />
                 <Route path="orders" element={<AdminOrders />} />
+                <Route path="reviews" element={<AdminReviews />} />
               </Route>
             </Routes>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
-import { LayoutDashboard, ShoppingCart, Flower2, Package, Users, ExternalLink, LogOut, Bell, CheckCheck, Menu, X } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Flower2, Package, Users, MessageSquare, ExternalLink, LogOut, Bell, CheckCheck, Menu, X } from 'lucide-react';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../services/api';
 
 const navItems = [
@@ -9,6 +9,7 @@ const navItems = [
   { to: '/admin/products', icon: <Flower2 size={18} />, label: 'Sản Phẩm' },
   { to: '/admin/inventory', icon: <Package size={18} />, label: 'Tồn Kho' },
   { to: '/admin/customers', icon: <Users size={18} />, label: 'Khách Hàng' },
+  { to: '/admin/reviews', icon: <MessageSquare size={18} />, label: 'Đánh Giá' },
 ];
 
 export default function AdminLayout({ onLogout }) {
@@ -35,6 +36,20 @@ export default function AdminLayout({ onLogout }) {
       // fail silently
     }
   };
+
+  useEffect(() => {
+    // Admin dashboard workspace always operates in cohesive, high-contrast dark luxury mode
+    const prevHeroTheme = localStorage.getItem('vyvy_hero_theme');
+    document.body.classList.remove('theme-light-floral');
+    document.documentElement.setAttribute('data-theme', 'dark');
+
+    return () => {
+      if (prevHeroTheme === 'light') {
+        document.body.classList.add('theme-light-floral');
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    };
+  }, []);
 
   useEffect(() => {
     fetchNotifs();

@@ -88,6 +88,13 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchStats();
+    const handleSync = () => fetchStats();
+    window.addEventListener('vyvy_orders_updated', handleSync);
+    window.addEventListener('vyvy_products_updated', handleSync);
+    return () => {
+      window.removeEventListener('vyvy_orders_updated', handleSync);
+      window.removeEventListener('vyvy_products_updated', handleSync);
+    };
   }, []);
 
   const statusColor = {

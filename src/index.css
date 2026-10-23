@@ -102,6 +102,16 @@ h1, h2, h3, h4 {
   text-shadow: 0 0 35px rgba(250, 204, 21, 0.45);
 }
 
+/* Red / Rose highlight accent */
+.text-highlight-red {
+  color: #ff3366;
+  background: linear-gradient(135deg, #ff4d79 0%, #f43f5e 50%, #e11d48 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 25px rgba(244, 63, 94, 0.5));
+  display: inline-block;
+}
+
 /* ============ SIGNATURE BUTTONS ============ */
 /* Reference image hero CTA: Rounded pill with warm sunset gradient */
 .hero-cta-btn {
@@ -229,6 +239,88 @@ h1, h2, h3, h4 {
   justify-content: space-between;
   gap: 12px;
   z-index: 10;
+}
+
+/* Signature 3D Cards Header Plate */
+.showcase-header-plate {
+  display: inline-block;
+  max-width: 95%;
+  padding: 14px 18px;
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(12, 14, 22, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  transition: all 0.3s ease;
+}
+
+.showcase-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(12, 13, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.showcase-title {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin: 8px 0 3px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+
+.showcase-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+}
+
+.card-capsule-icon-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.card-capsule-price {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.card-capsule-cart-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card-capsule-cart-btn:hover {
+  border-color: #facc15;
+  color: #facc15;
+  background: rgba(250, 204, 21, 0.15);
 }
 
 /* ============ DECORATIVE CROSSES & DOT GRIDS ============ */
@@ -849,14 +941,35 @@ h1, h2, h3, h4 {
   height: 100%;
   object-fit: cover;
   object-position: center center;
-  filter: contrast(1.05) saturate(1.08);
+  filter: contrast(1.08) saturate(1.12);
   will-change: transform;
   display: block;
 }
 
 @media (max-width: 768px) {
+  .global-hero-bg-container {
+    inset: 0 !important;
+    transform: none !important;
+  }
   .global-hero-bg-img {
-    object-position: center top;
+    object-fit: cover !important;
+    object-position: center center !important;
+    filter: none !important;
+  }
+
+  /* Unblock mobile floral wallpaper: completely remove vignette, ambient haze and 3D spheres */
+  .hero-vignette-overlay,
+  body.theme-light-floral .hero-vignette-overlay {
+    display: none !important;
+  }
+
+  .hero-ambient-glow,
+  body.theme-light-floral .hero-ambient-glow {
+    display: none !important;
+  }
+
+  .hero-spheres-container {
+    display: none !important;
   }
 }
 
@@ -872,6 +985,30 @@ body.theme-light-floral {
   background-color: #faf8f5 !important;
   color: #1c1917 !important;
   color-scheme: light;
+
+  /* Global variable overrides for light floral porcelain theme */
+  --bg-darkest:   #faf8f5;
+  --bg-deep:      #faf8f5;
+  --bg-surface:   #ffffff;
+  --bg-surface-2: #f6f2ec;
+  
+  --glass-card:       rgba(255, 255, 255, 0.95);
+  --glass-card-hover: #ffffff;
+  --glass-capsule:    rgba(255, 255, 255, 0.95);
+  --glass-border:     rgba(235, 222, 210, 0.85);
+  --glass-border-hot: rgba(225, 29, 72, 0.45);
+  
+  --c-yellow: #be123c;
+  
+  --t-100: #1c1917;
+  --t-80:  #44403c;
+  --t-60:  #6b635b;
+  --t-40:  #a8a29e;
+  --t-20:  rgba(120, 113, 108, 0.2);
+
+  --shadow-card:       0 10px 30px -4px rgba(140, 100, 80, 0.09), 0 2px 8px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 22px 48px -10px rgba(225, 29, 72, 0.18), 0 0 0 1px rgba(225, 29, 72, 0.25);
+  --shadow-glow-cta:   0 8px 25px rgba(225, 29, 72, 0.35);
 }
 
 /* Brand Logo Reactive Switching */
@@ -936,6 +1073,15 @@ body.theme-light-floral .text-highlight-yellow {
   display: inline-block;
 }
 
+body.theme-light-floral .text-highlight-red {
+  color: #be123c !important;
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 4px 15px rgba(225, 29, 72, 0.18) !important;
+  display: inline-block;
+}
+
 /* Sub-badge pill in Hero */
 body.theme-light-floral .hero-sub-badge,
 body.theme-light-floral div[style*="background: 'rgba(255, 255, 255, 0.05)'"],
@@ -967,42 +1113,253 @@ body.theme-light-floral .hero-cta-btn .cta-icon-badge {
   color: #e11d48 !important;
 }
 
-/* 3D Showcase Cards */
-body.theme-light-floral .showcase-card {
-  background: rgba(255, 255, 255, 0.90) !important;
-  border: 1px solid rgba(230, 218, 205, 0.8) !important;
-  box-shadow: 0 16px 40px -10px rgba(100, 75, 55, 0.12) !important;
+/* 3D Showcase Cards in Light Floral Porcelain Theme */
+/* ============================================================
+   SIGNATURE SHOWCASE CARDS (Luxury Atelier Masterpieces)
+   ============================================================ */
+.signature-showcase-card {
+  border-radius: 26px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(22, 25, 36, 0.94) 0%, rgba(14, 16, 24, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-body.theme-light-floral .showcase-card div[style*="background: 'linear-gradient(180deg"],
-body.theme-light-floral .showcase-card div[style*="background: linear-gradient(180deg"] {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.96) 100%) !important;
+.signature-showcase-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(250, 204, 21, 0.45);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.75), 0 0 30px rgba(250, 204, 21, 0.12);
 }
 
-body.theme-light-floral .showcase-card h3 {
-  color: #1c1917 !important;
+body.theme-light-floral .signature-showcase-card {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1px solid rgba(235, 222, 210, 0.92) !important;
+  box-shadow: 0 12px 36px -6px rgba(125, 90, 70, 0.12), 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+}
+
+body.theme-light-floral .signature-showcase-card:hover {
+  transform: translateY(-8px) !important;
+  background: #ffffff !important;
+  border-color: rgba(225, 29, 72, 0.35) !important;
+  box-shadow: 0 24px 50px -10px rgba(225, 29, 72, 0.2), 0 0 0 1px rgba(225, 29, 72, 0.25) !important;
+}
+
+/* Image Showcase */
+.signature-img-wrap {
+  position: relative;
+  height: 235px;
+  overflow: hidden;
+  background: #090a10;
+}
+
+body.theme-light-floral .signature-img-wrap {
+  background: #fbf8f5 !important;
+}
+
+.signature-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.signature-showcase-card:hover .signature-img-wrap img {
+  transform: scale(1.08);
+}
+
+.signature-badge-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 3;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(12, 14, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #facc15;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+body.theme-light-floral .signature-badge-pill {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(225, 29, 72, 0.25) !important;
+  color: #be123c !important;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.1) !important;
+}
+
+.signature-curator-tag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+body.theme-light-floral .signature-curator-tag {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border: 1px solid rgba(230, 218, 205, 0.9) !important;
+  color: #8c7e75 !important;
+}
+
+/* Info Base */
+.signature-info-base {
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.signature-meta-row {
+  margin-bottom: 6px;
+}
+
+.signature-flower-types {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(250, 204, 21, 0.88);
+}
+
+body.theme-light-floral .signature-flower-types {
+  color: #9f1239 !important;
+}
+
+.signature-card-title {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  margin: 0 0 16px 0 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.3px !important;
   text-shadow: none !important;
+  transition: color 0.2s ease;
 }
 
-body.theme-light-floral .showcase-card div[style*="letterSpacing: '0.5px'"],
-body.theme-light-floral .showcase-card div[style*="letter-spacing: 0.5px"] {
+.signature-showcase-card:hover .signature-card-title {
+  color: #facc15 !important;
+}
+
+body.theme-light-floral .signature-card-title {
+  color: #1c1917 !important;
+}
+
+body.theme-light-floral .signature-showcase-card:hover .signature-card-title {
+  color: #be123c !important;
+}
+
+.signature-card-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.theme-light-floral .signature-card-bottom-row {
+  border-top: 1px solid rgba(230, 220, 210, 0.8) !important;
+}
+
+.signature-price-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 2px;
+}
+
+body.theme-light-floral .signature-price-label {
+  color: #8c827a !important;
+}
+
+.signature-card-price {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #facc15;
+}
+
+body.theme-light-floral .signature-card-price {
+  color: #be123c !important;
+}
+
+.signature-cart-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.signature-cart-btn:hover {
+  background: rgba(250, 204, 21, 0.2);
+  border-color: #facc15;
+  color: #facc15;
+  transform: scale(1.08);
+}
+
+body.theme-light-floral .signature-cart-btn {
+  background: #fbf8f5 !important;
+  border: 1px solid rgba(230, 218, 205, 0.9) !important;
   color: #78716c !important;
 }
 
-body.theme-light-floral .card-capsule-bar {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border: 1px solid rgba(225, 215, 200, 0.8) !important;
-  box-shadow: 0 6px 18px rgba(100, 75, 55, 0.08) !important;
+body.theme-light-floral .signature-cart-btn:hover {
+  background: #ffffff !important;
+  border-color: rgba(225, 29, 72, 0.4) !important;
+  color: #be123c !important;
+  transform: scale(1.08) !important;
 }
 
-body.theme-light-floral .card-capsule-bar span {
-  color: #e11d48 !important;
-  font-weight: 800 !important;
+.signature-order-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 50%, #ea580c 100%);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-body.theme-light-floral .btn-card-action {
-  background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%) !important;
-  color: #ffffff !important;
+.signature-order-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.5);
+  filter: brightness(1.06);
 }
 
 /* Category Filter Buttons */
@@ -1030,22 +1387,991 @@ body.theme-light-floral .cross-marks span {
   color: #e11d48 !important;
 }
 
-/* Product Cards in Grid */
-body.theme-light-floral .product-card,
-body.theme-light-floral div[style*="rgba(20, 22, 31, 0.75)"] {
-  background: rgba(255, 255, 255, 0.94) !important;
-  border: 1px solid rgba(230, 218, 205, 0.75) !important;
-  box-shadow: 0 12px 35px -8px rgba(100, 70, 50, 0.08) !important;
+/* ============================================================
+   LUXURY FLOWER PRODUCT CARD & CATALOG DESIGN SYSTEM
+   Supports both Light Floral Atelier & Dark Luxe Cyber
+   ============================================================ */
+
+/* Section Header Eyebrow Badge */
+.catalog-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #facc15;
 }
 
-body.theme-light-floral .product-card h4,
-body.theme-light-floral h4[style*="color: rgb(255, 255, 255)"],
-body.theme-light-floral h4[style*="color: #fff"] {
+body.theme-light-floral .catalog-header-badge {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(225, 29, 72, 0.25) !important;
+  color: #be123c !important;
+  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.1) !important;
+}
+
+.catalog-header-badge .badge-sparkle {
+  color: #facc15;
+}
+
+body.theme-light-floral .catalog-header-badge .badge-sparkle {
+  color: #e11d48 !important;
+}
+
+.catalog-header-sub {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+body.theme-light-floral .catalog-header-sub {
+  color: #6b635b !important;
+}
+
+/* Category Filter Buttons */
+.catalog-filter-btn {
+  padding: 8px 20px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.catalog-filter-btn:hover {
+  color: #ffffff;
+  border-color: rgba(250, 204, 21, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.catalog-filter-btn.active {
+  background: #facc15;
+  color: #0b0c10;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(250, 204, 21, 0.35);
+}
+
+body.theme-light-floral .catalog-filter-btn {
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #57534e !important;
+  border: 1px solid rgba(225, 215, 200, 0.85) !important;
+  box-shadow: 0 2px 8px rgba(100, 75, 55, 0.04) !important;
+}
+
+body.theme-light-floral .catalog-filter-btn:hover {
+  background: #ffffff !important;
+  border-color: #e11d48 !important;
+  color: #e11d48 !important;
+  transform: translateY(-1px) !important;
+}
+
+body.theme-light-floral .catalog-filter-btn.active {
+  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 45%, #fb923c 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 18px rgba(225, 29, 72, 0.35) !important;
+}
+
+/* ============================================================
+   PRODUCT CARD LUXURY — MAIN CARD CONTAINER
+   ============================================================ */
+.product-card-luxury {
+  border-radius: 26px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(22, 25, 36, 0.9) 0%, rgba(14, 16, 24, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+.product-card-luxury:hover {
+  transform: translateY(-8px);
+  border-color: rgba(250, 204, 21, 0.45);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.8), 0 0 30px rgba(250, 204, 21, 0.12);
+}
+
+/* Product Card in Light Floral Porcelain Theme */
+body.theme-light-floral .product-card-luxury {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1px solid rgba(235, 222, 210, 0.9) !important;
+  box-shadow: 0 10px 30px -4px rgba(135, 95, 75, 0.08), 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+}
+
+body.theme-light-floral .product-card-luxury:hover {
+  transform: translateY(-8px) !important;
+  background: #ffffff !important;
+  border-color: rgba(225, 29, 72, 0.35) !important;
+  box-shadow: 0 22px 50px -10px rgba(225, 29, 72, 0.18), 0 0 0 1px rgba(225, 29, 72, 0.2) !important;
+}
+
+/* Product Card Image Wrapper */
+.product-card-img-wrap {
+  position: relative;
+  height: 245px;
+  overflow: hidden;
+  background: #090a10;
+}
+
+body.theme-light-floral .product-card-img-wrap {
+  background: #fbf8f4 !important;
+}
+
+.product-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card-luxury:hover .product-card-img-wrap img {
+  transform: scale(1.08);
+}
+
+.product-card-img-gradient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.3) 100%);
+  transition: opacity 0.3s ease;
+}
+
+body.theme-light-floral .product-card-img-gradient {
+  background: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(255,255,255,0) 45%, rgba(255,255,255,0.45) 100%) !important;
+}
+
+/* Floating Tag / Badge */
+.product-card-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 3;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(12, 14, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #facc15;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+body.theme-light-floral .product-card-badge {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(225, 29, 72, 0.22) !important;
+  color: #be123c !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.12) !important;
+}
+
+/* Stock Tag */
+.product-card-stock-tag {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 3;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(244, 63, 94, 0.22);
+  border: 1px solid rgba(244, 63, 94, 0.5);
+  color: #fb7185;
+  backdrop-filter: blur(8px);
+}
+
+body.theme-light-floral .product-card-stock-tag {
+  background: rgba(255, 241, 242, 0.95) !important;
+  border: 1px solid rgba(244, 63, 94, 0.35) !important;
+  color: #e11d48 !important;
+  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.1) !important;
+}
+
+/* Heart / Favorite Button */
+.product-card-heart-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(12, 14, 22, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.product-card-heart-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fb7185;
+  transform: scale(1.12);
+}
+
+body.theme-light-floral .product-card-heart-btn {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(225, 215, 205, 0.9) !important;
+  color: #78716c !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.theme-light-floral .product-card-heart-btn:hover {
+  background: #ffffff !important;
+  color: #e11d48 !important;
+  border-color: rgba(225, 29, 72, 0.4) !important;
+  transform: scale(1.14) !important;
+}
+
+/* Card Body */
+.product-card-body {
+  padding: 22px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.product-card-cat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.product-card-category {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: rgba(250, 204, 21, 0.88);
+}
+
+body.theme-light-floral .product-card-category {
+  color: #9f1239 !important;
+}
+
+.product-card-rating {
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #facc15;
+}
+
+body.theme-light-floral .product-card-rating {
+  color: #ea580c !important;
+}
+
+.product-card-reviews {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+body.theme-light-floral .product-card-reviews {
+  color: #a8a29e !important;
+}
+
+.product-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+  transition: color 0.2s ease;
+}
+
+.product-card-luxury:hover .product-card-title {
+  color: #facc15;
+}
+
+body.theme-light-floral .product-card-title {
   color: #1c1917 !important;
 }
 
-body.theme-light-floral div[style*="fontSize: '11px'"][style*="textTransform: 'uppercase'"] {
-  color: #78716c !important;
+body.theme-light-floral .product-card-luxury:hover .product-card-title {
+  color: #be123c !important;
+}
+
+.product-card-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+body.theme-light-floral .product-card-desc {
+  color: #57534e !important;
+}
+
+/* Micro Atelier Trust Guarantee */
+.product-card-trust-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+}
+
+body.theme-light-floral .product-card-trust-tag {
+  color: #8c827a !important;
+}
+
+.product-card-trust-tag svg {
+  color: #facc15;
+}
+
+body.theme-light-floral .product-card-trust-tag svg {
+  color: #e11d48 !important;
+}
+
+/* Card Footer & CTA Buttons */
+.product-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.theme-light-floral .product-card-footer {
+  border-top: 1px solid rgba(225, 215, 200, 0.8) !important;
+}
+
+.product-card-price {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #facc15;
+}
+
+body.theme-light-floral .product-card-price {
+  color: #be123c !important;
+}
+
+.product-card-original-price {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: line-through;
+  margin-top: 2px;
+}
+
+body.theme-light-floral .product-card-original-price {
+  color: #a8a29e !important;
+}
+
+.product-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-card-cart-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.product-card-cart-btn:hover {
+  border-color: #facc15;
+  color: #facc15;
+  background: rgba(250, 204, 21, 0.15);
+  transform: scale(1.08);
+}
+
+body.theme-light-floral .product-card-cart-btn {
+  background: #fbf9f6 !important;
+  border: 1px solid rgba(225, 215, 200, 0.95) !important;
+  color: #44403c !important;
+}
+
+body.theme-light-floral .product-card-cart-btn:hover {
+  background: #ffe4e6 !important;
+  border-color: #f43f5e !important;
+  color: #e11d48 !important;
+  transform: scale(1.08) !important;
+}
+
+.product-card-order-btn {
+  background: linear-gradient(90deg, #fde047 0%, #fb923c 50%, #f43f5e 100%);
+  color: #0b0c10;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(251, 146, 60, 0.3);
+}
+
+.product-card-order-btn:hover {
+  background: linear-gradient(90deg, #fef08a 0%, #f97316 50%, #e11d48 100%);
+  box-shadow: 0 6px 20px rgba(251, 146, 60, 0.45);
+  transform: translateY(-2px);
+}
+
+body.theme-light-floral .product-card-order-btn {
+  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 45%, #fb923c 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.32) !important;
+}
+
+body.theme-light-floral .product-card-order-btn:hover {
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.48) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Fallback for generic glass panels in Light Theme */
+body.theme-light-floral .glass-panel {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(230, 218, 205, 0.85) !important;
+  box-shadow: 0 10px 30px -4px rgba(100, 70, 55, 0.08) !important;
+}
+
+body.theme-light-floral .glass-panel-subtle {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border: 1px solid rgba(230, 218, 205, 0.75) !important;
+  box-shadow: 0 8px 24px rgba(100, 70, 55, 0.05) !important;
+}
+
+/* VIP Services Section in Light Theme */
+body.theme-light-floral #services > div {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(225, 215, 200, 0.85) !important;
+  box-shadow: 0 16px 45px -10px rgba(100, 75, 55, 0.09) !important;
+}
+
+body.theme-light-floral #services .glass-panel-subtle {
+  background: #ffffff !important;
+  border: 1px solid rgba(225, 215, 200, 0.8) !important;
+  box-shadow: 0 4px 18px rgba(100, 75, 55, 0.04) !important;
+}
+
+/* Products Page Filter Bar */
+body.theme-light-floral .products-filter-bar {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(225, 215, 200, 0.85) !important;
+  box-shadow: 0 8px 30px rgba(100, 75, 55, 0.06) !important;
+}
+
+body.theme-light-floral .products-filter-bar input {
+  background: #ffffff !important;
+  border: 1px solid rgba(225, 215, 200, 0.9) !important;
+  color: #1c1917 !important;
+}
+
+body.theme-light-floral .products-filter-bar select {
+  background: #ffffff !important;
+  border: 1px solid rgba(225, 215, 200, 0.9) !important;
+  color: #1c1917 !important;
+}
+
+/* ============================================================
+   PRODUCT DETAIL MODAL (LUXURY ARCHITECTURE & CONTRAST)
+   ============================================================ */
+.product-modal-card {
+  background: #12141c;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  max-width: 860px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(250, 204, 21, 0.08);
+  display: flex;
+}
+
+body.theme-light-floral .product-modal-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(225, 215, 200, 0.9) !important;
+  box-shadow: 0 25px 70px rgba(100, 70, 50, 0.22) !important;
+}
+
+/* Modal Close Button */
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.06);
+}
+
+body.theme-light-floral .modal-close-btn {
+  background: #fbf8f5 !important;
+  border: 1px solid rgba(225, 215, 200, 0.9) !important;
+  color: #1c1917 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.theme-light-floral .modal-close-btn:hover {
+  background: #ffe4e6 !important;
+  color: #e11d48 !important;
+  border-color: rgba(225, 29, 72, 0.3) !important;
+}
+
+/* Modal Image Column */
+.product-modal-img-col {
+  flex: 1 1 48%;
+  min-height: 440px;
+  position: relative;
+  overflow: hidden;
+  background: #090a0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.theme-light-floral .product-modal-img-col {
+  background: #fdfaf6 !important;
+}
+
+.modal-img-ambient {
+  position: absolute;
+  inset: -30px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(32px) brightness(0.28) saturate(1.4);
+  transform: scale(1.25);
+  pointer-events: none;
+}
+
+body.theme-light-floral .modal-img-ambient {
+  filter: blur(32px) brightness(1.08) saturate(1.2) opacity(0.22) !important;
+}
+
+.modal-product-img {
+  position: relative;
+  z-index: 2;
+  max-width: 100%;
+  max-height: 480px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  padding: 16px;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
+  transition: transform 0.3s ease;
+}
+
+body.theme-light-floral .modal-product-img {
+  filter: drop-shadow(0 15px 35px rgba(120, 80, 60, 0.18)) !important;
+}
+
+/* Modal Content Column */
+.product-modal-content-col {
+  flex: 1 1 52%;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.modal-cat-tag {
+  color: #facc15;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+body.theme-light-floral .modal-cat-tag {
+  color: #be123c !important;
+  font-weight: 800 !important;
+}
+
+.modal-rating-tag {
+  color: #facc15;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+body.theme-light-floral .modal-rating-tag {
+  color: #92400e !important;
+  font-weight: 800 !important;
+  background: #fef3c7 !important;
+  border: 1px solid #fde68a !important;
+}
+
+.modal-product-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+body.theme-light-floral .modal-product-title {
+  color: #0f172a !important;
+}
+
+.modal-product-desc {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+
+body.theme-light-floral .modal-product-desc {
+  color: #334155 !important;
+}
+
+/* Modal Tabs Navigation */
+.modal-tabs-nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 4px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: fit-content;
+}
+
+body.theme-light-floral .modal-tabs-nav {
+  background: #f1f5f9 !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+.modal-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+}
+
+.modal-tab-btn:hover {
+  color: #ffffff;
+}
+
+.modal-tab-btn.active {
+  background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+}
+
+body.theme-light-floral .modal-tab-btn {
+  color: #475569 !important;
+}
+
+body.theme-light-floral .modal-tab-btn:hover {
+  color: #0f172a !important;
+}
+
+body.theme-light-floral .modal-tab-btn.active {
+  background: #e11d48 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.3) !important;
+}
+
+/* Feature Pills (4 Commitments — 100% Crisp & High Contrast) */
+.modal-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.modal-feature-pill {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 12px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+body.theme-light-floral .modal-feature-pill {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+/* Trust Box */
+.modal-trust-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(225, 29, 72, 0.1);
+  border: 1px solid rgba(225, 29, 72, 0.25);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+body.theme-light-floral .modal-trust-box {
+  background: #fff1f2 !important;
+  border: 1.5px solid #fecdd3 !important;
+  color: #1e293b !important;
+}
+
+body.theme-light-floral .modal-trust-box strong {
+  color: #be123c !important;
+}
+
+/* Reviews Summary Score Bar */
+.reviews-summary-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 18px;
+}
+
+body.theme-light-floral .reviews-summary-bar {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+.reviews-score-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reviews-score-num {
+  font-size: 24px;
+  font-weight: 900;
+  color: #facc15;
+}
+
+body.theme-light-floral .reviews-score-num {
+  color: #e11d48 !important;
+}
+
+.reviews-score-total {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+body.theme-light-floral .reviews-score-total {
+  color: #1e293b !important;
+}
+
+/* Modal Bottom Section */
+.modal-bottom-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.1);
+}
+
+body.theme-light-floral .modal-bottom-section {
+  border-top: 1.5px solid #e2e8f0 !important;
+}
+
+.modal-product-price {
+  font-size: 28px;
+  font-weight: 900;
+  color: #facc15;
+}
+
+body.theme-light-floral .modal-product-price {
+  color: #e11d48 !important;
+}
+
+.modal-price-note {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 2px;
+}
+
+body.theme-light-floral .modal-price-note {
+  color: #475569 !important;
+}
+
+.modal-qty-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+body.theme-light-floral .modal-qty-label {
+  color: #0f172a !important;
+}
+
+.modal-qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  padding: 3px 10px;
+}
+
+body.theme-light-floral .modal-qty-stepper {
+  background: #f1f5f9 !important;
+  border: 1.5px solid #cbd5e1 !important;
+}
+
+.modal-qty-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body.theme-light-floral .modal-qty-btn {
+  color: #0f172a !important;
+}
+
+.modal-qty-num {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 15px;
+  min-width: 32px;
+  text-align: center;
+}
+
+body.theme-light-floral .modal-qty-num {
+  color: #0f172a !important;
+}
+
+/* Modal Action Buttons */
+.modal-add-cart-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 9999px;
+  background: rgba(250, 204, 21, 0.12);
+  border: 1.5px solid #facc15;
+  color: #facc15;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-add-cart-btn:hover {
+  background: rgba(250, 204, 21, 0.2);
+  transform: translateY(-2px);
+}
+
+body.theme-light-floral .modal-add-cart-btn {
+  background: #fff1f2 !important;
+  border: 1.5px solid #f43f5e !important;
+  color: #e11d48 !important;
+}
+
+body.theme-light-floral .modal-add-cart-btn:hover {
+  background: #ffe4e6 !important;
+  transform: translateY(-2px) !important;
+}
+
+.modal-order-now-btn {
+  flex: 1;
+  justify-content: center;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 9999px;
+  border: none;
+  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 50%, #ea580c 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.35);
+  transition: all 0.25s ease;
+}
+
+.modal-order-now-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.5);
+  filter: brightness(1.05);
 }
 
 /* Footer in Light Theme */
@@ -1118,4 +2444,1417 @@ body.theme-light-floral::-webkit-scrollbar-thumb:hover {
   background: #e11d48;
 }
 
+/* ============================================================
+   MODAL TABS (Chi Tiết & Đánh Giá Bình Luận)
+   ============================================================ */
+.modal-tabs-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+body.theme-light-floral .modal-tabs-nav {
+  border-bottom: 1px solid rgba(225, 215, 200, 0.8) !important;
+}
+
+.modal-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.modal-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.modal-tab-btn.active {
+  background: rgba(250, 204, 21, 0.15);
+  border-color: #facc15;
+  color: #facc15;
+  box-shadow: 0 4px 14px rgba(250, 204, 21, 0.2);
+}
+
+body.theme-light-floral .modal-tab-btn {
+  background: #fbf8f5 !important;
+  border: 1px solid rgba(225, 215, 200, 0.9) !important;
+  color: #78716c !important;
+}
+
+body.theme-light-floral .modal-tab-btn:hover {
+  background: #ffffff !important;
+  color: #be123c !important;
+  border-color: rgba(225, 29, 72, 0.3) !important;
+}
+
+body.theme-light-floral .modal-tab-btn.active {
+  background: #fff1f2 !important;
+  border-color: #f43f5e !important;
+  color: #e11d48 !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.15) !important;
+}
+
+.modal-trust-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(225, 29, 72, 0.06);
+  border: 1px solid rgba(225, 29, 72, 0.2);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+  margin-top: 14px;
+}
+
+body.theme-light-floral .modal-trust-box {
+  background: #fff8f8 !important;
+  border: 1px solid rgba(225, 29, 72, 0.2) !important;
+  color: #57534e !important;
+}
+
+/* ============================================================
+   REVIEWS & RATINGS SYSTEM (ĐÁNH GIÁ & BÌNH LUẬN CÓ REPLY)
+   ============================================================ */
+.modal-reviews-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reviews-summary-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.theme-light-floral .reviews-summary-bar {
+  background: #fbf9f6 !important;
+  border: 1px solid rgba(225, 215, 200, 0.9) !important;
+}
+
+.reviews-score-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.reviews-score-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: #facc15;
+  line-height: 1;
+}
+
+body.theme-light-floral .reviews-score-num {
+  color: #e11d48 !important;
+}
+
+.reviews-score-stars {
+  display: flex;
+  gap: 3px;
+}
+
+.reviews-score-total {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+body.theme-light-floral .reviews-score-total {
+  color: #78716c !important;
+}
+
+.btn-open-review-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 50%, #ea580c 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-open-review-form:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.5);
+}
+
+/* Review Form Container */
+.modal-review-form {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+body.theme-light-floral .modal-review-form {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(225, 29, 72, 0.25) !important;
+  box-shadow: 0 10px 25px rgba(225, 29, 72, 0.08) !important;
+}
+
+.review-form-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+body.theme-light-floral .review-form-title {
+  color: #1c1917 !important;
+}
+
+.review-star-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+body.theme-light-floral .review-star-picker {
+  color: #1c1917 !important;
+}
+
+.review-rating-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #facc15;
+}
+
+body.theme-light-floral .review-rating-label {
+  color: #e11d48 !important;
+}
+
+.modal-form-input,
+.modal-form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.modal-form-input:focus,
+.modal-form-textarea:focus {
+  border-color: #facc15;
+}
+
+body.theme-light-floral .modal-form-input,
+body.theme-light-floral .modal-form-textarea {
+  background: #fbf9f6 !important;
+  border: 1px solid rgba(215, 200, 185, 0.9) !important;
+  color: #1c1917 !important;
+}
+
+body.theme-light-floral .modal-form-input:focus,
+body.theme-light-floral .modal-form-textarea:focus {
+  border-color: #e11d48 !important;
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1) !important;
+}
+
+.review-quick-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.review-tag-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.review-tag-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.review-tag-btn.active {
+  background: rgba(250, 204, 21, 0.2);
+  border-color: #facc15;
+  color: #facc15;
+}
+
+body.theme-light-floral .review-tag-btn {
+  background: #fbf8f5 !important;
+  border: 1px solid rgba(225, 215, 200, 0.9) !important;
+  color: #78716c !important;
+}
+
+body.theme-light-floral .review-tag-btn.active {
+  background: #fff1f2 !important;
+  border-color: #f43f5e !important;
+  color: #e11d48 !important;
+}
+
+.btn-cancel-review {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 14px;
+}
+
+body.theme-light-floral .btn-cancel-review {
+  color: #78716c !important;
+}
+
+.btn-submit-review {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Reviews List */
+.modal-reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.review-card-item {
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.25s ease;
+}
+
+.review-card-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.theme-light-floral .review-card-item {
+  background: #ffffff !important;
+  border: 1px solid rgba(230, 220, 210, 0.9) !important;
+  box-shadow: 0 4px 14px rgba(100, 70, 50, 0.05) !important;
+}
+
+body.theme-light-floral .review-card-item:hover {
+  border-color: rgba(225, 29, 72, 0.25) !important;
+  box-shadow: 0 8px 20px rgba(100, 70, 50, 0.08) !important;
+}
+
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.review-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+  flex-shrink: 0;
+}
+
+.review-user-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.review-user-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+body.theme-light-floral .review-user-name {
+  color: #1c1917 !important;
+}
+
+.review-buyer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+body.theme-light-floral .review-buyer-badge {
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #059669 !important;
+}
+
+.review-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+.review-stars-display {
+  display: flex;
+  gap: 2px;
+}
+
+.review-date-text {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+body.theme-light-floral .review-date-text {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+.review-like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.review-like-btn:hover {
+  background: rgba(250, 204, 21, 0.2);
+  color: #facc15;
+  border-color: #facc15;
+}
+
+body.theme-light-floral .review-like-btn {
+  background: #f1f5f9 !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #1e293b !important;
+}
+
+body.theme-light-floral .review-like-btn:hover {
+  background: #fff1f2 !important;
+  color: #e11d48 !important;
+  border-color: #f43f5e !important;
+}
+
+.review-body-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+}
+
+body.theme-light-floral .review-body-text {
+  color: #292524 !important;
+}
+
+.review-applied-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.review-pill-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(225, 29, 72, 0.1);
+  color: #fb7185;
+}
+
+body.theme-light-floral .review-pill-tag {
+  background: #fff1f2 !important;
+  color: #be123c !important;
+}
+
+/* Review Actions */
+.review-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.btn-trigger-reply {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: rgba(250, 204, 21, 0.88);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-trigger-reply:hover {
+  color: #facc15;
+  background: rgba(250, 204, 21, 0.1);
+}
+
+body.theme-light-floral .btn-trigger-reply {
+  color: #e11d48 !important;
+}
+
+body.theme-light-floral .btn-trigger-reply:hover {
+  background: #fff1f2 !important;
+}
+
+/* ============================================================
+   REPLIES THREAD (PHẦN TRẢ LỜI / REPLY)
+   ============================================================ */
+.review-replies-thread {
+  margin-top: 8px;
+  padding-left: 18px;
+  border-left: 2px solid rgba(250, 204, 21, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+body.theme-light-floral .review-replies-thread {
+  border-left: 2px solid rgba(225, 29, 72, 0.3) !important;
+}
+
+.reply-bubble-item {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reply-bubble-item.is-shop-reply {
+  background: rgba(250, 204, 21, 0.05);
+  border: 1px solid rgba(250, 204, 21, 0.2);
+}
+
+body.theme-light-floral .reply-bubble-item {
+  background: #fbf9f6 !important;
+  border: 1px solid rgba(225, 215, 200, 0.8) !important;
+}
+
+body.theme-light-floral .reply-bubble-item.is-shop-reply {
+  background: #fff5f7 !important;
+  border: 1.5px solid rgba(225, 29, 72, 0.22) !important;
+}
+
+.reply-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reply-author-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+body.theme-light-floral .reply-author-name {
+  color: #1c1917 !important;
+}
+
+.reply-shop-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(250, 204, 21, 0.18);
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.35);
+}
+
+body.theme-light-floral .reply-shop-badge {
+  background: rgba(225, 29, 72, 0.1) !important;
+  color: #be123c !important;
+  border: 1px solid rgba(225, 29, 72, 0.25) !important;
+}
+
+.reply-customer-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body.theme-light-floral .reply-customer-badge {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #78716c !important;
+}
+
+.reply-date-text {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+body.theme-light-floral .reply-date-text {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+.reply-body-text {
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+body.theme-light-floral .reply-body-text {
+  color: #292524 !important;
+}
+
+/* Inline Reply Form Box */
+.review-inline-reply-box {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed rgba(250, 204, 21, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+body.theme-light-floral .review-inline-reply-box {
+  background: #fbf8f5 !important;
+  border: 1px dashed rgba(225, 29, 72, 0.35) !important;
+}
+
+.inline-reply-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+body.theme-light-floral .inline-reply-header {
+  color: #57534e !important;
+}
+
+.reply-shop-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #facc15;
+}
+
+body.theme-light-floral .reply-shop-toggle {
+  color: #be123c !important;
+}
+
+.btn-cancel-reply {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+}
+
+body.theme-light-floral .btn-cancel-reply {
+  color: #78716c !important;
+}
+
+.btn-submit-reply {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 15px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-submit-reply:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4);
+}
+
+/* ============================================================
+   ADMIN REVIEW MODERATION & CUSTOMER AUTH ENHANCEMENTS
+   ============================================================ */
+
+/* Admin Status Ribbon */
+.admin-status-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.admin-badge-active {
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: #f59e0b;
+  color: #000000;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Customer Auth Prompt Banner (when not logged in) */
+.review-auth-prompt-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.12) 0%, rgba(250, 204, 21, 0.08) 100%);
+  border: 1px dashed rgba(250, 204, 21, 0.35);
+  margin-bottom: 16px;
+}
+
+body.theme-light-floral .review-auth-prompt-banner {
+  background: #fff8f5 !important;
+  border: 1px dashed rgba(225, 29, 72, 0.35) !important;
+}
+
+.auth-prompt-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1 1 260px;
+}
+
+body.theme-light-floral .auth-prompt-content {
+  color: #44403c !important;
+}
+
+.btn-prompt-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-prompt-login:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.5);
+}
+
+/* Review Active User Chip */
+.review-active-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #34d399;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+body.theme-light-floral .review-active-user-chip {
+  background: rgba(5, 150, 105, 0.08) !important;
+  color: #059669 !important;
+}
+
+/* Logged-in User Row in Review Form */
+.review-logged-user-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 12px;
+}
+
+body.theme-light-floral .review-logged-user-row {
+  background: #fbf9f6 !important;
+  border: 1px solid rgba(225, 215, 200, 0.8) !important;
+}
+
+body.theme-light-floral .review-logged-user-row span {
+  color: #1c1917 !important;
+}
+
+.review-logged-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e11d48 0%, #fb923c 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Admin Review Actions Group in Header */
+.admin-review-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 4px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.theme-light-floral .admin-review-actions-group {
+  background: #f5efe6 !important;
+  border-color: rgba(215, 200, 185, 0.8) !important;
+}
+
+.btn-admin-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-admin-edit {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.btn-admin-edit:hover {
+  background: #f59e0b;
+  color: #000000;
+}
+
+.btn-admin-delete {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+}
+
+.btn-admin-delete:hover {
+  background: #f43f5e;
+  color: #ffffff;
+}
+
+.btn-admin-reply {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+}
+
+.btn-admin-reply:hover {
+  background: #facc15;
+  color: #000000;
+}
+
+/* Badge when review is edited by admin */
+.review-edited-admin-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
+}
+
+.review-edited-at-text {
+  font-size: 10.5px;
+  color: #f59e0b;
+  font-style: italic;
+}
+
+/* Admin Inline Edit Box */
+.admin-edit-review-inline-box {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1.5px dashed rgba(245, 158, 11, 0.4);
+  margin-top: 6px;
+}
+
+body.theme-light-floral .admin-edit-review-inline-box {
+  background: #fffdf5 !important;
+  border: 1.5px dashed rgba(217, 119, 6, 0.4) !important;
+}
+
+.admin-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.btn-save-admin-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: #f59e0b;
+  color: #000000;
+  font-weight: 700;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-save-admin-edit:hover {
+  background: #d97706;
+  color: #ffffff;
+}
+
+.btn-cancel-modal {
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+body.theme-light-floral .btn-cancel-modal {
+  background: #eee5db !important;
+  color: #57534e !important;
+  border-color: rgba(200, 185, 170, 0.8) !important;
+}
+
+/* Admin Mini Action inside Replies */
+.admin-reply-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-admin-mini-action {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 2px 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-admin-mini-action:hover {
+  background: #f59e0b;
+  color: #000000;
+}
+
+.btn-admin-mini-action.btn-danger:hover {
+  background: #f43f5e;
+  color: #ffffff;
+}
+
+/* Quick reply templates pills */
+.admin-quick-templates {
+  margin: 6px 0 10px;
+}
+
+.quick-templates-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.quick-template-pill {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  background: rgba(250, 204, 21, 0.1);
+  border: 1px solid rgba(250, 204, 21, 0.25);
+  color: #facc15;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.quick-template-pill:hover {
+  background: rgba(250, 204, 21, 0.25);
+  border-color: #facc15;
+}
+
+body.theme-light-floral .quick-template-pill {
+  background: #fff8eb !important;
+  border-color: rgba(217, 119, 6, 0.3) !important;
+  color: #b45309 !important;
+}
+
+/* Admin Confirm Delete Overlay */
+.admin-confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.admin-confirm-modal-box {
+  background: #141724;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: 24px;
+  padding: 28px 24px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+}
+
+body.theme-light-floral .admin-confirm-modal-box {
+  background: #ffffff !important;
+  border-color: rgba(244, 63, 94, 0.4) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+}
+
+.admin-confirm-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(244, 63, 94, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.admin-confirm-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+body.theme-light-floral .admin-confirm-title {
+  color: #1c1917 !important;
+}
+
+.admin-confirm-desc {
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body.theme-light-floral .admin-confirm-desc {
+  color: #57534e !important;
+}
+
+.admin-confirm-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-danger-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: #f43f5e;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger-confirm:hover {
+  background: #e11d48;
+  transform: translateY(-1px);
+}
+
+/* ========================================================
+   SITE FOOTER - LUXURY BOUTIQUE FLORAL
+======================================================== */
+.site-footer {
+  background: linear-gradient(180deg, rgba(12, 14, 22, 0.98) 0%, rgba(6, 7, 11, 0.99) 100%);
+  border-top: 1px solid rgba(250, 204, 21, 0.18);
+  padding: 60px 0 35px;
+  position: relative;
+  z-index: 5;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+}
+
+.site-footer .footer-logo-dark {
+  display: block;
+  height: 64px;
+  width: auto;
+  max-width: 260px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.6));
+}
+
+.site-footer .footer-logo-light {
+  display: none !important;
+}
+
+.site-footer .footer-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+  position: relative;
+  display: inline-block;
+}
+
+.site-footer .footer-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 28px;
+  height: 2.5px;
+  background: #facc15;
+  border-radius: 2px;
+}
+
+.site-footer .footer-link {
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.site-footer .footer-link:hover {
+  color: #facc15;
+  transform: translateX(3px);
+}
+
+.site-footer .footer-contact-item {
+  display: flex;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13.5px;
+  line-height: 1.5;
+  align-items: flex-start;
+}
+
+.site-footer .footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: rgba(250, 204, 21, 0.1);
+  border: 1px solid rgba(250, 204, 21, 0.3);
+  color: #facc15;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.site-footer .footer-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 13px;
+}
+
+/* Light Theme Styling for Site Footer */
+body.theme-light-floral .site-footer {
+  background: linear-gradient(180deg, #fff7f8 0%, #fff1f4 100%) !important;
+  border-top: 1px solid rgba(225, 29, 72, 0.18) !important;
+  color: #475569 !important;
+  box-shadow: 0 -10px 40px rgba(225, 29, 72, 0.04);
+}
+
+body.theme-light-floral .site-footer .footer-top-ribbon {
+  border-bottom-color: rgba(225, 29, 72, 0.12) !important;
+}
+
+body.theme-light-floral .site-footer .footer-feature-title {
+  color: #1e293b !important;
+}
+
+body.theme-light-floral .site-footer .footer-logo-dark {
+  display: none !important;
+}
+
+body.theme-light-floral .site-footer .footer-logo-light {
+  display: block !important;
+  height: 64px;
+  width: auto;
+  max-width: 260px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(100, 70, 50, 0.12));
+}
+
+body.theme-light-floral .site-footer .footer-heading {
+  color: #0f172a !important;
+}
+
+body.theme-light-floral .site-footer .footer-heading::after {
+  background: #e11d48 !important;
+}
+
+body.theme-light-floral .site-footer .footer-link {
+  color: #475569 !important;
+}
+
+body.theme-light-floral .site-footer .footer-link:hover {
+  color: #e11d48 !important;
+}
+
+body.theme-light-floral .site-footer .footer-contact-item {
+  color: #1e293b !important;
+}
+
+body.theme-light-floral .site-footer .footer-slogan {
+  color: #475569 !important;
+}
+
+body.theme-light-floral .site-footer .footer-badge {
+  background: rgba(225, 29, 72, 0.08) !important;
+  border-color: rgba(225, 29, 72, 0.25) !important;
+  color: #e11d48 !important;
+}
+
+body.theme-light-floral .site-footer .footer-bottom-bar {
+  border-top-color: rgba(225, 29, 72, 0.12) !important;
+  color: #64748b !important;
+}
+
+body.theme-light-floral .site-footer .footer-bottom-bar a {
+  color: #475569 !important;
+}
+
+body.theme-light-floral .site-footer .footer-bottom-bar a:hover {
+  color: #e11d48 !important;
+}
+
+/* ========================================================
+   ADMIN PORTAL - ISOLATED LUXURY DARK WORKSPACE
+   Guarantees 100% consistent high-contrast dark theme
+   regardless of storefront light theme state
+======================================================== */
+.admin-layout,
+body.theme-light-floral .admin-layout {
+  background: #08090f !important;
+  color: #f8fafc !important;
+  color-scheme: dark !important;
+}
+
+.admin-sidebar,
+body.theme-light-floral .admin-sidebar {
+  background: rgba(12, 13, 19, 0.98) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-content,
+body.theme-light-floral .admin-content {
+  background: radial-gradient(ellipse at 80% 10%, rgba(250, 204, 21, 0.04) 0%, transparent 60%), #090a10 !important;
+  color: #f8fafc !important;
+}
+
+.admin-top-bar,
+body.theme-light-floral .admin-top-bar {
+  background: rgba(10, 12, 18, 0.85) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-layout .glass-card,
+body.theme-light-floral .admin-layout .glass-card {
+  background: rgba(18, 20, 29, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  color: #ffffff !important;
+}
+
+.admin-table-container,
+body.theme-light-floral .admin-table-container {
+  background: rgba(18, 20, 29, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+.admin-layout .admin-table,
+body.theme-light-floral .admin-layout .admin-table {
+  background: transparent !important;
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+.admin-layout .admin-table th,
+body.theme-light-floral .admin-layout .admin-table th {
+  background: rgba(14, 16, 24, 0.85) !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+.admin-layout .admin-table td,
+body.theme-light-floral .admin-layout .admin-table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.admin-layout .admin-table tr:hover td,
+body.theme-light-floral .admin-layout .admin-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+.admin-layout .dark-input,
+body.theme-light-floral .admin-layout .dark-input {
+  background: rgba(18, 20, 29, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.admin-layout .dark-input:focus,
+body.theme-light-floral .admin-layout .dark-input:focus {
+  border-color: #facc15 !important;
+  box-shadow: 0 0 15px rgba(250, 204, 21, 0.15) !important;
+}
+
+.admin-layout h1, .admin-layout h2, .admin-layout h3, .admin-layout h4,
+body.theme-light-floral .admin-layout h1,
+body.theme-light-floral .admin-layout h2,
+body.theme-light-floral .admin-layout h3,
+body.theme-light-floral .admin-layout h4 {
+  color: #ffffff !important;
+}
+
+.admin-layout p,
+body.theme-light-floral .admin-layout p {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
 

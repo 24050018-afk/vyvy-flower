@@ -356,9 +356,10 @@ export default function AdminOrders() {
         </div>
 
         {/* Table View with Sequential Actions */}
-        <div className="admin-table-container">
-          <table className="admin-table">
-            <thead>
+        <div className="admin-table-container glass-card" style={{ overflow: 'hidden', borderRadius: '24px' }}>
+          <div style={{ overflowX: 'auto' }}>
+            <table className="admin-table">
+              <thead>
               <tr>
                 <th>Mã Đơn</th>
                 <th>Khách Hàng</th>
@@ -536,6 +537,7 @@ export default function AdminOrders() {
           </table>
         </div>
       </div>
+    </div>
 
       {/* Order Detail Modal with Interactive 5-Step Pipeline */}
       {detailOrder && (
