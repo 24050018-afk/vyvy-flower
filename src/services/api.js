@@ -122,8 +122,16 @@ export async function getProducts() {
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        saveLocalProducts(data);
-        return data;
+        const harmonized = data.map(p => {
+          const img = p.image_url || p.image || '/images/vyvy_lily_hong.jpg';
+          return {
+            ...p,
+            image: img,
+            image_url: img,
+          };
+        });
+        saveLocalProducts(harmonized);
+        return harmonized;
       }
     }
   } catch (err) {
@@ -133,6 +141,7 @@ export async function getProducts() {
 }
 
 export async function createProduct(data) {
+  const imageUrl = data.image_url || data.image || '/images/vyvy_lily_hong.jpg';
   const newProduct = {
     ...data,
     id: Date.now(),
@@ -141,13 +150,15 @@ export async function createProduct(data) {
     rating: Number(data.rating || 5.0),
     reviews: Number(data.reviews || 0),
     stock: Number(data.stock || 10),
+    image: imageUrl,
+    image_url: imageUrl,
   };
 
   try {
     const res = await fetch(`${API_BASE}/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, image: imageUrl, image_url: imageUrl }),
     });
     if (res.ok) {
       const serverRes = await res.json();
@@ -164,20 +175,51 @@ export async function createProduct(data) {
 }
 
 export async function updateProduct(id, data) {
+  const imageUrl = data.image_url || data.image;
+  const payload = {
+    ...data,
+    ...(imageUrl ? { image_url: imageUrl, image: imageUrl } : {})
+  };
+
   try {
-    await fetch(`${API_BASE}/products/${id}`, {
+    const res = await fetch(`${API_BASE}/products/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
+    if (!res.ok) {
+      console.warn(`[updateProduct API Warning] Status: ${res.status}`);
+    }
   } catch (err) {
     console.warn('[updateProduct] Saved locally:', err.message);
   }
 
+  // Also call PATCH /api/products/:id/image if updating image as backup
+  if (imageUrl) {
+    try {
+      await fetch(`${API_BASE}/products/${id}/image`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: imageUrl, image_url: imageUrl }),
+      });
+    } catch (e) {}
+  }
+
   const local = getLocalProducts();
-  const updated = local.map(p => (String(p.id) === String(id) ? { ...p, ...data } : p));
+  const updated = local.map(p => {
+    if (String(p.id) === String(id)) {
+      const finalImg = imageUrl || p.image_url || p.image;
+      return {
+        ...p,
+        ...payload,
+        image: finalImg,
+        image_url: finalImg,
+      };
+    }
+    return p;
+  });
   saveLocalProducts(updated);
-  return { success: true };
+  return { success: true, id, ...payload };
 }
 
 export async function deleteProduct(id) {
@@ -217,20 +259,7 @@ export async function resetDefaultCatalog() {
 }
 
 export async function updateProductImage(id, imageUrl) {
-  try {
-    await fetch(`${API_BASE}/products/${id}/image`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: imageUrl }),
-    });
-  } catch (err) {
-    console.warn('[updateProductImage] Image saved locally:', err.message);
-  }
-
-  const local = getLocalProducts();
-  const updated = local.map(p => (String(p.id) === String(id) ? { ...p, image: imageUrl } : p));
-  saveLocalProducts(updated);
-  return { success: true, image: imageUrl };
+  return updateProduct(id, { image_url: imageUrl, image: imageUrl });
 }
 
 export async function uploadImage(base64Data, name) {

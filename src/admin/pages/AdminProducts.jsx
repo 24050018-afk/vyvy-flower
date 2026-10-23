@@ -46,7 +46,31 @@ export default function AdminProducts() {
 
   useEffect(() => {
     loadData();
+
+    // Listen to real-time product updates (from ImgBB uploads or cloud changes)
+    const handleProductsUpdated = (e) => {
+      if (Array.isArray(e.detail) && e.detail.length > 0) {
+        setProductList(e.detail);
+      }
+    };
+    window.addEventListener('vyvy_products_updated', handleProductsUpdated);
+    return () => window.removeEventListener('vyvy_products_updated', handleProductsUpdated);
   }, []);
+
+  // Close modals when Escape key is pressed
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (quickImageProduct && !savingImage) {
+          setQuickImageProduct(null);
+        } else if (showModal) {
+          setShowModal(false);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [quickImageProduct, savingImage, showModal]);
 
   const openAdd = () => {
     setEditItem(null);
@@ -146,16 +170,16 @@ export default function AdminProducts() {
 
   const openQuickImageEdit = (product) => {
     setQuickImageProduct(product);
-    setQuickImageUrl(product.image || '/images/vyvy_lily_hong.jpg');
+    setQuickImageUrl(product.image_url || product.image || '/images/vyvy_lily_hong.jpg');
   };
 
   const handleSaveQuickImage = async () => {
     if (!quickImageProduct) return;
     setSavingImage(true);
     try {
-      await updateProductImage(quickImageProduct.id, quickImageUrl);
-      setProductList(prev => prev.map(p => p.id === quickImageProduct.id ? { ...p, image: quickImageUrl } : p));
-      addToast(`Đã cập nhật hình ảnh cho "${quickImageProduct.name}" thành công!`);
+      await updateProduct(quickImageProduct.id, { image_url: quickImageUrl, image: quickImageUrl });
+      setProductList(prev => prev.map(p => p.id === quickImageProduct.id ? { ...p, image: quickImageUrl, image_url: quickImageUrl } : p));
+      addToast(`Đã cập nhật hình ảnh cho "${quickImageProduct.name}" vào TiDB Cloud thành công!`);
       setQuickImageProduct(null);
     } catch (err) {
       addToast(err.message || 'Lỗi khi cập nhật ảnh sản phẩm!', 'error');
@@ -593,8 +617,14 @@ export default function AdminProducts() {
                   Hình ảnh sản phẩm (Tải lên từ máy, URL online hoặc chọn mẫu)
                 </label>
                 <ProductImageSelector
+                  productId={editItem?.id}
                   value={form.image}
-                  onChange={(newImg) => setForm({ ...form, image: newImg })}
+                  onChange={(newImg) => {
+                    setForm(prev => ({ ...prev, image: newImg, image_url: newImg }));
+                    if (editItem?.id) {
+                      setProductList(prev => prev.map(p => p.id === editItem.id ? { ...p, image: newImg, image_url: newImg } : p));
+                    }
+                  }}
                   productName={form.name}
                   onError={(msg) => addToast(msg, 'error')}
                 />
@@ -659,8 +689,16 @@ export default function AdminProducts() {
             </div>
 
             <ProductImageSelector
+              productId={quickImageProduct.id}
               value={quickImageUrl}
-              onChange={setQuickImageUrl}
+              onChange={(newUrl) => {
+                setQuickImageUrl(newUrl);
+                setProductList(prev => prev.map(p => p.id === quickImageProduct.id ? { ...p, image: newUrl, image_url: newUrl } : p));
+              }}
+              onSuccess={(savedUrl) => {
+                setProductList(prev => prev.map(p => p.id === quickImageProduct.id ? { ...p, image: savedUrl, image_url: savedUrl } : p));
+                addToast(`Đã lưu ảnh mới vào TiDB Cloud thành công!`, 'success');
+              }}
               productName={quickImageProduct.name}
               onError={(msg) => addToast(msg, 'error')}
             />

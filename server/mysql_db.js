@@ -47,6 +47,7 @@ export async function initMySQL() {
       price INT NOT NULL,
       original_price INT NULL,
       image TEXT NULL,
+      image_url TEXT NULL,
       description TEXT NULL,
       rating DECIMAL(2,1) DEFAULT 5.0,
       reviews INT DEFAULT 0,
@@ -58,6 +59,8 @@ export async function initMySQL() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
   `);
+
+  try { await pool.query('ALTER TABLE products ADD COLUMN image_url TEXT NULL'); } catch (e) {}
 
   // 2. CUSTOMERS TABLE
   await pool.query(`

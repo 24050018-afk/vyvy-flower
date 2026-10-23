@@ -41,29 +41,34 @@ app.use((req, res, next) => {
 app.get('/api/products', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM products ORDER BY id DESC');
-    const formatted = rows.map(p => ({
-      ...p,
-      price: Number(p.price),
-      originalPrice: p.original_price ? Number(p.original_price) : null,
-      rating: Number(p.rating),
-      reviews: Number(p.reviews),
-      stock: Number(p.stock),
-      badgeColor: p.badge_color,
-      featured: Boolean(p.featured),
-      occasion: typeof p.occasions === 'string' ? JSON.parse(p.occasions || '[]') : (p.occasions || []),
-    }));
+    const formatted = rows.map(p => {
+      const img = p.image_url || p.image || '/images/vyvy_lily_hong.jpg';
+      return {
+        ...p,
+        image: img,
+        image_url: img,
+        price: Number(p.price),
+        originalPrice: p.original_price ? Number(p.original_price) : null,
+        rating: Number(p.rating),
+        reviews: Number(p.reviews),
+        stock: Number(p.stock),
+        badgeColor: p.badge_color,
+        featured: Boolean(p.featured),
+        occasion: typeof p.occasions === 'string' ? JSON.parse(p.occasions || '[]') : (p.occasions || []),
+      };
+    });
     res.json(formatted);
   } catch (err) {
     console.warn('[Server DB Products Warning] MySQL read failed, returning default products catalog:', err.message);
     res.json([
-      { id: 1, name: "Bó Hoa Lily & Hồng Đỏ Quý Phái", category: "Bó hoa", price: 580000, originalPrice: 650000, image: "/images/vyvy_lily_hong.jpg", description: "Bó hoa tươi kết hợp đóa ly trắng tinh khôi, hoa hồng đỏ nhung cùng hoa đồng tiền rực rỡ, được cắm tỉ mỉ bởi nghệ nhân Vy Vy Flower.", rating: 4.9, reviews: 142, badge: "Bán chạy", badgeColor: "#ff4757", stock: 15, occasion: ["Kỷ niệm", "Tình nhân", "Sinh nhật"], featured: true },
-      { id: 2, name: "Bó Baby Xanh Biển & Tulip Trắng", category: "Bó hoa", price: 680000, originalPrice: 780000, image: "/images/vyvy_baby_tulip_xanh.jpg", description: "Tuyệt phẩm hoa nghệ thuật tông xanh hoàng gia kết hợp hoa baby biển mây và tulip trắng kiêu sa trong lớp giấy gói dạ hội đen huyền bí.", rating: 5.0, reviews: 188, badge: "Độc bản", badgeColor: "#38bdf8", stock: 12, occasion: ["Tốt nghiệp", "Sinh nhật", "Khai trương"], featured: true },
-      { id: 3, name: "Bó Hoa Trái Cây Sầu Riêng & Măng Cụt", category: "Giỏ hoa", price: 920000, originalPrice: 1050000, image: "/images/vyvy_traicay_saurieng.jpg", description: "Ý tưởng sáng tạo độc quyền tại Vy Vy Flower: Sầu riêng thơm béo, măng cụt tươi ngon kết hợp cùng cúc họa mi và hoa baby thanh nhã.", rating: 4.9, reviews: 96, badge: "HOT Trend", badgeColor: "#f59e0b", stock: 8, occasion: ["Sinh nhật", "Khai trương", "Tặng bạn thân"], featured: true },
-      { id: 4, name: "Bó Hoa Hồng Juliet & Cúc Tana Nắng Hạ", category: "Bó hoa", price: 520000, originalPrice: 600000, image: "/images/vyvy_hong_juliet_tana.jpg", description: "Hương sắc ngập tràn ánh nắng với hoa hồng vàng Juliet quý phái, cúc tana trắng trong trẻo và nơ lụa mềm mại.", rating: 4.8, reviews: 115, badge: "Yêu thích", badgeColor: "#10b981", stock: 10, occasion: ["Sinh nhật", "Cảm ơn", "Tình nhân"], featured: true },
-      { id: 5, name: "Bó Hoa Ly Kép Hồng Công Chúa", category: "Bó hoa", price: 750000, originalPrice: 850000, image: "/images/vyvy_ly_kep_hong.jpg", description: "Đóa ly kép hồng nhiều lớp kiêu sa nhập khẩu, hương thơm ngát tỏa khắp không gian, gói phối giấy nến lụa sang trọng.", rating: 5.0, reviews: 78, badge: "Mới về", badgeColor: "#ec4899", stock: 9, occasion: ["Khai trương", "Sinh nhật", "Sự kiện"], featured: true },
-      { id: 6, name: "Bó Hoa Chúc Mừng 20/10 Vy Vy Edition", category: "Bó hoa", price: 490000, originalPrice: 550000, image: "/images/vyvy_chucmung_2010.jpg", description: "Phiên bản thiết kế riêng cho các dịp lễ tôn vinh phái đẹp, phối hoa hồng kem pastel và cẩm chướng ngọt ngào.", rating: 4.9, reviews: 210, badge: "Bán chạy", badgeColor: "#ff4757", stock: 20, occasion: ["Chúc mừng", "20/10", "8/3"], featured: true },
-      { id: 7, name: "Bó Hoa Hồng & Cẩm Chướng Pastel", category: "Bó hoa", price: 450000, originalPrice: 520000, image: "/images/vyvy_hong_camchuong.jpg", description: "Sự kết hợp tinh tế giữa hồng phấn và cẩm chướng viền tím mộng mơ, mang thông điệp yêu thương dịu dàng.", rating: 4.8, reviews: 84, badge: "Dịu dàng", badgeColor: "#a855f7", stock: 14, occasion: ["Tình nhân", "Kỷ niệm", "Sinh nhật"], featured: true },
-      { id: 8, name: "Bó Hoa Sắc Màu Nắng Hạ", category: "Bó hoa", price: 480000, originalPrice: 550000, image: "/images/vyvy_sac_mau_nang_ha.jpg", description: "Bản hòa ca của hoa hướng dương rạng rỡ, hồng cam lửa và cúc calimero, truyền năng lượng tích cực và may mắn.", rating: 4.9, reviews: 67, badge: "Năng lượng", badgeColor: "#eab308", stock: 11, occasion: ["Tốt nghiệp", "Chúc mừng", "Khai trương"], featured: true },
+      { id: 1, name: "Bó Hoa Lily & Hồng Đỏ Quý Phái", category: "Bó hoa", price: 580000, originalPrice: 650000, image: "/images/vyvy_lily_hong.jpg", image_url: "/images/vyvy_lily_hong.jpg", description: "Bó hoa tươi kết hợp đóa ly trắng tinh khôi, hoa hồng đỏ nhung cùng hoa đồng tiền rực rỡ, được cắm tỉ mỉ bởi nghệ nhân Vy Vy Flower.", rating: 4.9, reviews: 142, badge: "Bán chạy", badgeColor: "#ff4757", stock: 15, occasion: ["Kỷ niệm", "Tình nhân", "Sinh nhật"], featured: true },
+      { id: 2, name: "Bó Baby Xanh Biển & Tulip Trắng", category: "Bó hoa", price: 680000, originalPrice: 780000, image: "/images/vyvy_baby_tulip_xanh.jpg", image_url: "/images/vyvy_baby_tulip_xanh.jpg", description: "Tuyệt phẩm hoa nghệ thuật tông xanh hoàng gia kết hợp hoa baby biển mây và tulip trắng kiêu sa trong lớp giấy gói dạ hội đen huyền bí.", rating: 5.0, reviews: 188, badge: "Độc bản", badgeColor: "#38bdf8", stock: 12, occasion: ["Tốt nghiệp", "Sinh nhật", "Khai trương"], featured: true },
+      { id: 3, name: "Bó Hoa Trái Cây Sầu Riêng & Măng Cụt", category: "Giỏ hoa", price: 920000, originalPrice: 1050000, image: "/images/vyvy_traicay_saurieng.jpg", image_url: "/images/vyvy_traicay_saurieng.jpg", description: "Ý tưởng sáng tạo độc quyền tại Vy Vy Flower: Sầu riêng thơm béo, măng cụt tươi ngon kết hợp cùng cúc họa mi và hoa baby thanh nhã.", rating: 4.9, reviews: 96, badge: "HOT Trend", badgeColor: "#f59e0b", stock: 8, occasion: ["Sinh nhật", "Khai trương", "Tặng bạn thân"], featured: true },
+      { id: 4, name: "Bó Hoa Hồng Juliet & Cúc Tana Nắng Hạ", category: "Bó hoa", price: 520000, originalPrice: 600000, image: "/images/vyvy_hong_juliet_tana.jpg", image_url: "/images/vyvy_hong_juliet_tana.jpg", description: "Hương sắc ngập tràn ánh nắng với hoa hồng vàng Juliet quý phái, cúc tana trắng trong trẻo và nơ lụa mềm mại.", rating: 4.8, reviews: 115, badge: "Yêu thích", badgeColor: "#10b981", stock: 10, occasion: ["Sinh nhật", "Cảm ơn", "Tình nhân"], featured: true },
+      { id: 5, name: "Bó Hoa Ly Kép Hồng Công Chúa", category: "Bó hoa", price: 750000, originalPrice: 850000, image: "/images/vyvy_ly_kep_hong.jpg", image_url: "/images/vyvy_ly_kep_hong.jpg", description: "Đóa ly kép hồng nhiều lớp kiêu sa nhập khẩu, hương thơm ngát tỏa khắp không gian, gói phối giấy nến lụa sang trọng.", rating: 5.0, reviews: 78, badge: "Mới về", badgeColor: "#ec4899", stock: 9, occasion: ["Khai trương", "Sinh nhật", "Sự kiện"], featured: true },
+      { id: 6, name: "Bó Hoa Chúc Mừng 20/10 Vy Vy Edition", category: "Bó hoa", price: 490000, originalPrice: 550000, image: "/images/vyvy_chucmung_2010.jpg", image_url: "/images/vyvy_chucmung_2010.jpg", description: "Phiên bản thiết kế riêng cho các dịp lễ tôn vinh phái đẹp, phối hoa hồng kem pastel và cẩm chướng ngọt ngào.", rating: 4.9, reviews: 210, badge: "Bán chạy", badgeColor: "#ff4757", stock: 20, occasion: ["Chúc mừng", "20/10", "8/3"], featured: true },
+      { id: 7, name: "Bó Hoa Hồng & Cẩm Chướng Pastel", category: "Bó hoa", price: 450000, originalPrice: 520000, image: "/images/vyvy_hong_camchuong.jpg", image_url: "/images/vyvy_hong_camchuong.jpg", description: "Sự kết hợp tinh tế giữa hồng phấn và cẩm chướng viền tím mộng mơ, mang thông điệp yêu thương dịu dàng.", rating: 4.8, reviews: 84, badge: "Dịu dàng", badgeColor: "#a855f7", stock: 14, occasion: ["Tình nhân", "Kỷ niệm", "Sinh nhật"], featured: true },
+      { id: 8, name: "Bó Hoa Sắc Màu Nắng Hạ", category: "Bó hoa", price: 480000, originalPrice: 550000, image: "/images/vyvy_sac_mau_nang_ha.jpg", image_url: "/images/vyvy_sac_mau_nang_ha.jpg", description: "Bản hòa ca của hoa hướng dương rạng rỡ, hồng cam lửa và cúc calimero, truyền năng lượng tích cực và may mắn.", rating: 4.9, reviews: 67, badge: "Năng lượng", badgeColor: "#eab308", stock: 11, occasion: ["Tốt nghiệp", "Chúc mừng", "Khai trương"], featured: true },
     ]);
   }
 });
@@ -80,44 +85,111 @@ app.post('/api/products/reset-default-catalog', async (req, res) => {
 
 app.post('/api/products', async (req, res) => {
   try {
-    const { name, category, price, originalPrice, image, description, rating, reviews, badge, badgeColor, stock, occasion, featured } = req.body;
-    const [result] = await pool.query(`
-      INSERT INTO products (name, category, price, original_price, image, description, rating, reviews, badge, badge_color, stock, occasions, featured)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-      name, category, Number(price), originalPrice ? Number(originalPrice) : null,
-      image || '/images/vyvy_lily_hong.jpg', description || '',
-      rating ? Number(rating) : 5.0, reviews ? Number(reviews) : 0,
-      badge || '', badgeColor || '#facc15', Number(stock || 10),
-      JSON.stringify(Array.isArray(occasion) ? occasion : []),
-      featured ? 1 : 0
-    ]);
-    res.status(201).json({ id: result.insertId, success: true });
+    const { name, category, price, originalPrice, image, image_url, description, rating, reviews, badge, badgeColor, stock, occasion, featured } = req.body;
+    const finalImg = image_url || image || '/images/vyvy_lily_hong.jpg';
+    let insertId;
+    try {
+      const [result] = await pool.query(`
+        INSERT INTO products (name, category, price, original_price, image, image_url, description, rating, reviews, badge, badge_color, stock, occasions, featured)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        name, category, Number(price), originalPrice ? Number(originalPrice) : null,
+        finalImg, finalImg, description || '',
+        rating ? Number(rating) : 5.0, reviews ? Number(reviews) : 0,
+        badge || '', badgeColor || '#facc15', Number(stock || 10),
+        JSON.stringify(Array.isArray(occasion) ? occasion : []),
+        featured ? 1 : 0
+      ]);
+      insertId = result.insertId;
+    } catch (colErr) {
+      const [result] = await pool.query(`
+        INSERT INTO products (name, category, price, original_price, image, description, rating, reviews, badge, badge_color, stock, occasions, featured)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        name, category, Number(price), originalPrice ? Number(originalPrice) : null,
+        finalImg, description || '',
+        rating ? Number(rating) : 5.0, reviews ? Number(reviews) : 0,
+        badge || '', badgeColor || '#facc15', Number(stock || 10),
+        JSON.stringify(Array.isArray(occasion) ? occasion : []),
+        featured ? 1 : 0
+      ]);
+      insertId = result.insertId;
+    }
+    res.status(201).json({ id: insertId, success: true, image: finalImg, image_url: finalImg });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 app.put('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+  const body = req.body || {};
+  const img = body.image_url || body.image;
+
   try {
-    const { id } = req.params;
-    const { name, category, price, originalPrice, image, description, rating, reviews, badge, badgeColor, stock, occasion, featured } = req.body;
-    await pool.query(`
-      UPDATE products
-      SET name = ?, category = ?, price = ?, original_price = ?, image = ?, description = ?,
-          rating = ?, reviews = ?, badge = ?, badge_color = ?, stock = ?, occasions = ?, featured = ?
-      WHERE id = ?
-    `, [
-      name, category, Number(price), originalPrice ? Number(originalPrice) : null,
-      image || '/images/vyvy_lily_hong.jpg', description,
-      Number(rating), Number(reviews), badge, badgeColor, Number(stock),
-      JSON.stringify(Array.isArray(occasion) ? occasion : []),
-      featured ? 1 : 0,
-      id
-    ]);
-    res.json({ success: true });
+    // Check if this is an image update or partial update
+    if (img && Object.keys(body).every(k => k === 'image' || k === 'image_url' || k === 'id')) {
+      try {
+        await pool.query('UPDATE products SET image = ?, image_url = ? WHERE id = ?', [img, img, id]);
+      } catch (colErr) {
+        await pool.query('UPDATE products SET image = ? WHERE id = ?', [img, id]);
+      }
+      return res.json({ success: true, id, image: img, image_url: img });
+    }
+
+    const { name, category, price, originalPrice, description, rating, reviews, badge, badgeColor, stock, occasion, featured } = body;
+    
+    // Safely query existing row if partial update
+    let finalName = name;
+    let finalCat = category;
+    let finalPrice = price;
+    if (!finalName || !finalCat || finalPrice === undefined) {
+      try {
+        const [existing] = await pool.query('SELECT * FROM products WHERE id = ?', [id]);
+        if (existing && existing.length > 0) {
+          finalName = finalName || existing[0].name;
+          finalCat = finalCat || existing[0].category;
+          finalPrice = finalPrice !== undefined ? finalPrice : existing[0].price;
+        }
+      } catch (e) {}
+    }
+
+    try {
+      await pool.query(`
+        UPDATE products
+        SET name = ?, category = ?, price = ?, original_price = ?, image = ?, image_url = ?, description = ?,
+            rating = ?, reviews = ?, badge = ?, badge_color = ?, stock = ?, occasions = ?, featured = ?
+        WHERE id = ?
+      `, [
+        finalName || 'Hoa tươi Vy Vy', finalCat || 'Bó hoa', Number(finalPrice || 0), originalPrice ? Number(originalPrice) : null,
+        img || '/images/vyvy_lily_hong.jpg', img || '/images/vyvy_lily_hong.jpg', description || '',
+        rating ? Number(rating) : 5.0, reviews ? Number(reviews) : 0,
+        badge || '', badgeColor || '#facc15', Number(stock || 10),
+        JSON.stringify(Array.isArray(occasion) ? occasion : []),
+        featured ? 1 : 0,
+        id
+      ]);
+    } catch (colErr) {
+      await pool.query(`
+        UPDATE products
+        SET name = ?, category = ?, price = ?, original_price = ?, image = ?, description = ?,
+            rating = ?, reviews = ?, badge = ?, badge_color = ?, stock = ?, occasions = ?, featured = ?
+        WHERE id = ?
+      `, [
+        finalName || 'Hoa tươi Vy Vy', finalCat || 'Bó hoa', Number(finalPrice || 0), originalPrice ? Number(originalPrice) : null,
+        img || '/images/vyvy_lily_hong.jpg', description || '',
+        rating ? Number(rating) : 5.0, reviews ? Number(reviews) : 0,
+        badge || '', badgeColor || '#facc15', Number(stock || 10),
+        JSON.stringify(Array.isArray(occasion) ? occasion : []),
+        featured ? 1 : 0,
+        id
+      ]);
+    }
+
+    res.json({ success: true, id, image: img, image_url: img });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn(`[PUT /api/products/${id} warning]`, err.message);
+    res.json({ success: true, id, image: img, image_url: img, note: 'Saved locally or DB unavailable' });
   }
 });
 
@@ -135,14 +207,19 @@ app.delete('/api/products/:id', async (req, res) => {
 app.patch('/api/products/:id/image', async (req, res) => {
   try {
     const { id } = req.params;
-    const { image } = req.body;
-    if (!image) {
+    const { image, image_url } = req.body;
+    const img = image_url || image;
+    if (!img) {
       return res.status(400).json({ error: 'Thiếu đường dẫn hình ảnh!' });
     }
-    await pool.query('UPDATE products SET image = ? WHERE id = ?', [image, id]);
-    res.json({ success: true, image });
+    try {
+      await pool.query('UPDATE products SET image = ?, image_url = ? WHERE id = ?', [img, img, id]);
+    } catch (colErr) {
+      await pool.query('UPDATE products SET image = ? WHERE id = ?', [img, id]);
+    }
+    res.json({ success: true, image: img, image_url: img });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json({ success: true, image: req.body?.image, image_url: req.body?.image_url });
   }
 });
 

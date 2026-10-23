@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { Upload, Link as LinkIcon, Image as ImageIcon, Check, Loader2, Cloud, Key, ExternalLink, ShieldCheck } from 'lucide-react';
-import { uploadImage } from '../../services/api';
+import React, { useState, useRef, useEffect } from 'react';
+import { Upload, Link as LinkIcon, Image as ImageIcon, Check, Loader2, Cloud, Key, ExternalLink, ShieldCheck, X } from 'lucide-react';
+import { uploadImage, updateProduct } from '../../services/api';
 
 const PRESET_IMAGES = [
   { url: '/images/vyvy_lily_hong.jpg', name: 'Bó Hoa Lily Trắng & Hồng Đỏ Quý Phái' },
@@ -52,14 +52,56 @@ function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.
   });
 }
 
-export default function ProductImageSelector({ value, onChange, productName = 'flower', onError }) {
+export default function ProductImageSelector({
+  value = '',
+  onChange,
+  onSelect,
+  onClose,
+  productName = 'flower',
+  productId = null,
+  onSuccess,
+  onError
+}) {
   const [activeTab, setActiveTab] = useState('upload'); // 'upload' | 'url' | 'presets'
   const [urlInput, setUrlInput] = useState(value || '');
   const [uploading, setUploading] = useState(false);
-  const [imgbbKey, setImgbbKey] = useState(() => localStorage.getItem('vyvy_imgbb_key') || import.meta.env.VITE_IMGBB_KEY || '7da53652c2a02e2cbbf329908196daeb');
+  const [isDragging, setIsDragging] = useState(false);
+  const [imgbbKey, setImgbbKey] = useState(() => {
+    try {
+      return localStorage.getItem('vyvy_imgbb_key') || (typeof import.meta !== 'undefined' && import.meta.env?.VITE_IMGBB_KEY) || '7da53652c2a02e2cbbf329908196daeb';
+    } catch {
+      return '7da53652c2a02e2cbbf329908196daeb';
+    }
+  });
   const [showCloudConfig, setShowCloudConfig] = useState(false);
-  const [keyInput, setKeyInput] = useState(() => localStorage.getItem('vyvy_imgbb_key') || import.meta.env.VITE_IMGBB_KEY || '7da53652c2a02e2cbbf329908196daeb');
+  const [keyInput, setKeyInput] = useState(() => {
+    try {
+      return localStorage.getItem('vyvy_imgbb_key') || (typeof import.meta !== 'undefined' && import.meta.env?.VITE_IMGBB_KEY) || '7da53652c2a02e2cbbf329908196daeb';
+    } catch {
+      return '7da53652c2a02e2cbbf329908196daeb';
+    }
+  });
   const fileInputRef = useRef(null);
+
+  // Sync internal urlInput state if parent value prop changes
+  useEffect(() => {
+    setUrlInput(value || '');
+  }, [value]);
+
+  // Safe handler that supports both onChange and onSelect props and immediate DB sync
+  const handleSelect = async (url) => {
+    if (!url) return;
+    if (productId) {
+      try {
+        await updateProduct(productId, { image_url: url, image: url });
+      } catch (dbErr) {
+        console.warn('[Auto-update PUT /api/products/:id error]:', dbErr);
+      }
+    }
+    if (typeof onChange === 'function') onChange(url);
+    if (typeof onSelect === 'function') onSelect(url);
+    if (typeof onSuccess === 'function') onSuccess(url);
+  };
 
   const handleFileUpload = async (file) => {
     if (!file) return;
@@ -79,7 +121,7 @@ export default function ProductImageSelector({ value, onChange, productName = 'f
       // 1. Compress image to clean, sharp, lightweight JPEG (~80-120KB)
       const compressedDataUrl = await compressImageFile(file);
 
-      // 2. Attempt server upload (if backend is running)
+      // 2. Attempt server / cloud upload (ImgBB Cloud CDN)
       let finalUrl = compressedDataUrl;
       try {
         const res = await uploadImage(compressedDataUrl, productName);
@@ -90,9 +132,21 @@ export default function ProductImageSelector({ value, onChange, productName = 'f
         console.warn('[Upload Notice] Backend API upload not available, using compressed image data directly:', uploadErr);
       }
 
-      // 3. Apply the final URL (works seamlessly on vyvyflower.id.vn and localhost)
-      onChange(finalUrl);
+      // 3. Immediately persist to database (TiDB Cloud) via PUT /api/products/:id if productId provided
+      if (productId) {
+        try {
+          await updateProduct(productId, { image_url: finalUrl, image: finalUrl });
+        } catch (dbErr) {
+          console.warn('[Auto-save to TiDB Cloud error]:', dbErr);
+        }
+      }
+
+      // 4. Apply the final URL and trigger callbacks
+      handleSelect(finalUrl);
       setUrlInput(finalUrl);
+      if (typeof onSuccess === 'function') {
+        onSuccess(finalUrl);
+      }
     } catch (err) {
       console.error('File read error:', err);
       if (onError) onError('Không thể xử lý hình ảnh này! Vui lòng thử ảnh khác.');
@@ -101,22 +155,56 @@ export default function ProductImageSelector({ value, onChange, productName = 'f
     }
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
   const handleDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFileUpload(e.dataTransfer.files[0]);
     }
   };
 
   const handleUrlApply = () => {
-    if (urlInput.trim()) {
-      onChange(urlInput.trim());
+    if (urlInput && urlInput.trim()) {
+      handleSelect(urlInput.trim());
     }
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      {typeof onClose === 'function' && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-6px' }}>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Đóng"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'rgba(255, 255, 255, 0.6)',
+              cursor: 'pointer',
+              padding: '4px',
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+      )}
       {/* Top Preview Card */}
       <div style={{
         display: 'flex',
@@ -246,8 +334,8 @@ export default function ProductImageSelector({ value, onChange, productName = 'f
           <div
             className={`img-drop-zone ${isDragging ? 'dragging' : ''}`}
             onClick={() => fileInputRef.current?.click()}
-            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-            onDragLeave={() => setIsDragging(false)}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
             {uploading ? (
@@ -385,7 +473,7 @@ export default function ProductImageSelector({ value, onChange, productName = 'f
             value={urlInput}
             onChange={(e) => {
               setUrlInput(e.target.value);
-              onChange(e.target.value);
+              handleSelect(e.target.value);
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -428,7 +516,7 @@ export default function ProductImageSelector({ value, onChange, productName = 'f
                 <div
                   key={preset.url}
                   onClick={() => {
-                    onChange(preset.url);
+                    handleSelect(preset.url);
                     setUrlInput(preset.url);
                   }}
                   className={`preset-img-item ${isSelected ? 'selected' : ''}`}
