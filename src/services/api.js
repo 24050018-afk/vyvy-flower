@@ -25,17 +25,45 @@ async function handleResponse(res) {
 /* ============================================================
    LOCAL STORAGE PERSISTENCE HELPERS (Safe for Static Hosting)
    ============================================================ */
+export function getProductImageOverrides() {
+  try {
+    const raw = localStorage.getItem('vyvy_product_images');
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+export function saveProductImageOverride(id, imageUrl) {
+  try {
+    const overrides = getProductImageOverrides();
+    overrides[String(id)] = imageUrl;
+    localStorage.setItem('vyvy_product_images', JSON.stringify(overrides));
+  } catch (e) {}
+}
+
 function getLocalProducts() {
+  const overrides = getProductImageOverrides();
+  let baseList = defaultMockProducts;
   try {
     const stored = localStorage.getItem('vyvy_products_cache');
     if (stored) {
       const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) baseList = parsed;
     }
   } catch (e) {
     console.warn('Failed to parse local products:', e);
   }
-  return defaultMockProducts;
+
+  return baseList.map(p => {
+    const override = overrides[String(p.id)];
+    const finalImg = override || p.image_url || p.image || '/images/vyvy_lily_hong.jpg';
+    return {
+      ...p,
+      image: finalImg,
+      image_url: finalImg,
+    };
+  });
 }
 
 function saveLocalProducts(products) {
@@ -117,21 +145,27 @@ function saveLocalInventory(inv) {
    1. PRODUCTS API
    ============================================================ */
 export async function getProducts() {
+  const overrides = getProductImageOverrides();
   try {
     const res = await fetch(`${API_BASE}/products`);
     if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        const harmonized = data.map(p => {
-          const img = p.image_url || p.image || '/images/vyvy_lily_hong.jpg';
-          return {
-            ...p,
-            image: img,
-            image_url: img,
-          };
-        });
-        saveLocalProducts(harmonized);
-        return harmonized;
+      const text = await res.text();
+      // Ensure response is actually a valid JSON array, not HTML (which occurs on Vercel with SPA rewrites)
+      if (text && text.trim().startsWith('[')) {
+        const data = JSON.parse(text);
+        if (Array.isArray(data) && data.length > 0) {
+          const harmonized = data.map(p => {
+            const override = overrides[String(p.id)];
+            const img = override || p.image_url || p.image || '/images/vyvy_lily_hong.jpg';
+            return {
+              ...p,
+              image: img,
+              image_url: img,
+            };
+          });
+          saveLocalProducts(harmonized);
+          return harmonized;
+        }
       }
     }
   } catch (err) {
@@ -176,6 +210,9 @@ export async function createProduct(data) {
 
 export async function updateProduct(id, data) {
   const imageUrl = data.image_url || data.image;
+  if (imageUrl) {
+    saveProductImageOverride(id, imageUrl);
+  }
   const payload = {
     ...data,
     ...(imageUrl ? { image_url: imageUrl, image: imageUrl } : {})

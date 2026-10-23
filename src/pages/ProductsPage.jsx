@@ -45,6 +45,15 @@ export default function ProductsPage() {
 
   useEffect(() => {
     loadData();
+
+    const handleUpdated = (e) => {
+      if (Array.isArray(e.detail) && e.detail.length > 0) {
+        const clean = e.detail.filter(p => !p.image?.includes('spheres_') && p.name !== 'aaaa');
+        if (clean.length > 0) setProductList(clean);
+      }
+    };
+    window.addEventListener('vyvy_products_updated', handleUpdated);
+    return () => window.removeEventListener('vyvy_products_updated', handleUpdated);
   }, []);
 
   const handleOrderProduct = (product, qty = 1) => {
@@ -229,9 +238,16 @@ export default function ProductsPage() {
                   {/* Image Showcase */}
                   <div className="product-card-img-wrap">
                     <img
-                      src={p.image}
+                      src={p.image_url || p.image}
                       alt={p.name}
                       loading="lazy"
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        if (!e.target.dataset.fallback) {
+                          e.target.dataset.fallback = 'true';
+                          e.target.src = '/images/vyvy_lily_hong.jpg';
+                        }
+                      }}
                     />
                     <div className="product-card-img-gradient" />
 

@@ -542,14 +542,21 @@ export default function ProductDetailModal({
           <div
             className="modal-img-ambient"
             style={{
-              backgroundImage: `url(${product.image})`,
+              backgroundImage: `url(${product.image_url || product.image})`,
             }}
           />
 
           <img
-            src={product.image}
+            src={product.image_url || product.image}
             alt={product.name}
             className="modal-product-img"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              if (!e.target.dataset.fallback) {
+                e.target.dataset.fallback = 'true';
+                e.target.src = '/images/vyvy_lily_hong.jpg';
+              }
+            }}
           />
 
           {/* Badge Overlay */}

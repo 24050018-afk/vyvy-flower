@@ -112,8 +112,9 @@ export default function CartDrawer() {
                       {/* Thumbnail */}
                       <div className="cart-item-thumb">
                         <img
-                          src={item.image || '/images/vyvy_lily_hong.jpg'}
+                          src={item.image_url || item.image || '/images/vyvy_lily_hong.jpg'}
                           alt={item.name}
+                          referrerPolicy="no-referrer"
                         />
                       </div>
 

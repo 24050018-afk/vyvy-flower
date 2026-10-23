@@ -17,14 +17,27 @@ export default function HomePage() {
   const [modalQuantity, setModalQuantity] = useState(1);
 
   useEffect(() => {
-    getProducts()
-      .then(data => {
-        if (data && data.length > 0) {
-          const clean = data.filter(p => !p.image?.includes('spheres_') && p.name !== 'aaaa');
-          if (clean.length > 0) setDbProducts(clean);
-        }
-      })
-      .catch(() => {});
+    const fetchCatalog = () => {
+      getProducts()
+        .then(data => {
+          if (data && data.length > 0) {
+            const clean = data.filter(p => !p.image?.includes('spheres_') && p.name !== 'aaaa');
+            if (clean.length > 0) setDbProducts(clean);
+          }
+        })
+        .catch(() => {});
+    };
+
+    fetchCatalog();
+
+    const handleUpdated = (e) => {
+      if (Array.isArray(e.detail) && e.detail.length > 0) {
+        const clean = e.detail.filter(p => !p.image?.includes('spheres_') && p.name !== 'aaaa');
+        if (clean.length > 0) setDbProducts(clean);
+      }
+    };
+    window.addEventListener('vyvy_products_updated', handleUpdated);
+    return () => window.removeEventListener('vyvy_products_updated', handleUpdated);
   }, []);
 
   const { startOrderFlow } = useCustomer();
@@ -344,9 +357,16 @@ export default function HomePage() {
                 {/* Image Showcase */}
                 <div className="product-card-img-wrap">
                   <img
-                    src={p.image}
+                    src={p.image_url || p.image}
                     alt={p.name}
                     loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      if (!e.target.dataset.fallback) {
+                        e.target.dataset.fallback = 'true';
+                        e.target.src = '/images/vyvy_lily_hong.jpg';
+                      }
+                    }}
                   />
                   <div className="product-card-img-gradient" />
 

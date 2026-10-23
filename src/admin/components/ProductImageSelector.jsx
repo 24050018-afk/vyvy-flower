@@ -239,9 +239,12 @@ export default function ProductImageSelector({
             </div>
           ) : (
             <img
-              src={value || '/images/vyvy_lily_hong.jpg'}
+              src={urlInput || value || '/images/vyvy_lily_hong.jpg'}
               alt="Preview"
-              onError={(e) => { e.target.src = '/images/vyvy_lily_hong.jpg'; }}
+              referrerPolicy="no-referrer"
+              onError={(e) => {
+                console.warn('Preview image load error:', e.target.src);
+              }}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           )}

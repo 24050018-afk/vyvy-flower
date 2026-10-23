@@ -353,9 +353,15 @@ export default function AdminProducts() {
                         onClick={() => openQuickImageEdit(p)}
                       >
                         <img
-                          src={p.image}
+                          src={p.image_url || p.image || '/images/vyvy_lily_hong.jpg'}
                           alt={p.name}
-                          onError={(e) => { e.target.src = '/images/vyvy_lily_hong.jpg'; }}
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            if (!e.target.dataset.fallback) {
+                              e.target.dataset.fallback = 'true';
+                              e.target.src = '/images/vyvy_lily_hong.jpg';
+                            }
+                          }}
                         />
                         <div className="admin-product-thumb-overlay">
                           <Camera size={18} />
